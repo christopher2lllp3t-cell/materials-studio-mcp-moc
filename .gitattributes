@@ -1,0 +1,4 @@
+# The accepted release manifest binds exact SHA-256 values for source files.
+# Preserve the repository's original bytes on Windows instead of applying an
+# implicit CRLF/LF conversion during checkout.
+* -text

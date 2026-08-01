@@ -1,0 +1,961 @@
+{
+  "schema_version": 1,
+  "release": {
+    "name": "materials-studio-mcp-moc",
+    "version": "1.3.0",
+    "api_version": "1.0",
+    "channel": "v1-release-candidate",
+    "generated_at_utc": "2026-08-01T14:29:04.559873+00:00",
+    "production_science_released": false
+  },
+  "python": {
+    "executable": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\.venv\\Scripts\\python.exe",
+    "version": "3.12.13",
+    "implementation": "CPython"
+  },
+  "public_tools": [
+    {
+      "name": "ms_detect_installation",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_pipeline_get_config",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_pipeline_health_check",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_architecture_compliance_audit",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_prepare_production_confirmation",
+      "risk": "R1",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_task_submit",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_task_query",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_task_cancel",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_task_retry",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_project_initialize",
+      "risk": "R1",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_project_get",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_project_update_specification",
+      "risk": "R1",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_project_register_artifact",
+      "risk": "R1",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_project_validate",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_project_set_quality_gate",
+      "risk": "R1",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_project_transition",
+      "risk": "R1",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_structure_preflight",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_msi2lmp_preflight",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_convert_to_lammps_checked",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_export_xsd_to_car_mdf_checked",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_search_local_help",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_read_local_help_page",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_find_code_examples",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_list_example_documents",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_task_catalog",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_recommend_workflow",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_execute_task_request",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_scan_workspace",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_inspect_document",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_prepare_castep_pl_package",
+      "risk": "R1",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_prepare_castep_standalone_inputs",
+      "risk": "R1",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_castep_preflight_checked",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_castep_gateway_readiness",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_geology_import_crystal_parent",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_geology_build_periodic_slab_cell",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_pack_periodic_aqueous_nacl",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_build_clayff_spce_nacl_lammps",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_forcite_calculation_checked",
+      "risk": "R3",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_g01_qualification_vertical",
+      "risk": "R3",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "md_scientific_gate_audit",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_geology_build_supercell",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_geology_enumerate_surface_terminations",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_geology_apply_substitutions",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_geology_place_counterions",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_geology_apply_hydroxylation_ledger",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_geology_assess_nanopore_contract",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_moc_get_status",
+      "risk": "R0",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_moc_open_document",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    },
+    {
+      "name": "ms_list_analysis_targets",
+      "risk": "R2",
+      "lifecycle": "stable",
+      "replacement": null
+    }
+  ],
+  "public_tool_count": 49,
+  "files": [
+    {
+      "label": "pyproject.toml",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\pyproject.toml",
+      "bytes": 645,
+      "sha256": "07A1B0738E4C8E68F31C685B63DB3FA2E5567EC1CDC5DEB2DD8E0D50E6055756"
+    },
+    {
+      "label": "requirements.lock",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\requirements.lock",
+      "bytes": 774,
+      "sha256": "A434F257B8339912D1E64AE71D8440E37EDD1CB27CC143C0D77A99919843D150"
+    },
+    {
+      "label": "install.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\install.ps1",
+      "bytes": 4739,
+      "sha256": "F4A35D18EA93E96DF9D220F2196E4CF450BF476813FAFCBBD4629FC3E807DC1C"
+    },
+    {
+      "label": "mcp-config.example.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\mcp-config.example.json",
+      "bytes": 523,
+      "sha256": "9DE2C9F9871C2CB5B687BFADBDA8B2ABDEFA395F6E8F3858DAFD2FACCB6F6F35"
+    },
+    {
+      "label": "README.md",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\README.md",
+      "bytes": 39439,
+      "sha256": "C0D91DA789C7D23EB369DA607CD4200F2423F75E376E095E83339B0B0D36C981"
+    },
+    {
+      "label": "src/materials_studio_mcp/__init__.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\__init__.py",
+      "bytes": 118,
+      "sha256": "12946FFD71A289A2ABFF0191467A56E6DC4666F55C1669F8186CB0A2379CC5E8"
+    },
+    {
+      "label": "src/materials_studio_mcp/adaptive_planning.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\adaptive_planning.py",
+      "bytes": 14688,
+      "sha256": "46C2B9E742FB73C4EA3D6EAC02ACDA173D61B47F72F4626E77FB14514B0D00D6"
+    },
+    {
+      "label": "src/materials_studio_mcp/api_contract.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\api_contract.py",
+      "bytes": 8715,
+      "sha256": "F6881E6052D7A90531B77D148666284C9EC55A23AADFEBDB331A9491F096A215"
+    },
+    {
+      "label": "src/materials_studio_mcp/capability_registry.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\capability_registry.py",
+      "bytes": 9300,
+      "sha256": "699A3827F68AEE706BAE7D0DA04220B0A0787F63A659074D523C95D5261E7CE1"
+    },
+    {
+      "label": "src/materials_studio_mcp/castep_gateway.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\castep_gateway.py",
+      "bytes": 6043,
+      "sha256": "E16C76C0CDC3921643658FC47CF22DEDA3CCD34BEB44B10928F447D062C1BC0F"
+    },
+    {
+      "label": "src/materials_studio_mcp/castep_pl.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\castep_pl.py",
+      "bytes": 21872,
+      "sha256": "465EC349F8AF4015764E06278F67AD1A7B0269478B4E9A9FF46BC6C0E24C7296"
+    },
+    {
+      "label": "src/materials_studio_mcp/castep_preflight.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\castep_preflight.py",
+      "bytes": 9837,
+      "sha256": "B21B0F1D7D2A03893C9C00C55B59F453E02F07D873E6FD6BF2B6CD532694793A"
+    },
+    {
+      "label": "src/materials_studio_mcp/castep_standalone.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\castep_standalone.py",
+      "bytes": 22996,
+      "sha256": "1EFA8B82C7E2E45A09DCF6F312C5D7E522BA5696348D3EA248FDFD93646D4606"
+    },
+    {
+      "label": "src/materials_studio_mcp/clayff_lammps.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\clayff_lammps.py",
+      "bytes": 20867,
+      "sha256": "243C7A395630029C6B5592BF7BEB6D081B71F42F13F70FBE742432D381AAEEB1"
+    },
+    {
+      "label": "src/materials_studio_mcp/confirmation.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\confirmation.py",
+      "bytes": 4975,
+      "sha256": "2F4D8251EA981826CD83D84B33D6F30121D6C075C76DD773889E443665D9AAD5"
+    },
+    {
+      "label": "src/materials_studio_mcp/conversion_executor.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\conversion_executor.py",
+      "bytes": 8226,
+      "sha256": "578129D5C29DD4CB5B5EEA5C184F641D7794B7E4B54C84D39889F00FC0E38083"
+    },
+    {
+      "label": "src/materials_studio_mcp/g01_reproduction.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\g01_reproduction.py",
+      "bytes": 21779,
+      "sha256": "24EFB077325B2485BB84F8500A4F6FFB493C1196D16F292D1BACA5D0A31EF3A4"
+    },
+    {
+      "label": "src/materials_studio_mcp/geology_modeling.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\geology_modeling.py",
+      "bytes": 70741,
+      "sha256": "C52785A0603A3738361B5AD2C1971B78A3F4E895E2354EBAFC19AE35A7B4DA28"
+    },
+    {
+      "label": "src/materials_studio_mcp/geopore_gate.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\geopore_gate.py",
+      "bytes": 12526,
+      "sha256": "F7E7C4D6E9BAE96D8617A21A008F3B44100C666C901369C787445546A500BCAF"
+    },
+    {
+      "label": "src/materials_studio_mcp/lammps_validation.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\lammps_validation.py",
+      "bytes": 16407,
+      "sha256": "B940526572DBC33FC2D724ECB0EEE5DFD1275FF86EA93CA4F32B2CFA46C73769"
+    },
+    {
+      "label": "src/materials_studio_mcp/moc_control.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\moc_control.py",
+      "bytes": 2691,
+      "sha256": "4651C3FD8D10342E512032D67E72447FB430E96A6F061FBA968FD0DBD3912EF0"
+    },
+    {
+      "label": "src/materials_studio_mcp/ms_helper.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\ms_helper.ps1",
+      "bytes": 32421,
+      "sha256": "7F58EF7373D6383FE9DAABBE22FC299A091019B4103E679E96E5A224E58E9D62"
+    },
+    {
+      "label": "src/materials_studio_mcp/operations.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\operations.py",
+      "bytes": 6103,
+      "sha256": "937376BA2AE0DDC3EF0A89E1C5FA3F2F5340FD7E699BB73998CBEB7D483D58DB"
+    },
+    {
+      "label": "src/materials_studio_mcp/periodic_packing.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\periodic_packing.py",
+      "bytes": 18662,
+      "sha256": "7D27112DD1DD24058FCB670F524AF179DD6D9C3328895E5F3CEDA8FE5F62C2BB"
+    },
+    {
+      "label": "src/materials_studio_mcp/pipeline_config.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\pipeline_config.py",
+      "bytes": 15505,
+      "sha256": "1856B5067D2F0E8DBFA28183CF6E3AB97562578DDDE736782298819B7538C943"
+    },
+    {
+      "label": "src/materials_studio_mcp/project_manager.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\project_manager.py",
+      "bytes": 20359,
+      "sha256": "3E8370C83A8A8DF4A818009C69CA7E80EC8A17F3A486750A6C6345C1E1DBE1DE"
+    },
+    {
+      "label": "src/materials_studio_mcp/project_manifest_v2.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\project_manifest_v2.py",
+      "bytes": 18360,
+      "sha256": "A5B098B080BA626C08FA560616AEFDC3182C337FA6D5A28BC40F14492AA9BABF"
+    },
+    {
+      "label": "src/materials_studio_mcp/public_registry.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\public_registry.py",
+      "bytes": 4154,
+      "sha256": "32607E02A19A9A981D6507B096E956DD0D136CFDE4085F1B72FEECD9443D3975"
+    },
+    {
+      "label": "src/materials_studio_mcp/qualification_workflow.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\qualification_workflow.py",
+      "bytes": 37094,
+      "sha256": "58801A87B2A009B74531E9A51F2BBB1DFABB4A477ACE26068C1D8E7F2AF33EA1"
+    },
+    {
+      "label": "src/materials_studio_mcp/readiness.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\readiness.py",
+      "bytes": 6034,
+      "sha256": "3A9F1B0E4091638AD337EBC88532E9F3A5B85401A6A19F7F5F7B09DBDCF311E0"
+    },
+    {
+      "label": "src/materials_studio_mcp/release.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\release.py",
+      "bytes": 14080,
+      "sha256": "8D9BACF2E2837345E354D1900256CEFF17881DD7378194CB6206EAE297853DB0"
+    },
+    {
+      "label": "src/materials_studio_mcp/science_contract.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\science_contract.py",
+      "bytes": 8710,
+      "sha256": "70817995ACAE1468907B31C69A3457422275F40C569396BCE05B8B2F5C182DD0"
+    },
+    {
+      "label": "src/materials_studio_mcp/scientific_gate_audit.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\scientific_gate_audit.py",
+      "bytes": 21437,
+      "sha256": "1A206F1A7243AA1E474D03FF9EF55AA6F266FF7278AAAC0F047D9C746A735E87"
+    },
+    {
+      "label": "src/materials_studio_mcp/security.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\security.py",
+      "bytes": 1167,
+      "sha256": "5B0964E0F5C7835C59D4316255A7DBEE2E106ADE9C6CD4F6BA6801458D727400"
+    },
+    {
+      "label": "src/materials_studio_mcp/server.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\server.py",
+      "bytes": 401817,
+      "sha256": "20F80F300B7CEC15513EF627F891E5B139D5723E327677CA6D580AD909202900"
+    },
+    {
+      "label": "src/materials_studio_mcp/structure_preflight.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\structure_preflight.py",
+      "bytes": 21114,
+      "sha256": "5BB39FDD5BC59D1CF6E9B6211E4E556A855FA17371E22D3768B0CF7301CE0802"
+    },
+    {
+      "label": "src/materials_studio_mcp/task_manager.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\task_manager.py",
+      "bytes": 14171,
+      "sha256": "38E7E3F31FC39E8CBDA3A00EB36193244E28734E5747DB951CD11261BC4839DE"
+    },
+    {
+      "label": "src/materials_studio_mcp/triclinic.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\triclinic.py",
+      "bytes": 4762,
+      "sha256": "7788D1B78B3652857075772873C277423313F313BEDB5C115E95D62426805085"
+    },
+    {
+      "label": "src/materials_studio_mcp/version_source.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\version_source.py",
+      "bytes": 1730,
+      "sha256": "50A75B95BD1F03CE39FBB318F9EEA97A39C6307226E3F46F864DF8D4B727ABBA"
+    },
+    {
+      "label": "src/materials_studio_mcp/vmd_validation.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\vmd_validation.py",
+      "bytes": 28221,
+      "sha256": "76866F0867A3CA5CBDA86C24BA178337D333C270C7AF2EB5FD6069909E74605A"
+    },
+    {
+      "label": "config/materialsscript-capabilities.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\materialsscript-capabilities.json",
+      "bytes": 17370,
+      "sha256": "C38141152EF44BFDF15ACF2920C04729554989933CC3803957B437CCD2BC60FD"
+    },
+    {
+      "label": "config/policy.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\policy.json",
+      "bytes": 1305,
+      "sha256": "510FB99938B532333BBB9DD3F90682F2F5C07E01FD269CBDE7CEA68133940BCC"
+    },
+    {
+      "label": "config/project-manifest.schema.v2.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\project-manifest.schema.v2.json",
+      "bytes": 4250,
+      "sha256": "9EA086380C5768FF6608485872C48F606A434AECB31E537D73577985E06C1E0C"
+    },
+    {
+      "label": "config/project-manifest.template.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\project-manifest.template.json",
+      "bytes": 1118,
+      "sha256": "8F7E50990E557F45EC52B9271AA6261DF75C7B7A83A5CDE509C098607B9E6928"
+    },
+    {
+      "label": "config/qualification-profiles.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\qualification-profiles.json",
+      "bytes": 994,
+      "sha256": "F73460F75DFE4F9A6A09049AA7A358729FA0D1E52AFEA037365027EC5181843C"
+    },
+    {
+      "label": "config/research-environment.local.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\research-environment.local.json",
+      "bytes": 1558,
+      "sha256": "901CDB1B9A4AE2167C56EC1EF2EE142F8E51E3DD919977A3FB8ACB7A79EA3122"
+    },
+    {
+      "label": "config/research-workflow-requirements.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\research-workflow-requirements.json",
+      "bytes": 4622,
+      "sha256": "B77BF96B3E48C1795E9DBA34C32F2FA6C5ABCF2396F82C248D5ECC94B679BFF0"
+    },
+    {
+      "label": "config/science-contract.schema.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\science-contract.schema.json",
+      "bytes": 4829,
+      "sha256": "1CCEDB03ECD0FC232A49724CEE6694C6905E54FC5059C58C0ADF6DE9220E0771"
+    },
+    {
+      "label": "config/scientific-gate-intake.schema.v1.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\scientific-gate-intake.schema.v1.json",
+      "bytes": 4363,
+      "sha256": "C3D5D98A26AEDE9DEF0901705C432B12337438F7695391E9CA1A1940B132DF3C"
+    },
+    {
+      "label": "config/software.local.json",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\software.local.json",
+      "bytes": 851,
+      "sha256": "14AEA6D3679FB8BBCBD6924DA9A7FE61488ADF07669866BEFF21416BEBBBA1F7"
+    },
+    {
+      "label": "scripts/build_release_v1.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\build_release_v1.ps1",
+      "bytes": 4557,
+      "sha256": "B50377255971BC14D171C1FD822D419F11BD5F37C67BC07688B612F24C647980"
+    },
+    {
+      "label": "scripts/install_release_v1.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\install_release_v1.ps1",
+      "bytes": 6279,
+      "sha256": "C3649030E09471A193E96EA9E9C5FA1899F599109B7C972E67EAD4B6A845A64E"
+    },
+    {
+      "label": "scripts/reproduce_g01_v1.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\reproduce_g01_v1.py",
+      "bytes": 1017,
+      "sha256": "179F1897E4009DE1B8DC3841966CE83F6647AAE54779C1429E3FC81D1BC7BBBC"
+    },
+    {
+      "label": "scripts/rollback_release_v1.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\rollback_release_v1.ps1",
+      "bytes": 1570,
+      "sha256": "43C96F3C58D7636EC43A53F1DF7F5D8551580ED317DDF7980177EBF3DAA7A7DE"
+    },
+    {
+      "label": "scripts/smoke_geology_hydroxylation_mcp.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\smoke_geology_hydroxylation_mcp.py",
+      "bytes": 5016,
+      "sha256": "D6A05E8DC713D43B019C7A0493A5BFB89CB6D9B228000A9AC2705D15986F08A0"
+    },
+    {
+      "label": "scripts/smoke_geology_mutations_mcp.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\smoke_geology_mutations_mcp.py",
+      "bytes": 5398,
+      "sha256": "A9CAA6C276FE74DA6422042264CFA510C434DE9953DD5F2D8FED4937C5031A90"
+    },
+    {
+      "label": "scripts/smoke_geology_supercell_mcp.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\smoke_geology_supercell_mcp.py",
+      "bytes": 4086,
+      "sha256": "E8F7AC0554FDB150FEEE3795D3E04C9D7CFE177989F449B6367888C8D64F1777"
+    },
+    {
+      "label": "scripts/smoke_geology_surface_mcp.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\smoke_geology_surface_mcp.py",
+      "bytes": 3840,
+      "sha256": "1E188912D38D9ACDEC4A18346B9353E1BCDFF91D0880054272D346388B0C8308"
+    },
+    {
+      "label": "tests/test_adaptive_planning.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_adaptive_planning.py",
+      "bytes": 10102,
+      "sha256": "0E10C20253114E5A6578615FE0A141CAE792AE8B21B699F190C16DC225FF7BC5"
+    },
+    {
+      "label": "tests/test_api_contract_and_operations.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_api_contract_and_operations.py",
+      "bytes": 9929,
+      "sha256": "11E0F6C478E284CF75ECF75740000AF5924C8DC026FD5425AC36A8F06FB9D36F"
+    },
+    {
+      "label": "tests/test_capability_registry.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_capability_registry.py",
+      "bytes": 2427,
+      "sha256": "11CB2E148805682C6415AED22FFF5B7D03FAF4B4A25AEEBF4372315E3E5DC818"
+    },
+    {
+      "label": "tests/test_castep_pl.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_castep_pl.py",
+      "bytes": 18025,
+      "sha256": "7CB773F839E8A5CBB73A426D5A474629D2BBB0D39F4E94C6C10B3FEC9473266A"
+    },
+    {
+      "label": "tests/test_castep_standalone.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_castep_standalone.py",
+      "bytes": 8892,
+      "sha256": "90BF56D7FEE7111B187489E267DC67D7A4AC818045C207BDC476A73902B1F634"
+    },
+    {
+      "label": "tests/test_checked_conversion_tools.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_checked_conversion_tools.py",
+      "bytes": 6792,
+      "sha256": "56F5FA405D7754EB9513758D1D25D1BE6E195D8CBFB7DEA8EB2CE43487B2D00E"
+    },
+    {
+      "label": "tests/test_confirmation.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_confirmation.py",
+      "bytes": 3528,
+      "sha256": "717814A861D4A84A7F63FABCC72C4F536E1241EB1E181012C5590911D8EAD3EF"
+    },
+    {
+      "label": "tests/test_conversion_process_safety.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_conversion_process_safety.py",
+      "bytes": 1347,
+      "sha256": "388FC0B3CA62FF22E62C8625A4846EB47C7951A456918ACD77BC94246D038F9F"
+    },
+    {
+      "label": "tests/test_execution_policy.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_execution_policy.py",
+      "bytes": 3398,
+      "sha256": "EA93759B6038A30B4F7CD01F9C1F8463EF0BEA1F81521425155A0C032FE809C7"
+    },
+    {
+      "label": "tests/test_foundation_architecture.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_foundation_architecture.py",
+      "bytes": 4585,
+      "sha256": "9BDAFE2E5A2484DE65C70035DBEE52DA656C0C320A89653724DACC9D99CF7BE2"
+    },
+    {
+      "label": "tests/test_g01_reproduction.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_g01_reproduction.py",
+      "bytes": 1103,
+      "sha256": "4DDDD195C8D80D1510C7518121457D2A106BDAF0B1C07E5D9CAE4C04D350E221"
+    },
+    {
+      "label": "tests/test_g05_triclinic.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_g05_triclinic.py",
+      "bytes": 4957,
+      "sha256": "578A978445A97B7FC9AD373CD1BBAA3491643F351C0CD5DA113B543C9CBEC42C"
+    },
+    {
+      "label": "tests/test_g06_emami_surface_database.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_g06_emami_surface_database.py",
+      "bytes": 5695,
+      "sha256": "8E0CB95E3909511352FFFE9100A2412A5631BFA950CC4AA01B6E4D1CFF668949"
+    },
+    {
+      "label": "tests/test_geology_modeling_tools.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_geology_modeling_tools.py",
+      "bytes": 32034,
+      "sha256": "40FC55E8B811BA08752B617DCA43809B360AB784D808DFB03FAD3578EEF40CEA"
+    },
+    {
+      "label": "tests/test_geopore_gate.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_geopore_gate.py",
+      "bytes": 2969,
+      "sha256": "62FA8004601BFC7AB0965CC72DD8FFF7C62C0F283590801B63605D44E7474FD4"
+    },
+    {
+      "label": "tests/test_golden_science_fixtures.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_golden_science_fixtures.py",
+      "bytes": 2553,
+      "sha256": "20ED7587FDC45F74DF2BF5A62A83363F1943F02F7A5BBD5F26A5C04C3499E46C"
+    },
+    {
+      "label": "tests/test_lammps_validation.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_lammps_validation.py",
+      "bytes": 4527,
+      "sha256": "939D06DCB6E9B2C4562F68A0ADD83BBBDDC71BB5AD8F82D2F0E2C17AFD2C39EA"
+    },
+    {
+      "label": "tests/test_materialsscript_ascii_staging.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_materialsscript_ascii_staging.py",
+      "bytes": 16180,
+      "sha256": "DCACDC71BEDF860DEA342C8DA055E1590EB08AB19DE6CCE9935CB31CA60350FA"
+    },
+    {
+      "label": "tests/test_moc_control.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_moc_control.py",
+      "bytes": 2149,
+      "sha256": "2B90713BCD00497C626EDA35462C8042F260673D4443E4B23D2194E9AE2DC256"
+    },
+    {
+      "label": "tests/test_moc_integration.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_moc_integration.py",
+      "bytes": 33167,
+      "sha256": "878C575C0BCC798E46FA97933D7A637D20F595A025B56A82B84A58E9DDF11032"
+    },
+    {
+      "label": "tests/test_pipeline_config.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_pipeline_config.py",
+      "bytes": 1752,
+      "sha256": "987579B770EBC341CA145E29A163CE2F5C601D913DBE42B6416C137BAA43DD93"
+    },
+    {
+      "label": "tests/test_platform_security.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_platform_security.py",
+      "bytes": 6188,
+      "sha256": "D6502DC059C3DB124762BD300F7111F9B9FD338EB248317CDE7990628F79AA54"
+    },
+    {
+      "label": "tests/test_project_manager.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_project_manager.py",
+      "bytes": 8509,
+      "sha256": "F2C382266788D7250816A43FC7C17B095B7E465CF6FB4546DE3CE1FBC1A2935A"
+    },
+    {
+      "label": "tests/test_project_manifest_v2.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_project_manifest_v2.py",
+      "bytes": 8615,
+      "sha256": "A48265958C5E07769534DC805EB3E5E58B03D8C1B5BE7FEB07CFADC9B508715C"
+    },
+    {
+      "label": "tests/test_public_compatibility_matrix.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_public_compatibility_matrix.py",
+      "bytes": 4107,
+      "sha256": "B486F1D74B4741CA34EC83BA41975BAA0A4BEC896272F909B38021BC1D000C98"
+    },
+    {
+      "label": "tests/test_qualification_workflow.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_qualification_workflow.py",
+      "bytes": 10217,
+      "sha256": "96F42F6135BAD9405AC10FD9CE5377FF9FEFE10CCCE916A710B9BC3532B0C907"
+    },
+    {
+      "label": "tests/test_readiness.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_readiness.py",
+      "bytes": 1518,
+      "sha256": "1551C486AB9E1326E59DD56EF9F6EFEF0193A4BA50CDEBE77AC9AD65AF75C386"
+    },
+    {
+      "label": "tests/test_release_manifest.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_release_manifest.py",
+      "bytes": 3420,
+      "sha256": "12BB34F204B626E52A3F4846660252C00A06CCBD4877AA742447D4C474F67974"
+    },
+    {
+      "label": "tests/test_science_contract.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_science_contract.py",
+      "bytes": 6920,
+      "sha256": "6D0EAF53C3AC5E6924A54D5A6A3855F056CBC57ADCEFC84D018CD5831C4DE672"
+    },
+    {
+      "label": "tests/test_scientific_gate_audit.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_scientific_gate_audit.py",
+      "bytes": 6582,
+      "sha256": "3180189A91D44A1CC95D502C7FB326401671BB6416B2D9BAEC3A4B5E40952AB6"
+    },
+    {
+      "label": "tests/test_scientific_quality_gates.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_scientific_quality_gates.py",
+      "bytes": 3306,
+      "sha256": "9092A1BF7BE13608687A6BA83516B3C5ACE9438BCAC0B0FB2E9E3AE86758D470"
+    },
+    {
+      "label": "tests/test_server_security.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_server_security.py",
+      "bytes": 4051,
+      "sha256": "1C5193E4DD731255F5CA3E9D90F624C9FE3F687874807549FBD5F3A0A68B05DF"
+    },
+    {
+      "label": "tests/test_structure_preflight.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_structure_preflight.py",
+      "bytes": 3482,
+      "sha256": "A5EE9F39068D9DB8F9016D452F3A7A0840E0E17B117EB429C7B2BB51AA7ECA8E"
+    },
+    {
+      "label": "tests/test_task_management_and_forcite_checked.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_task_management_and_forcite_checked.py",
+      "bytes": 14372,
+      "sha256": "0E4EC005469C2FB4293C307C3174F4AEDAEE88B9F0696B860E048755A8936E8F"
+    },
+    {
+      "label": "tests/test_vmd_validation.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_vmd_validation.py",
+      "bytes": 4378,
+      "sha256": "19397C085CBD0E3A96479CFB04287151F2F17C64310C164242933C5A2DE38F93"
+    },
+    {
+      "label": "workspace/ms_moc.py",
+      "path": "D:\\分子动力学模拟\\tools\\ms_moc.py",
+      "bytes": 89081,
+      "sha256": "4843243A026F1096F2DF09973B9BEC139466AAEAF4120C8D0E1B5AC45190C2D9"
+    },
+    {
+      "label": "workspace/ms_mcp_bridge.py",
+      "path": "D:\\分子动力学模拟\\tools\\ms_mcp_bridge.py",
+      "bytes": 6003,
+      "sha256": "E21E02BF5C8DEA74B6D362F7F18CDF1758ED55D8976A6A2E8AFD221F426A622C"
+    },
+    {
+      "label": "workspace/MS_MOC_INTERFACE.md",
+      "path": "D:\\分子动力学模拟\\MS_MOC_INTERFACE.md",
+      "bytes": 4398,
+      "sha256": "0B270A8D3488747CEE4B4B296FD1E8A5A12C3F5555AA3015FCBA0B03D2DA61CE"
+    },
+    {
+      "label": "workspace/MS_MOC_STATUS.md",
+      "path": "D:\\分子动力学模拟\\MS_MOC_STATUS.md",
+      "bytes": 10217,
+      "sha256": "E79EB368905E8BBB8B2B04D878595479B4CA5E3557A01018B3C38CC3432E7470"
+    },
+    {
+      "label": "workspace/SCIENCE_ENVIRONMENT.md",
+      "path": "D:\\分子动力学模拟\\07_mcp_materials_studio\\SCIENCE_ENVIRONMENT.md",
+      "bytes": 967,
+      "sha256": "43C194F6921A87C1A427231B5554BB7807E1D6675B0AE9D39F053CC3EE98BADB"
+    },
+    {
+      "label": "workspace/science-requirements.lock",
+      "path": "D:\\分子动力学模拟\\07_mcp_materials_studio\\science-requirements.lock",
+      "bytes": 13,
+      "sha256": "FB2A203F80CE37499FF60F11CCFEA4145A9E4B0AD4C9E6E84D571E82135ECCA7"
+    }
+  ],
+  "missing_files": [],
+  "runtime_binaries": [
+    {
+      "name": "RunMatScript",
+      "path": "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1\\etc\\Scripting\\bin\\RunMatScript.bat",
+      "exists": true,
+      "bytes": 1879,
+      "sha256": "A9C1DD188532F36424A5994DFD7DFD09794AB3A8D153E98E919F1F68D075F440"
+    },
+    {
+      "name": "MatStudio",
+      "path": "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1\\bin\\MatStudio.exe",
+      "exists": true,
+      "bytes": 3032376,
+      "sha256": "7B9A67667CB2A4A5C84AC7425D291B63F155299B4D2C034B8B1AD4658F38E33A"
+    },
+    {
+      "name": "LAMMPS",
+      "path": "D:\\lammps_install\\LAMMPS 64-bit 11Feb2026-MSMPI\\bin\\lmp.exe",
+      "exists": true,
+      "bytes": 106934,
+      "sha256": "4331440D98F13903FEAD33DDF82227C4FF741B4D4D9CA25410D4843D93F29070"
+    },
+    {
+      "name": "msi2lmp",
+      "path": "D:\\lammps_install\\LAMMPS 64-bit 11Feb2026-MSMPI\\bin\\msi2lmp.exe",
+      "exists": true,
+      "bytes": 239601,
+      "sha256": "E5503575A45EF48A93809E246B485F72513F23B62872500C2E0B72EF5568B520"
+    },
+    {
+      "name": "VMD",
+      "path": "C:\\Program Files\\VMD\\vmd.exe",
+      "exists": true,
+      "bytes": 11617792,
+      "sha256": "657042E358AAD64A9FA25177E0F2E4AB4B8E9FEB4AA8AD87B7ECEF2F465C5B65"
+    },
+    {
+      "name": "Packmol",
+      "path": "E:\\ms_mcp\\software\\packmol_v21.2.3_ucrt64\\packmol.exe",
+      "exists": true,
+      "bytes": 1256574,
+      "sha256": "458BF8E1E8938CDFB5EB520EAEB7EF87A74267164EC314DD8FB5313DC762C59B"
+    },
+    {
+      "name": "PowerShell",
+      "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "exists": true,
+      "bytes": 454656,
+      "sha256": "7600FFE12DA441FE89D035B13801E8E91D064BC544A27B19A5CF49F6AB8B18F5"
+    }
+  ]
+}

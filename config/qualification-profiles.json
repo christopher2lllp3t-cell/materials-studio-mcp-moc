@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "g01_pcff_vertical_v1": {
+      "scope": "G01 three-atom nonperiodic water calibration fixture only",
+      "model_role": "calibration",
+      "input_xsd_sha256": "bfe89ed9b80a747ec88d777bc8fc8479faa06838eaaebc0b8821949a10dde85e",
+      "expected_atom_count": 3,
+      "expected_elements": {"H": 2, "O": 1},
+      "expected_bond_count": 2,
+      "expected_bond_types": {"Single": 2},
+      "periodic_axes": [],
+      "expected_formal_charge": 0.0,
+      "forcefield": "PCFF",
+      "forcefield_class": "II",
+      "pcff_off_sha256": "e311ffe41614c7ac9522d1bd35e294d7f681d57bb3d1c93796ebec63c85ab247",
+      "pcff_frc_sha256": "a76831b3800d3386e9337f57b9990fa39811da8b3e785a4a82441e45c6282a33",
+      "preparation_profile_id": "prepare_pcff_v1",
+      "energy_profile_id": "energy_pcff_v1",
+      "max_minimization_iterations": 200,
+      "max_nvt_steps": 200,
+      "qualification_only": true,
+      "production_science_released": false
+    }
+  }
+}

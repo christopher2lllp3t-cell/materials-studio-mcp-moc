@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "workspace_roots": [
+    "D:\\分子动力学模拟",
+    "E:\\ms_mcp\\ms_mcp_runtime"
+  ],
+  "scratch_root": "E:\\ms_mcp\\ms_mcp_jobs",
+  "allowed_executable_paths": [
+    "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1\\etc\\Scripting\\bin\\RunMatScript.bat",
+    "D:\\lammps_install\\LAMMPS 64-bit 11Feb2026-MSMPI\\bin\\lmp.exe",
+    "D:\\lammps_install\\LAMMPS 64-bit 11Feb2026-MSMPI\\bin\\msi2lmp.exe",
+    "C:\\Program Files\\Microsoft MPI\\Bin\\mpiexec.exe",
+    "C:\\Program Files\\VMD\\vmd.exe",
+    "E:\\ms_mcp\\software\\packmol_v21.2.3_ucrt64\\packmol.exe",
+    "E:\\ms_mcp\\software\\msys64\\usr\\bin\\bash.exe"
+  ],
+  "limits": {
+    "default_timeout_seconds": 120,
+    "max_timeout_seconds": 3600,
+    "max_parallel_jobs": 1,
+    "max_mpi_processes": 8
+  },
+  "execution": {
+    "overwrite_existing_outputs": false,
+    "retain_failed_job_directories": true,
+    "require_preflight_before_production": true,
+    "require_confirmation_for_production": true
+  },
+  "preflight": {
+    "require_lammps_run_zero": true,
+    "require_short_minimization": true,
+    "require_short_dynamics": true,
+    "reject_lost_atoms": true,
+    "reject_nan_or_infinite_energy": true,
+    "require_neutrality_check": true,
+    "require_forcefield_coverage_check": true
+  }
+}

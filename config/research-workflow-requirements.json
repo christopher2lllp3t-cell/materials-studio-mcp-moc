@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "title": "Materials Studio 2023 research workflow readiness requirements",
+  "policy": {
+    "missing_requirement_blocks_workflow": true,
+    "unverified_capability_blocks_execution": true,
+    "manual_gate_never_auto_passes": true
+  },
+  "workflows": [
+    {
+      "id": "ms_core_structure",
+      "label": "Core and Structure controlled modeling",
+      "requirements": [
+        {"id": "ms_root", "kind": "path", "binding": "software.materials_studio.root", "path_type": "directory"},
+        {"id": "run_matscript", "kind": "path", "binding": "software.materials_studio.run_mat_script", "path_type": "file"},
+        {"id": "build_supercell", "kind": "capability", "capability_id": "structure.build_supercell"},
+        {"id": "cleave_surface", "kind": "capability", "capability_id": "structure.cleave_surface"}
+      ]
+    },
+    {
+      "id": "forcite_kerogen",
+      "label": "Forcite kerogen preparation and calculation",
+      "requirements": [
+        {"id": "forcite_preparation", "kind": "capability", "capability_id": "forcite.forcefield_preparation"},
+        {"id": "forcite_energy", "kind": "capability", "capability_id": "forcite.energy"},
+        {"id": "forcite_geometry", "kind": "capability", "capability_id": "forcite.geometry_optimization"},
+        {"id": "forcite_dynamics", "kind": "capability", "capability_id": "forcite.dynamics_nvt"},
+        {"id": "science_contract", "kind": "manual_gate", "code": "SCIENCE_CONTRACT_REQUIRED", "status": "pending"}
+      ]
+    },
+    {
+      "id": "lammps_extension",
+      "label": "LAMMPS conversion and governed runtime",
+      "requirements": [
+        {"id": "lammps", "kind": "path", "binding": "software.lammps.executable", "path_type": "file"},
+        {"id": "msi2lmp", "kind": "path", "binding": "software.lammps.msi2lmp", "path_type": "file"},
+        {"id": "mpi", "kind": "path", "binding": "software.mpi.executable", "path_type": "file"},
+        {"id": "forcefield_library", "kind": "path", "binding": "software.lammps.frc_files", "path_type": "directory"}
+      ]
+    },
+    {
+      "id": "castep_dft",
+      "label": "CASTEP DFT calculation",
+      "requirements": [
+        {"id": "castep_runner", "kind": "path", "binding": "environment.castep.runner", "path_type": "file"},
+        {"id": "castep_executable", "kind": "path", "binding": "environment.castep.executable", "path_type": "file"},
+        {"id": "castep_capability", "kind": "capability", "capability_id": "castep.calculation"},
+        {"id": "castep_license", "kind": "manual_gate", "code": "CASTEP_LICENSE_NOT_VALIDATED", "status": "pending"}
+      ]
+    },
+    {
+      "id": "results_and_reports",
+      "label": "Results parsing and report generation",
+      "requirements": [
+        {"id": "castep_results_parser", "kind": "capability", "capability_id": "results.castep_parsing"},
+        {"id": "materialsscript_reports", "kind": "capability", "capability_id": "reports.materialsscript_report_generation"}
+      ]
+    },
+    {
+      "id": "namd_ch03",
+      "label": "Chapter 3 NAMD competitive adsorption",
+      "requirements": [
+        {"id": "namd_executable", "kind": "path", "binding": "environment.namd.executable", "path_type": "file"},
+        {"id": "ch03_contract", "kind": "path", "binding": "environment.ch03.contract", "path_type": "file"},
+        {"id": "combined_pore_pdb", "kind": "required_file_in_directory", "binding": "environment.ch03.root", "relative_path": "graphene_mmt_pore_3nm.pdb"},
+        {"id": "combined_pore_psf", "kind": "required_file_in_directory", "binding": "environment.ch03.root", "relative_path": "graphene_mmt_pore_3nm.psf"},
+        {"id": "co2_template", "kind": "required_file_in_directory", "binding": "environment.ch03.root", "relative_path": "co2_trappe_rigid.pdb"},
+        {"id": "ch4_template", "kind": "required_file_in_directory", "binding": "environment.ch03.root", "relative_path": "ch4_ua.pdb"},
+        {"id": "forcefield_parameters", "kind": "required_file_in_directory", "binding": "environment.ch03.root", "relative_path": "forcefield_ch03.prm"},
+        {"id": "exact_reproduction_contract", "kind": "manual_gate", "code": "CH03_CONTRACT_NOT_FROZEN", "status": "pending"}
+      ]
+    },
+    {
+      "id": "refprop_eos",
+      "label": "REFPROP 10 pressure mapping",
+      "requirements": [
+        {"id": "refprop_dll", "kind": "path", "binding": "environment.refprop.dll", "path_type": "file"},
+        {"id": "refprop_evidence", "kind": "hashed_evidence", "binding": "environment.refprop.evidence", "sha256_binding": "environment.refprop.evidence_sha256"}
+      ]
+    }
+  ]
+}

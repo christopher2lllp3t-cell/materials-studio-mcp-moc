@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "materials-studio-2023": {
+      "command": "E:\\ms_mcp\\deployments\\current\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "materials_studio_mcp.server"
+      ],
+      "cwd": "E:\\ms_mcp\\deployments\\current",
+      "env": {
+        "MATERIALS_STUDIO_ROOT": "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1",
+        "MS_MOC_SCRIPT": "E:\\ms_mcp\\deployments\\current\\moc\\ms_moc.py",
+        "MS_MOC_MCP_ROOT": "E:\\ms_mcp\\deployments\\current"
+      }
+    }
+  }
+}

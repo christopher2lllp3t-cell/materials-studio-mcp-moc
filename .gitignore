@@ -1,0 +1,48 @@
+# Machine-local MCP and research environment configuration. Keep these files
+# on the host; never put executable paths, user workspace mappings, or tokens
+# into the reproducible source baseline.
+mcp-config.local.json
+config/*.local.json
+config/*.local.toml
+config/*.local.yaml
+config/*.local.yml
+*.local.env
+.env
+.env.*
+!.env.example
+
+# Python environments, package metadata, and build outputs.
+.venv/
+venv/
+.tox/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+wheelhouse/
+*.whl
+*.egg
+
+# Test, coverage, editor, and operating-system transient state.
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.idea/
+.vscode/
+*.code-workspace
+Thumbs.db
+Desktop.ini
+
+# Runtime/deployment artifacts and local task outputs. The committed
+# release-manifest.json is the 1.3.0 candidate evidence; release bundles and
+# installation receipts are external immutable deployment artifacts.
+release-bundle.json
+install-receipt.json
+artifacts/
+outputs/
+jobs/
+tmp/

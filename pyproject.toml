@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "materials-studio-mcp"
+dynamic = ["version"]
+description = "MCP server for BIOVIA Materials Studio 2023 on Windows"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "mcp>=1.26.0,<2.0.0",
+]
+
+[project.scripts]
+materials-studio-mcp = "materials_studio_mcp.server:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+materials_studio_mcp = ["ms_helper.ps1"]
+
+[tool.setuptools.dynamic]
+version = {attr = "materials_studio_mcp.__version__"}

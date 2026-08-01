@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "project": {"id": "replace-me", "title": "replace-me", "status": "draft", "created_at": null},
+  "model_specification": {
+    "composition": [], "crystal_structure": null, "surface": null, "cell": null,
+    "pore_width_nm": null, "surface_termination": null, "fluid_composition": [],
+    "target_density_g_cm3": null, "temperature_k": null, "pressure_mpa": null,
+    "periodic_axes": ["x", "y", "z"], "fixed_regions": []
+  },
+  "forcefield": {
+    "name": null, "version": null, "units": null, "atom_typing_source": null,
+    "charge_model": null, "mixing_rule": null, "special_bonds": null, "parameter_sources": []
+  },
+  "geology_model": {
+    "fidelity": null, "clay_is_surrogate": false, "source_model": null,
+    "mineral_identity": null, "surface_termination": null, "charge_compensation": null
+  },
+  "science_contract": null,
+  "artifacts": [],
+  "quality_gates": {"structure": "pending", "forcefield": "pending", "lammps_preflight": "pending", "scientific_validation": "pending", "science_contract": "pending"},
+  "provenance": {"software": {}, "commands": [], "file_hashes": {}}
+}

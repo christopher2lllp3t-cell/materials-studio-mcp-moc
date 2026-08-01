@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "materials-studio-mcp/science-contract/v1",
+  "title": "MS-LAMMPS-VMD unified scientific contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "units", "coordinates", "boundary", "lammps", "charge", "forcefield", "seed_ledger", "trajectory"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "units": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profile", "lammps_style", "length", "time", "energy", "charge", "mass", "pressure"],
+      "properties": {
+        "profile": {"const": "ms_compass_to_lammps_real_v1"},
+        "lammps_style": {"const": "real"},
+        "length": {"const": "angstrom"}, "time": {"const": "femtosecond"},
+        "energy": {"const": "kcal/mol"}, "charge": {"const": "elementary_charge"},
+        "mass": {"const": "g/mol"}, "pressure": {"const": "atm"}
+      }
+    },
+    "coordinates": {
+      "type": "object", "additionalProperties": false,
+      "required": ["representation", "length_unit", "cell_matrix_convention"],
+      "properties": {
+        "representation": {"enum": ["fractional", "cartesian"]},
+        "length_unit": {"const": "angstrom"},
+        "cell_matrix_convention": {"const": "row_vectors_a_b_c"}
+      }
+    },
+    "boundary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["periodic_axes", "lammps_boundary"],
+      "properties": {
+        "periodic_axes": {"type": "array", "uniqueItems": true, "items": {"enum": ["x", "y", "z"]}},
+        "lammps_boundary": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"enum": ["p", "f", "s", "m"]}}
+      }
+    },
+    "lammps": {
+      "type": "object", "additionalProperties": false,
+      "required": ["atom_style", "triclinic_tilt_handling"],
+      "properties": {"atom_style": {"const": "full"}, "triclinic_tilt_handling": {"const": "preserve"}}
+    },
+    "charge": {
+      "type": "object", "additionalProperties": false,
+      "required": ["formal_charge_semantics", "partial_charge_semantics", "partial_charge_source", "expected_net_partial_charge_e", "audit_by_component"],
+      "properties": {
+        "formal_charge_semantics": {"const": "oxidation_or_connectivity_only"},
+        "partial_charge_semantics": {"const": "forcefield_nonbonded_charge"},
+        "partial_charge_source": {"type": "string", "minLength": 1},
+        "expected_net_partial_charge_e": {"type": "number"},
+        "audit_by_component": {"const": true}
+      }
+    },
+    "forcefield": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profile_id", "profile_version", "profile_sha256", "parameter_file_sha256", "compatibility_reviewed", "mixing_rule", "special_bonds", "long_range_electrostatics"],
+      "properties": {
+        "profile_id": {"type": "string", "minLength": 1}, "profile_version": {"type": "string", "minLength": 1},
+        "profile_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "parameter_file_sha256": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+        "compatibility_reviewed": {"const": true}, "mixing_rule": {"type": "string", "minLength": 1},
+        "special_bonds": {"type": "string", "minLength": 1}, "long_range_electrostatics": {"type": "string", "minLength": 1}
+      }
+    },
+    "seed_ledger": {
+      "type": "object", "additionalProperties": false,
+      "required": ["master_seed", "derivation", "replica_index", "streams"],
+      "properties": {
+        "master_seed": {"type": "integer", "minimum": 1, "maximum": 2147483647},
+        "derivation": {"const": "sha256_run_uuid_stage_replica_to_int31_v1"},
+        "replica_index": {"type": "integer", "minimum": 0},
+        "streams": {
+          "type": "object", "additionalProperties": false,
+          "required": ["packing", "velocity", "thermostat", "sorption"],
+          "properties": {
+            "packing": {"type": "integer", "minimum": 1, "maximum": 2147483647},
+            "velocity": {"type": "integer", "minimum": 1, "maximum": 2147483647},
+            "thermostat": {"type": "integer", "minimum": 1, "maximum": 2147483647},
+            "sorption": {"type": "integer", "minimum": 1, "maximum": 2147483647}
+          }
+        }
+      }
+    },
+    "trajectory": {
+      "type": "object", "additionalProperties": false,
+      "required": ["wrapped_fields", "unwrapped_fields", "msd_uses_unwrapped", "density_uses_wrapped", "timestep_unit"],
+      "properties": {
+        "wrapped_fields": {"enum": ["x_y_z", "xs_ys_zs"]},
+        "unwrapped_fields": {"enum": ["xu_yu_zu", "x_y_z_plus_image_flags"]},
+        "msd_uses_unwrapped": {"const": true}, "density_uses_wrapped": {"const": true},
+        "timestep_unit": {"const": "femtosecond"}
+      }
+    }
+  }
+}

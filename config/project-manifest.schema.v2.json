@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "materials-studio-mcp/project-manifest/v2",
+  "title": "Materials Studio MCP project manifest v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project", "artifacts", "state_history", "blockers"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "title", "state", "model_role", "target_artifact_id", "created_by", "created_at", "updated_at"],
+      "properties": {
+        "project_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$"},
+        "title": {"type": "string", "minLength": 1},
+        "state": {"enum": ["DRAFT", "STRUCTURE_VERIFIED", "FORCEFIELD_VERIFIED", "CONVERSION_VERIFIED", "LAMMPS_PREFLIGHT_VERIFIED", "QUALIFICATION_ONLY", "PRODUCTION_READY", "BLOCKED"]},
+        "model_role": {"enum": ["target", "calibration", "qualification"]},
+        "target_artifact_id": {"type": ["string", "null"]},
+        "created_by": {"type": "string", "minLength": 1},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/artifact"}
+    },
+    "state_history": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/state_transition"}
+    },
+    "blockers": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_type", "path", "sha256", "parent_artifact_ids", "created_by", "tool_version", "created_at", "status"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+        "artifact_type": {"enum": ["source_structure", "derived_structure", "forcefield_bundle", "conversion_artifact", "simulation_run", "analysis_result", "evidence_receipt"]},
+        "path": {"type": "string", "minLength": 1, "pattern": "^(?![A-Za-z]:)(?![\\\\/])"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "parent_artifact_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "created_by": {"type": "string", "minLength": 1},
+        "tool_version": {"type": "string", "minLength": 1},
+        "created_at": {"type": "string", "format": "date-time"},
+        "status": {"enum": ["REGISTERED", "CANDIDATE", "VERIFIED", "QUALIFICATION_ONLY", "PRODUCTION_APPROVED", "BLOCKED", "INVALID"]},
+        "metadata": {"type": "object"}
+      },
+      "allOf": [
+        {"if": {"properties": {"artifact_type": {"const": "forcefield_bundle"}}}, "then": {"required": ["metadata"], "properties": {"metadata": {"required": ["forcefield_profile", "profile_sha256", "parameter_file_sha256", "atom_typing_coverage", "charge_audit"]}}}},
+        {"if": {"properties": {"artifact_type": {"const": "evidence_receipt"}}}, "then": {"required": ["metadata"], "properties": {"metadata": {"required": ["evidence_kind", "evidence_scope", "model_role", "gate", "result", "subject_artifact_ids"]}}}}
+      ]
+    },
+    "state_transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from_state", "to_state", "evidence_ids", "authorized_by", "manual_authorization", "created_at"],
+      "properties": {
+        "from_state": {"enum": ["DRAFT", "STRUCTURE_VERIFIED", "FORCEFIELD_VERIFIED", "CONVERSION_VERIFIED", "LAMMPS_PREFLIGHT_VERIFIED", "QUALIFICATION_ONLY", "PRODUCTION_READY", "BLOCKED"]},
+        "to_state": {"enum": ["DRAFT", "STRUCTURE_VERIFIED", "FORCEFIELD_VERIFIED", "CONVERSION_VERIFIED", "LAMMPS_PREFLIGHT_VERIFIED", "QUALIFICATION_ONLY", "PRODUCTION_READY", "BLOCKED"]},
+        "evidence_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "authorized_by": {"type": "string", "minLength": 1},
+        "manual_authorization": {"type": "boolean"},
+        "created_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}

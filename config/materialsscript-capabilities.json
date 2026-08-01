@@ -1,0 +1,354 @@
+{
+  "schema_version": 1,
+  "target": {
+    "product": "BIOVIA Materials Studio",
+    "release": "2023/23.1"
+  },
+  "policy": {
+    "unregistered_is_verified": false,
+    "natural_language_to_perl": false,
+    "parameter_policy": "closed_allowlist"
+  },
+  "evidence": [
+    {
+      "id": "doc_forcite_energy_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_scripting_doc",
+      "path": "forcitescripting/apiforciteenergy.htm",
+      "sha256": "4B8A855DC9BDBB4EF9AB942AC2A266095B6FE5B117161ABA7CE3FA06CAD6D5DF"
+    },
+    {
+      "id": "doc_forcite_geometry_optimization_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_scripting_doc",
+      "path": "forcitescripting/apiforcitegeometryoptimization.htm",
+      "sha256": "D5F628679FC32EEE737E339683EA6C4E483243356EF85A775F85029CCC42908A"
+    },
+    {
+      "id": "doc_forcite_dynamics_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_scripting_doc",
+      "path": "forcitescripting/apiforcitedynamics.htm",
+      "sha256": "EA34A8D6F09AF084393BD0074D69B5F7EABCBFC5444C449DE989E3AEB0F73436"
+    },
+    {
+      "id": "doc_build_supercell_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_scripting_doc",
+      "path": "scriptingapi/apibuildsupercell.htm",
+      "sha256": "4BB68491E08B17BD37B5527A7BFF10904B7FAE68DB3CCC076F2AFB380ED02432"
+    },
+    {
+      "id": "doc_cleave_surface_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_scripting_doc",
+      "path": "scriptingapi/apicleavesurface.htm",
+      "sha256": "15A642A1768A47DEFCA85FB0E9224AA34AAAAB6CE4FE81F9E4E2C883ED77310F"
+    },
+    {
+      "id": "doc_castep_geometry_optimization_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_scripting_doc",
+      "path": "castepscripting/apicastepgeometryoptimization.htm",
+      "sha256": "CC77A35F34ED1535B6CDDB29DA52AEA3161C6983118D78570F8F1B41996FD430"
+    },
+    {
+      "id": "doc_castep_standalone_launcher_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "tskcasteprunstandalone.htm",
+      "sha256": "8F1D1A3F1194DFE33960114A014737DD07B05292BB559B74054158895B1E70A7"
+    },
+    {
+      "id": "doc_castep_lattice_cart_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "keywords/k_lattice_cart_castep.htm",
+      "sha256": "666155157D38BCEF7EFC8CD3216592F4DFE67C788752D405E99F56CB89FBBFFA"
+    },
+    {
+      "id": "doc_castep_positions_frac_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "keywords/k_positions_frac_castep.htm",
+      "sha256": "B1DA4D3712DBAABBAB1CDD0897F6EB32DCC7D325F3E34E00EA63942D197906FB"
+    },
+    {
+      "id": "doc_castep_kpoints_mp_grid_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "keywords/k_kpoints_mp_grid_castep.htm",
+      "sha256": "C2DFB33C47736229832B2C131A4180F87CD0A519404B489C62BC4AD49644BA17"
+    },
+    {
+      "id": "doc_castep_species_pot_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "keywords/k_species_pot_castep.htm",
+      "sha256": "E17BCD61E777C250CAB85FCCD7AE516A79763C3760023A0C33230D4F292F52CF"
+    },
+    {
+      "id": "doc_castep_task_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "keywords/k_task_castep.htm",
+      "sha256": "BD19A9B1BA90FC19DA3696FAC0C1760A38673ED606DB1D7DBDAE12B7CDB72723"
+    },
+    {
+      "id": "doc_castep_cut_off_energy_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "keywords/k_cut_off_energy_castep.htm",
+      "sha256": "4428F2341E216AE1935F7263B2F666D9B524635EC6C8A0687397AE16B51653A2"
+    },
+    {
+      "id": "doc_castep_xc_functional_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "keywords/k_xc_functional_castep.htm",
+      "sha256": "D3D53AA3E9C40128E80FE16EADA760FAA2633EC2DCB405D48EF2D38320965BAB"
+    },
+    {
+      "id": "doc_castep_spin_polarized_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "keywords/k_spin_polarized_castep.htm",
+      "sha256": "0FA7F7A96931563B13F6FF940DC64DA6F1660C9756A4AB225746243394CD5677"
+    },
+    {
+      "id": "doc_castep_fix_occupancy_23_1",
+      "kind": "local_documentation",
+      "root": "local_ms_castep_doc",
+      "path": "keywords/k_fix_occupancy_castep.htm",
+      "sha256": "B9E59AC6648E2B1217259EFA6070D9207FA894003D8627E19FF310FFB21219E6"
+    },
+    {
+      "id": "test_castep_pl",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_castep_pl.py",
+      "sha256": "7CB773F839E8A5CBB73A426D5A474629D2BBB0D39F4E94C6C10B3FEC9473266A"
+    },
+    {
+      "id": "test_adaptive_planning",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_adaptive_planning.py",
+      "sha256": "0E10C20253114E5A6578615FE0A141CAE792AE8B21B699F190C16DC225FF7BC5"
+    },
+    {
+      "id": "test_materialsscript_ascii_staging",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_materialsscript_ascii_staging.py",
+      "sha256": "DCACDC71BEDF860DEA342C8DA055E1590EB08AB19DE6CCE9935CB31CA60350FA"
+    },
+    {
+      "id": "test_geology_modeling_tools",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_geology_modeling_tools.py",
+      "sha256": "40FC55E8B811BA08752B617DCA43809B360AB784D808DFB03FAD3578EEF40CEA"
+    },
+    {
+      "id": "test_castep_standalone",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_castep_standalone.py",
+      "sha256": "90BF56D7FEE7111B187489E267DC67D7A4AC818045C207BDC476A73902B1F634"
+    },
+    {
+      "id": "test_forcite_checked",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_task_management_and_forcite_checked.py",
+      "sha256": "0E4EC005469C2FB4293C307C3174F4AEDAEE88B9F0696B860E048755A8936E8F"
+    },
+    {
+      "id": "receipt_type_iic_compassiii",
+      "kind": "runtime_receipt",
+      "root": "workspace",
+      "path": "07_mcp_materials_studio/mcp_projects/kerogen_type_II_C_ms_smoke_20260718/reports/kerogen_type_ii_c_compassiii_typed_v1.forcite/receipt.json",
+      "sha256": "29C409CE21374C9C741E59E8FB3CA60F9DA7B6B52092AB0BAF411A5CDC4856C5"
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "core.controlled_materialsscript_execution",
+      "layer": "Core",
+      "status": "verified",
+      "verified": true,
+      "exposure": "internal",
+      "api_symbols": ["Documents->Import", "Documents->New", "Document->SaveAs"],
+      "parameters": [],
+      "evidence_ids": ["test_materialsscript_ascii_staging"],
+      "notes": "Internal template runner only; arbitrary Perl is not MCP-visible."
+    },
+    {
+      "id": "structure.build_supercell",
+      "layer": "Structure",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": ["Document->BuildSuperCell"],
+      "parameters": [
+        {"name": "repeats_a", "status": "verified", "verified": true, "evidence_ids": ["doc_build_supercell_23_1", "test_geology_modeling_tools"]},
+        {"name": "repeats_b", "status": "verified", "verified": true, "evidence_ids": ["doc_build_supercell_23_1", "test_geology_modeling_tools"]},
+        {"name": "repeats_c", "status": "verified", "verified": true, "evidence_ids": ["doc_build_supercell_23_1", "test_geology_modeling_tools"]}
+      ],
+      "evidence_ids": ["doc_build_supercell_23_1", "test_geology_modeling_tools"],
+      "notes": "Only the reviewed integer repeat signature is allowed."
+    },
+    {
+      "id": "structure.cleave_surface",
+      "layer": "Structure",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": ["Tools->SurfaceBuilder->CleaveSurface"],
+      "parameters": [
+        {"name": "MillerIndex", "status": "verified", "verified": true, "evidence_ids": ["doc_cleave_surface_23_1", "test_geology_modeling_tools"]},
+        {"name": "Top", "status": "verified", "verified": true, "evidence_ids": ["doc_cleave_surface_23_1", "test_geology_modeling_tools"]}
+      ],
+      "evidence_ids": ["doc_cleave_surface_23_1", "test_geology_modeling_tools"],
+      "notes": "Candidate generation only; no automatic termination selection."
+    },
+    {
+      "id": "forcite.forcefield_preparation",
+      "layer": "Forcite",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": ["Modules->Forcite->ChangeSettings", "Modules->Forcite->Energy->Run"],
+      "parameters": [
+        {"name": "CurrentForcefield", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_energy_23_1", "receipt_type_iic_compassiii"]},
+        {"name": "AssignForcefieldTypes", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_energy_23_1", "receipt_type_iic_compassiii"]},
+        {"name": "AssignBondOrder", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_energy_23_1", "receipt_type_iic_compassiii"]},
+        {"name": "AssignChargeGroups", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_energy_23_1", "receipt_type_iic_compassiii"]},
+        {"name": "ChargeAssignment", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_energy_23_1", "receipt_type_iic_compassiii"]},
+        {"name": "ReportAutomaticTerms", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_energy_23_1", "receipt_type_iic_compassiii"]}
+      ],
+      "evidence_ids": ["doc_forcite_energy_23_1", "test_forcite_checked", "receipt_type_iic_compassiii"],
+      "notes": "Closed COMPASSIII/PCFF/Dreiding/Universal profiles; scientific compatibility remains project-specific."
+    },
+    {
+      "id": "forcite.energy",
+      "layer": "Forcite",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": ["Modules->Forcite->Energy->Run"],
+      "parameters": [
+        {"name": "CurrentForcefield", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_energy_23_1"]},
+        {"name": "ChargeAssignment", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_energy_23_1"]}
+      ],
+      "evidence_ids": ["doc_forcite_energy_23_1", "test_forcite_checked"],
+      "notes": "Only the governed COMPASSIII profile is exposed."
+    },
+    {
+      "id": "forcite.geometry_optimization",
+      "layer": "Forcite",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": ["Modules->Forcite->GeometryOptimization->Run"],
+      "parameters": [],
+      "evidence_ids": ["doc_forcite_geometry_optimization_23_1", "test_forcite_checked"],
+      "notes": "Current public profile accepts no caller-supplied module settings."
+    },
+    {
+      "id": "forcite.dynamics_nvt",
+      "layer": "Forcite",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": ["Modules->Forcite->Dynamics->Run"],
+      "parameters": [
+        {"name": "Ensemble3D", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "Thermostat", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "Temperature", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "NumberOfSteps", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "TimeStep", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "TrajectoryFrequency", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]}
+      ],
+      "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"],
+      "notes": "NVT/Andersen only; NPT, NVE and other controls are not exposed by the governed profile."
+    },
+    {
+      "id": "castep.adaptive_package_planning",
+      "layer": "CASTEP",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": ["Modules->CASTEP->GeometryOptimization->Run", "Settings"],
+      "parameters": [
+        {"name": "Quality", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]},
+        {"name": "XCFunctional", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]},
+        {"name": "Pseudopotentials", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]},
+        {"name": "UseDFTD", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]},
+        {"name": "DFTDMethod", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]},
+        {"name": "KPointDerivation", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]},
+        {"name": "KPointQuality", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]},
+        {"name": "KPointSeparation", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]},
+        {"name": "SpinTreatment", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]},
+        {"name": "CellOptimization", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_geometry_optimization_23_1"]}
+      ],
+      "evidence_ids": ["doc_castep_geometry_optimization_23_1", "test_castep_pl", "test_adaptive_planning"],
+      "notes": "Verified for plan generation, guarded PL rendering, and runtime-only preflight. This does not verify CASTEP calculation execution or scientific convergence."
+    },
+    {
+      "id": "castep.calculation",
+      "layer": "CASTEP",
+      "status": "unverified",
+      "verified": false,
+      "exposure": "not_implemented",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": [],
+      "notes": "No CASTEP MCP calculation is implemented until local scripts and licensed runtime tests are reviewed."
+    },
+    {
+      "id": "castep.standalone_input_generation",
+      "layer": "CASTEP",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": [],
+      "parameters": [
+        {"name": "LATTICE_CART", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_lattice_cart_23_1", "test_castep_standalone"]},
+        {"name": "POSITIONS_FRAC", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_positions_frac_23_1", "test_castep_standalone"]},
+        {"name": "KPOINTS_MP_GRID", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_kpoints_mp_grid_23_1", "test_castep_standalone"]},
+        {"name": "TASK", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_task_23_1", "test_castep_standalone"]},
+        {"name": "XC_FUNCTIONAL", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_xc_functional_23_1", "test_castep_standalone"]},
+        {"name": "CUT_OFF_ENERGY", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_cut_off_energy_23_1", "test_castep_standalone"]},
+        {"name": "SPIN_POLARIZED", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_spin_polarized_23_1", "test_castep_standalone"]},
+        {"name": "FIX_OCCUPANCY", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_fix_occupancy_23_1", "test_castep_standalone"]},
+        {"name": "default_otfg", "status": "verified", "verified": true, "evidence_ids": ["doc_castep_species_pot_23_1", "test_castep_standalone"]}
+      ],
+      "evidence_ids": ["doc_castep_standalone_launcher_23_1", "doc_castep_lattice_cart_23_1", "doc_castep_positions_frac_23_1", "doc_castep_kpoints_mp_grid_23_1", "doc_castep_species_pot_23_1", "doc_castep_task_23_1", "doc_castep_cut_off_energy_23_1", "doc_castep_xc_functional_23_1", "doc_castep_spin_polarized_23_1", "doc_castep_fix_occupancy_23_1", "test_castep_standalone"],
+      "notes": "Writes only deterministic standalone CASTEP input candidates. It never starts RunCASTEP.bat, acquires a license, selects a Gateway, or parses a CASTEP result; those remain separate unverified capabilities."
+    },
+    {
+      "id": "results.castep_parsing",
+      "layer": "Results",
+      "status": "unverified",
+      "verified": false,
+      "exposure": "not_implemented",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": [],
+      "notes": "CASTEP result properties and table schemas are not yet registered."
+    },
+    {
+      "id": "reports.materialsscript_report_generation",
+      "layer": "Reports",
+      "status": "unsupported",
+      "verified": false,
+      "exposure": "not_implemented",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": [],
+      "notes": "No generic MaterialsScript report API is claimed; current reports are Python-generated audit artifacts."
+    }
+  ]
+}
