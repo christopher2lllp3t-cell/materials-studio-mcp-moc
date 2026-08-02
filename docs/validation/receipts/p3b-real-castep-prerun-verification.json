@@ -1,0 +1,60 @@
+{
+    "schema_version":  1,
+    "verification_entry":  "scripts/verify_candidate_p3b.ps1",
+    "candidate":  {
+                      "qualification":  "p3b_real_castep_single_use_runner_prerun",
+                      "release_version":  "1.3.0",
+                      "production_science_released":  false,
+                      "castep_execution":  "unverified",
+                      "castep_result_parsing":  "unverified",
+                      "public_mcp_tool_added":  false,
+                      "public_tool_count":  49,
+                      "real_castep_execution_started":  false,
+                      "authorization_consumed":  false,
+                      "license_acquired":  false,
+                      "plan_sha256":  "E461D57676903DEA6A19886D1AE85EB28859DC4AE2DC933D9890AA1E8D59C35E",
+                      "input_manifest_sha256":  "8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79"
+                  },
+    "checks":  [
+                   {
+                       "name":  "unittest",
+                       "status":  "pass",
+                       "expected_test_count":  303
+                   },
+                   {
+                       "name":  "p3b_targeted",
+                       "status":  "pass",
+                       "expected_test_count":  13
+                   },
+                   {
+                       "name":  "frozen_plan_and_input_binding",
+                       "status":  "pass",
+                       "output":  "E461D57676903DEA6A19886D1AE85EB28859DC4AE2DC933D9890AA1E8D59C35E 8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79"
+                   },
+                   {
+                       "name":  "source_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "source_release_manifest",
+                       "status":  "pass",
+                       "sha256":  "07D1732E1A30A713C5A19C4C3E79CF0E49885A6E297BC96F06722CBD8D9D3E88"
+                   },
+                   {
+                       "name":  "deployment_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "deployment_verify",
+                       "status":  "pass",
+                       "bundle_sha256":  "207AB795043A264038A179974D8E86A518F20CB85A7D457C2A90C58A7D5DE723"
+                   },
+                   {
+                       "name":  "forbidden_processes_before_and_after",
+                       "status":  "pass",
+                       "count":  0
+                   }
+               ]
+}

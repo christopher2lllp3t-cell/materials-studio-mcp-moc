@@ -179,6 +179,13 @@
       "sha256": "B87FFC0F870B101E3E973F18AF1F71DCEBF23E3D8649FEABE7033E3EC31B2023"
     },
     {
+      "id": "test_castep_real_qualification_runner",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_castep_real_qualification_runner.py",
+      "sha256": "9CBD31310B30DDE95795D6D315E6EEB96D453E4BD84F29E4BD1863E4E212B19E"
+    },
+    {
       "id": "test_forcite_checked",
       "kind": "regression_test",
       "root": "project",
@@ -370,6 +377,17 @@
       "parameters": [],
       "evidence_ids": ["test_castep_real_qualification_plan"],
       "notes": "Private P3-A plan only. It hash-binds one local 4-core alpha-quartz SinglePoint qualification candidate and official launcher evidence, but remains execution-blocked pending separate user authorization, license evidence, and a reviewed P3-B runner."
+    },
+    {
+      "id": "castep.real_qualification_execution_candidate",
+      "layer": "CASTEP",
+      "status": "todo",
+      "verified": false,
+      "exposure": "not_implemented",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": ["test_castep_real_qualification_runner"],
+      "notes": "Private P3-B single-use qualification candidate only. It is frozen to one authorized local 4-core alpha-quartz SinglePoint attempt with a 600-second timeout. Mock qualification does not verify licensing or real CASTEP execution; public CASTEP calculation remains unreleased."
     },
     {
       "id": "results.castep_parsing",
