@@ -118,6 +118,7 @@ class RealCastepQualificationRunnerTests(unittest.TestCase):
         }
         with ExitStack() as stack:
             stack.enter_context(patch.object(p3b, "_QUALIFICATION_ROOT", root))
+            stack.enter_context(patch.object(p3b, "PLAN_RETIRED_AFTER_ATTEMPT_2", False))
             stack.enter_context(patch.object(p3b, "_load_plan", return_value=plan))
             stack.enter_context(patch.object(
                 p3b, "_fixed_file", side_effect=[launcher, command_interpreter]
@@ -161,6 +162,17 @@ class RealCastepQualificationRunnerTests(unittest.TestCase):
     def test_consumed_r1_plan_is_permanently_retired(self) -> None:
         with self.assertRaisesRegex(ValueError, "permanently retired"):
             p3b._load_plan(RETIRED_PLAN)
+
+    def test_successful_p3c_plan_is_retired_before_new_authorization_or_process(self) -> None:
+        with self.assertRaisesRegex(RuntimeError, "permanently retired"), patch.object(
+            p3b, "_load_plan"
+        ) as load_plan:
+            p3b.execute_real_castep_qualification_once(
+                plan_path=FROZEN_PLAN,
+                input_manifest=Path("not-read.json"),
+                authorization=self._authorization(),
+            )
+        load_plan.assert_not_called()
 
     def test_raw_windows_command_line_handles_quoted_batch_path_without_backslash_quotes(self) -> None:
         command_interpreter = Path(os.environ["SystemRoot"]) / "System32" / "cmd.exe"
@@ -316,9 +328,9 @@ class RealCastepQualificationRunnerTests(unittest.TestCase):
     def test_registry_does_not_release_public_castep(self) -> None:
         capabilities = {item["id"]: item for item in load_capability_registry()["capabilities"]}
         private = capabilities["castep.real_qualification_execution_candidate"]
-        self.assertEqual(private["status"], "todo")
-        self.assertFalse(private["verified"])
-        self.assertEqual(private["exposure"], "not_implemented")
+        self.assertEqual(private["status"], "verified")
+        self.assertTrue(private["verified"])
+        self.assertEqual(private["exposure"], "internal")
         public_run = capabilities["castep.calculation"]
         public_parse = capabilities["results.castep_parsing"]
         self.assertFalse(public_run["verified"])

@@ -4,6 +4,7 @@ param(
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+throw "P3-C pre-run verification is retired after successful attempt 2; use verify_candidate_p3c_final.ps1"
 $root = (Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).Path
 if ([string]::IsNullOrWhiteSpace($ReceiptPath)) {
     $ReceiptPath = Join-Path $root "docs\validation\receipts\p3c-corrected-prerun-verification.json"

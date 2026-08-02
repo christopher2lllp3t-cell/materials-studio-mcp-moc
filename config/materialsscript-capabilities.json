@@ -183,7 +183,14 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_real_qualification_runner.py",
-      "sha256": "1A95FC1191C32BF6B56B4840DFBBB3319DEB2353B247A2BE3632CC1FAC1EA1E9"
+      "sha256": "972E447E472437429E1820D937E282EBE80F38A7031AAB3DF4409B4D58E5A201"
+    },
+    {
+      "id": "receipt_p3c_real_castep_qualification",
+      "kind": "runtime_receipt",
+      "root": "project",
+      "path": "docs/validation/receipts/p3c-real-castep-qualification-success.json",
+      "sha256": "12FB79B370A783618C5F0580192D2B40E459A4E6DD4D9875210CED05415EB872"
     },
     {
       "id": "test_forcite_checked",
@@ -381,13 +388,13 @@
     {
       "id": "castep.real_qualification_execution_candidate",
       "layer": "CASTEP",
-      "status": "todo",
-      "verified": false,
-      "exposure": "not_implemented",
+      "status": "verified",
+      "verified": true,
+      "exposure": "internal",
       "api_symbols": [],
       "parameters": [],
-      "evidence_ids": ["test_castep_real_qualification_runner"],
-      "notes": "Private corrected P3-C single-use qualification candidate only. P3-B attempt 1 failed before CASTEP start and is retired. P3-C binds raw Windows command serialization for one authorized local 4-core alpha-quartz SinglePoint attempt with a 600-second timeout; public CASTEP calculation remains unreleased."
+      "evidence_ids": ["test_castep_real_qualification_runner", "receipt_p3c_real_castep_qualification"],
+      "notes": "Verified only for the exact private P3-C alpha-quartz 9-atom PBE/600 eV/3x3x3/default-OTFG SinglePoint profile on four local cores. Attempt 2 completed with exit 0, explicit four-seat license checkout, hash-bound output, finite energy/time, and no remaining owned processes. The consumed plan is retired; public/general CASTEP calculation remains unreleased and these settings are not convergence evidence."
     },
     {
       "id": "results.castep_parsing",

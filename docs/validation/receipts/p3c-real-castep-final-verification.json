@@ -1,0 +1,89 @@
+{
+    "schema_version":  1,
+    "verification_entry":  "scripts/verify_candidate_p3c_final.ps1",
+    "outcome":  {
+                    "qualification":  "pass",
+                    "scope":  "exact_private_alpha_quartz_singlepoint_p3c_profile_only",
+                    "plan_sha256":  "10F3C622A161EAB3F25B0A9E19031AA9C485C7946E758CFDE5C1CD625B5F726B",
+                    "authorization_sha256":  "8F3C910EB03B6CD3222B345314EB28F743441F17892007723B85EEFE50FD0D4C",
+                    "runner_receipt_sha256":  "12FB79B370A783618C5F0580192D2B40E459A4E6DD4D9875210CED05415EB872",
+                    "output_sha256":  "EE91F3319375DEFD581644840F64718C066291027D2E837ACD7B6DCEB468E851",
+                    "exit_code":  0,
+                    "license_checkout":  "explicit_success_four_copies",
+                    "final_energy_eV":  -3158.163551162,
+                    "total_time_seconds":  44.23,
+                    "owned_processes_remaining":  0,
+                    "plan_retired":  true,
+                    "public_castep_calculation":  "unverified",
+                    "public_castep_parsing":  "unverified",
+                    "production_science_released":  false,
+                    "convergence_evidence":  false,
+                    "public_tool_count":  49
+                },
+    "checks":  [
+                   {
+                       "name":  "runtime_receipt",
+                       "status":  "pass",
+                       "sha256":  "12FB79B370A783618C5F0580192D2B40E459A4E6DD4D9875210CED05415EB872"
+                   },
+                   {
+                       "name":  "castep_output",
+                       "status":  "pass",
+                       "sha256":  "EE91F3319375DEFD581644840F64718C066291027D2E837ACD7B6DCEB468E851"
+                   },
+                   {
+                       "name":  "license_checkout",
+                       "status":  "pass",
+                       "copies":  4
+                   },
+                   {
+                       "name":  "parser",
+                       "status":  "completed",
+                       "classification":  "completed"
+                   },
+                   {
+                       "name":  "input_hashes_before_after",
+                       "status":  "pass"
+                   },
+                   {
+                       "name":  "owned_processes_remaining",
+                       "status":  "pass",
+                       "count":  0
+                   },
+                   {
+                       "name":  "capability_boundary",
+                       "status":  "pass",
+                       "output":  "fixed_profile_verified_public_general_unverified_plan_retired"
+                   },
+                   {
+                       "name":  "unittest",
+                       "status":  "pass",
+                       "expected_test_count":  306
+                   },
+                   {
+                       "name":  "p3c_targeted",
+                       "status":  "pass",
+                       "expected_test_count":  16
+                   },
+                   {
+                       "name":  "source_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "source_integrity",
+                       "status":  "pass",
+                       "sha256":  "E7AC5E195E35CCF6EFF15115FFBD64AF6861C67B91DFADBCE88F2C63DE21060F"
+                   },
+                   {
+                       "name":  "deployment_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "deployment_integrity",
+                       "status":  "pass",
+                       "bundle_sha256":  "207AB795043A264038A179974D8E86A518F20CB85A7D457C2A90C58A7D5DE723"
+                   }
+               ]
+}

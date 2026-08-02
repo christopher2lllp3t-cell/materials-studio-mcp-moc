@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "runner_revision": "ms-mcp.private-real-castep-qualification-runner.1.3.0-p3c-r1",
+  "status": "qualification_pass",
+  "qualification_only": true,
+  "production_science_released": false,
+  "plan_sha256": "10F3C622A161EAB3F25B0A9E19031AA9C485C7946E758CFDE5C1CD625B5F726B",
+  "authorization_sha256": "8F3C910EB03B6CD3222B345314EB28F743441F17892007723B85EEFE50FD0D4C",
+  "job_directory": "E:\\ms_mcp\\ms_mcp_jobs\\castep_real_qualification\\p3b_quartz_alpha_sp_4c_2a43c478aa2a5e0d7162",
+  "seedname": "quartz_alpha_sp_4c",
+  "cores": 4,
+  "timeout_seconds": 600,
+  "input_hashes": {
+    "manifest_sha256": "8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79",
+    "source_sha256": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE",
+    "input_source_copy_sha256": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE",
+    "cell_sha256": "010F86189B61DCCB7D1557BB1E9ECD3353C93A9575AC15AEEB473B49FF61C34E",
+    "param_sha256": "31E5F02C9204429786B7C31A07A45EE1409697235D57CCE689D2AD2D87F24576",
+    "contract_file_sha256": "9C461EB21B8E7D90040A9DCE13179D4F974E9B8F2B7F70E129D4F83B4AE4A03D",
+    "contract_canonical_sha256": "ABB51030B44A697D78ADCE91595AC51A445D97F4B0E885E4CA9DCD73E3805A42"
+  },
+  "copied_input_hashes": {
+    "standalone_input_manifest.json": "8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79",
+    "input_source.xsd": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE",
+    "quartz_alpha_sp_4c.cell": "010F86189B61DCCB7D1557BB1E9ECD3353C93A9575AC15AEEB473B49FF61C34E",
+    "quartz_alpha_sp_4c.param": "31E5F02C9204429786B7C31A07A45EE1409697235D57CCE689D2AD2D87F24576",
+    "standalone_input_contract.json": "9C461EB21B8E7D90040A9DCE13179D4F974E9B8F2B7F70E129D4F83B4AE4A03D"
+  },
+  "staged_input_hashes_before_launch": {
+    "standalone_input_manifest.json": "8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79",
+    "input_source.xsd": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE",
+    "quartz_alpha_sp_4c.cell": "010F86189B61DCCB7D1557BB1E9ECD3353C93A9575AC15AEEB473B49FF61C34E",
+    "quartz_alpha_sp_4c.param": "31E5F02C9204429786B7C31A07A45EE1409697235D57CCE689D2AD2D87F24576",
+    "standalone_input_contract.json": "9C461EB21B8E7D90040A9DCE13179D4F974E9B8F2B7F70E129D4F83B4AE4A03D"
+  },
+  "staged_input_hashes_after_exit": {
+    "standalone_input_manifest.json": "8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79",
+    "input_source.xsd": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE",
+    "quartz_alpha_sp_4c.cell": "010F86189B61DCCB7D1557BB1E9ECD3353C93A9575AC15AEEB473B49FF61C34E",
+    "quartz_alpha_sp_4c.param": "31E5F02C9204429786B7C31A07A45EE1409697235D57CCE689D2AD2D87F24576",
+    "standalone_input_contract.json": "9C461EB21B8E7D90040A9DCE13179D4F974E9B8F2B7F70E129D4F83B4AE4A03D"
+  },
+  "launcher": {
+    "path": "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1\\etc\\CASTEP\\bin\\RunCASTEP.bat",
+    "sha256": "FE09BD22E729E03D1B75027CAC9ECF2A0CC250A170FE5EE309CC33CCD070C027",
+    "bytes": 917
+  },
+  "command_interpreter": {
+    "path": "C:\\Windows\\System32\\cmd.exe",
+    "sha256": "65EC268ADD3973B6DCA64222985DA47CAEAEE44A340B0EC1466782914FD743D9",
+    "bytes": 344064
+  },
+  "process": {
+    "pid": 41892,
+    "started_utc": "2026-08-02T08:53:36.727570+00:00",
+    "ended_utc": "2026-08-02T08:55:20.779174+00:00",
+    "exit_code": 0,
+    "termination": null
+  },
+  "observed_descendant_pids": {
+    "12392": "mpiexec.exe",
+    "17228": "conhost.exe",
+    "28348": "conhost.exe",
+    "34120": "smpd.exe",
+    "34704": "castepexe.exe",
+    "35964": "conhost.exe",
+    "38516": "castepexe.exe",
+    "39236": "conhost.exe",
+    "41328": "conhost.exe",
+    "41400": "perl.exe",
+    "41444": "castepexe.exe",
+    "41768": "castepexe.exe"
+  },
+  "owned_processes_remaining": [],
+  "logs": {
+    "stdout_path": "E:\\ms_mcp\\ms_mcp_jobs\\castep_real_qualification\\p3b_quartz_alpha_sp_4c_2a43c478aa2a5e0d7162\\runner.stdout.log",
+    "stdout_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "stderr_path": "E:\\ms_mcp\\ms_mcp_jobs\\castep_real_qualification\\p3b_quartz_alpha_sp_4c_2a43c478aa2a5e0d7162\\runner.stderr.log",
+    "stderr_sha256": "E90FF31268847721A236A850F3389FB6603F549532577DA14ACAE0844F2A2DE3"
+  },
+  "artifacts": [
+    {
+      "name": "Castepexe.log",
+      "bytes": 81,
+      "sha256": "7D44184747D58EF8A3F052840262C3A5A1C21AC788CFEE10808C0DE526B9BB83"
+    },
+    {
+      "name": "input_source.xsd",
+      "bytes": 49512,
+      "sha256": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE"
+    },
+    {
+      "name": "O_C19_PBE_OTF.usp",
+      "bytes": 906830,
+      "sha256": "00D249B2D969178D492DCA5996FFDEA090CE9AFBC45F26EF78A3604B2F185139"
+    },
+    {
+      "name": "quartz_alpha_sp_4c.bands",
+      "bytes": 6805,
+      "sha256": "E3AD2E55A300DC87C3CFAB09D1DE91483755BAAA57011D2B335D61C28F9C1E63"
+    },
+    {
+      "name": "quartz_alpha_sp_4c.bib",
+      "bytes": 2034,
+      "sha256": "1D432B00A951FED395B1326C83E997ECF03358F041E8324D1983AA297E47EF56"
+    },
+    {
+      "name": "quartz_alpha_sp_4c.castep",
+      "bytes": 26775,
+      "sha256": "EE91F3319375DEFD581644840F64718C066291027D2E837ACD7B6DCEB468E851"
+    },
+    {
+      "name": "quartz_alpha_sp_4c.castep_bin",
+      "bytes": 987170,
+      "sha256": "761541ACD9035A33A5CD280A3C71268E460CF093603BA17DA7EB5A3363F96B8F"
+    },
+    {
+      "name": "quartz_alpha_sp_4c.cell",
+      "bytes": 667,
+      "sha256": "010F86189B61DCCB7D1557BB1E9ECD3353C93A9575AC15AEEB473B49FF61C34E"
+    },
+    {
+      "name": "quartz_alpha_sp_4c.cst_esp",
+      "bytes": 850208,
+      "sha256": "821A5247F83AE23EE50CEAD59661287152C5598D9303B4BD44AB3931A469B745"
+    },
+    {
+      "name": "quartz_alpha_sp_4c.param",
+      "bytes": 118,
+      "sha256": "31E5F02C9204429786B7C31A07A45EE1409697235D57CCE689D2AD2D87F24576"
+    },
+    {
+      "name": "runner.stderr.log",
+      "bytes": 303,
+      "sha256": "E90FF31268847721A236A850F3389FB6603F549532577DA14ACAE0844F2A2DE3"
+    },
+    {
+      "name": "runner.stdout.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "name": "Si_C19_PBE_OTF.usp",
+      "bytes": 1611624,
+      "sha256": "69F6679FCE2D5C3EDCE7C266967B205008B24FAFCBB6627D749EDE2AAF453BC1"
+    },
+    {
+      "name": "standalone_input_contract.json",
+      "bytes": 7200,
+      "sha256": "9C461EB21B8E7D90040A9DCE13179D4F974E9B8F2B7F70E129D4F83B4AE4A03D"
+    },
+    {
+      "name": "standalone_input_manifest.json",
+      "bytes": 3038,
+      "sha256": "8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79"
+    },
+    {
+      "name": "std_err.txt",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "name": "std_out.txt",
+      "bytes": 96,
+      "sha256": "384997CD3A1CABC773A63A1D7FA593D72D61CCC3B478D418F3EC5366703CF638"
+    }
+  ],
+  "parser": {
+    "schema_version": 1,
+    "parser_revision": "ms-mcp.private-castep-result-parser.1.3.0-p1-r1",
+    "status": "completed",
+    "classification": "completed",
+    "completion_evidence": [
+      {
+        "kind": "final_energy",
+        "line_number": 356,
+        "value_eV": -3158.163551162
+      },
+      {
+        "kind": "total_time",
+        "line_number": 491,
+        "seconds": 44.23
+      }
+    ],
+    "energy": {
+      "unit": "eV",
+      "value": -3158.163551162
+    },
+    "warnings": [],
+    "errors": [],
+    "blockers": [
+      {
+        "code": "CASTEP_EXECUTION_UNVERIFIED",
+        "detail": "Offline parsing does not qualify CASTEP execution."
+      },
+      {
+        "code": "CASTEP_RESULT_PARSING_NOT_RELEASED",
+        "detail": "This private qualification layer is not a public scientific result parser."
+      }
+    ],
+    "input_hashes": {
+      "manifest_sha256": "8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79",
+      "source_sha256": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE",
+      "input_source_copy_sha256": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE",
+      "cell_sha256": "010F86189B61DCCB7D1557BB1E9ECD3353C93A9575AC15AEEB473B49FF61C34E",
+      "param_sha256": "31E5F02C9204429786B7C31A07A45EE1409697235D57CCE689D2AD2D87F24576",
+      "contract_file_sha256": "9C461EB21B8E7D90040A9DCE13179D4F974E9B8F2B7F70E129D4F83B4AE4A03D",
+      "contract_canonical_sha256": "ABB51030B44A697D78ADCE91595AC51A445D97F4B0E885E4CA9DCD73E3805A42"
+    },
+    "output_hashes": {
+      "expected_sha256": "EE91F3319375DEFD581644840F64718C066291027D2E837ACD7B6DCEB468E851",
+      "observed_sha256": "EE91F3319375DEFD581644840F64718C066291027D2E837ACD7B6DCEB468E851"
+    },
+    "seedname": "quartz_alpha_sp_4c",
+    "process": {
+      "exit_code": 0,
+      "termination": null
+    }
+  },
+  "license_evidence": "calculation_completed_license_inferred",
+  "errors": [],
+  "command_sha256": "0FD9D3D18643C052D83FE427C8710562EC12D50364A162F4DB1DDB218A9FF58B",
+  "authorization_consumption_marker": "E:\\ms_mcp\\ms_mcp_jobs\\castep_real_qualification\\authorization_consumed\\8F3C910EB03B6CD3222B345314EB28F743441F17892007723B85EEFE50FD0D4C.json"
+}

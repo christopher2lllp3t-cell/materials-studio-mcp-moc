@@ -47,6 +47,7 @@ APPROVED_PLAN_SHA256 = "10F3C622A161EAB3F25B0A9E19031AA9C485C7946E758CFDE5C1CD62
 RETIRED_PLAN_SHA256 = "E461D57676903DEA6A19886D1AE85EB28859DC4AE2DC933D9890AA1E8D59C35E"
 AUTHORIZATION_ACTION = "execute_one_local_p3b_castep_qualification"
 AUTHORIZATION_BASIS = "explicit_user_authorization_after_p3b_attempt_1_in_codex_thread_2026-08-02"
+PLAN_RETIRED_AFTER_ATTEMPT_2 = True
 _NONCE = re.compile(r"^[0-9A-F]{64}$")
 _SAFE_SEED = re.compile(r"^[A-Za-z0-9_]{1,48}$")
 _LICENSE_FAILURE = re.compile(
@@ -256,6 +257,10 @@ def execute_real_castep_qualification_once(
 ) -> dict[str, Any]:
     """Execute exactly one authorized P3-B local qualification attempt."""
 
+    if PLAN_RETIRED_AFTER_ATTEMPT_2:
+        raise RuntimeError(
+            "The successful P3-C plan was consumed by attempt 2 and is permanently retired"
+        )
     plan = _load_plan(Path(plan_path))
     validate_single_use_authorization(authorization)
     root = _QUALIFICATION_ROOT.resolve()
