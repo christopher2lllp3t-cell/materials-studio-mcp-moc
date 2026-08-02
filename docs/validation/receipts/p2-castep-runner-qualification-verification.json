@@ -16,7 +16,7 @@
                    {
                        "name":  "unittest",
                        "status":  "pass",
-                       "expected_test_count":  274
+                       "expected_test_count":  279
                    },
                    {
                        "name":  "source_pip_check",
@@ -26,7 +26,7 @@
                    {
                        "name":  "source_release_manifest",
                        "status":  "pass",
-                       "sha256":  "E5C782922D70987A9F9E152323E23F21331CD0745489B3572DFC33015D79AC54"
+                       "sha256":  "A9DF19BB5A417462A72E20FB7D5BC60486E43C219DF74CD394F2E0ABCBC7C756"
                    },
                    {
                        "name":  "deployment_pip_check",

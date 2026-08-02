@@ -34,8 +34,8 @@ _SAFE_SEED = re.compile(r"^[A-Za-z0-9_]{1,48}$")
 _FAKE_HELPER = PROJECT_ROOT / "tests" / "fixtures" / "castep_runner" / "synthetic_castep_helper.py"
 # Updated only by a source-reviewed P2 change; do not derive this expected value
 # from a caller-provided path or from an environment variable.
-_FAKE_HELPER_SHA256 = "850247944B5F80EEA2DE6638C5F3E8855D7CCC32F72281126FEA720382AF172E"
-_SYNTHETIC_SCENARIOS = frozenset({"normal", "sleep", "tree", "nonzero", "missing_output", "truncated"})
+_FAKE_HELPER_SHA256 = "F2303AA7AB5C02AC7EBD77F672CE16D2B9472D53E06A10249428510054AB7AFB"
+_SYNTHETIC_SCENARIOS = frozenset({"normal", "write_then_sleep", "sleep", "tree", "nonzero", "missing_output", "truncated"})
 
 
 def _issue(code: str, detail: str) -> dict[str, str]:
@@ -119,6 +119,8 @@ def _validate_input_contract(input_manifest: Path) -> tuple[str | None, dict[str
 
 def _create_job_directory(job_root: Path, seedname: str) -> Path:
     root = job_root.resolve()
+    if not str(root).isascii():
+        raise ValueError("P2 standalone runner requires the complete job directory path to be ASCII")
     root.mkdir(parents=True, exist_ok=True)
     for _ in range(4):
         leaf = f"p2_{seedname}_{secrets.token_hex(10)}"
@@ -155,6 +157,64 @@ def _copy_bound_inputs(input_manifest: Path, job_directory: Path, seedname: str,
             raise RuntimeError(f"Bound standalone input changed while being copied: {destination_name}")
         copied[destination_name] = actual
     return copied
+
+
+def _verify_staged_inputs(job_directory: Path, copied_hashes: dict[str, str]) -> tuple[dict[str, str | None], list[dict[str, str]]]:
+    """Fail closed if any exact input copy changes before or during a run."""
+
+    observed: dict[str, str | None] = {}
+    errors: list[dict[str, str]] = []
+    for name, expected in copied_hashes.items():
+        path = job_directory / name
+        actual = sha256_file(path) if path.is_file() else None
+        observed[name] = actual
+        if actual != expected:
+            errors.append(_issue("STAGED_INPUT_HASH_MISMATCH", f"Staged input '{name}' differs from its copied SHA-256."))
+    return observed, errors
+
+
+def _tree_termination_fallback(process: subprocess.Popen[bytes], error: Exception) -> dict[str, Any]:
+    """Fail closed when tree cleanup itself errors, while still killing our root PID."""
+
+    result: dict[str, Any] = {
+        "requested": True,
+        "pid": process.pid,
+        "method": "tree_termination_failed_root_fallback",
+        "tree_termination_error": f"{type(error).__name__}: {error}",
+        "root_kill_requested": False,
+        "root_exit_observed": process.poll() is not None,
+    }
+    if not result["root_exit_observed"]:
+        try:
+            process.kill()
+            result["root_kill_requested"] = True
+        except OSError as exc:
+            result["root_kill_error"] = f"{type(exc).__name__}: {exc}"
+        try:
+            process.wait(timeout=15)
+        except subprocess.TimeoutExpired:
+            result["root_wait_timeout"] = True
+    result["root_exit_observed"] = process.poll() is not None
+    return result
+
+
+def _internal_failure(job_directory: Path, receipt: dict[str, Any], process: subprocess.Popen[bytes] | None, error: Exception) -> dict[str, Any]:
+    """Record internal failures without ever relabelling them as lock contention."""
+
+    receipt["process"]["ended_utc"] = _now()
+    receipt["errors"] = [_issue("INTERNAL_RUNNER_ERROR", f"{type(error).__name__}: {error}")]
+    receipt["status"] = "internal_runner_error"
+    if process is not None and process.poll() is None:
+        try:
+            receipt["process"]["termination"] = _terminate_process_tree(process)
+            process.wait(timeout=15)
+        except Exception as cleanup_error:
+            receipt["process"]["termination"] = _tree_termination_fallback(process, cleanup_error)
+            receipt["status"] = "process_cleanup_failed"
+            receipt["errors"].append(_issue("PROCESS_TREE_TERMINATION_FAILED", f"{type(cleanup_error).__name__}: {cleanup_error}"))
+    if process is not None:
+        receipt["process"]["exit_code"] = process.returncode
+    return _finish(job_directory, receipt)
 
 
 def _synthetic_adapter() -> tuple[Path, str, Path, str]:
@@ -224,6 +284,10 @@ def run_synthetic_standalone_qualification(
         receipt = _base_receipt(input_hashes=input_hashes, seedname=seedname, cores=cores, timeout_seconds=timeout, status="job_directory_collision")
         receipt["errors"] = [_issue("JOB_DIRECTORY_COLLISION", str(exc))]
         return receipt
+    except ValueError as exc:
+        receipt = _base_receipt(input_hashes=input_hashes, seedname=seedname, cores=cores, timeout_seconds=timeout, status="job_directory_not_ascii")
+        receipt["errors"] = [_issue("JOB_DIRECTORY_NOT_ASCII", str(exc))]
+        return receipt
 
     receipt = _base_receipt(input_hashes=input_hashes, seedname=seedname, cores=cores, timeout_seconds=timeout, status="initializing")
     receipt["job"] = {"directory": str(job_directory), "directory_name": job_directory.name}
@@ -234,94 +298,122 @@ def run_synthetic_standalone_qualification(
         receipt["errors"] = [_issue("INPUT_COPY_FAILED", f"{type(exc).__name__}: {exc}")]
         return _finish(job_directory, receipt)
 
+    process: subprocess.Popen[bytes] | None = None
+    slot = acquire_execution_slot()
     try:
-        with acquire_execution_slot():
-            try:
-                helper, helper_hash, interpreter, interpreter_hash = _synthetic_adapter()
-            except Exception as exc:
-                receipt["status"] = "synthetic_adapter_unavailable"
-                receipt["errors"] = [_issue("SYNTHETIC_ADAPTER_UNAVAILABLE", f"{type(exc).__name__}: {exc}")]
-                return _finish(job_directory, receipt)
-            receipt["adapter"] = {
-                "helper_path": str(helper), "helper_sha256": helper_hash,
-                "interpreter_path": str(interpreter), "interpreter_sha256": interpreter_hash,
-            }
-            _, rechecked_hashes, recheck_errors = _validate_input_contract(manifest)
-            if _input_changed(input_hashes, rechecked_hashes, recheck_errors):
-                receipt["status"] = "input_changed_before_launch"
-                receipt["errors"] = recheck_errors or [_issue("INPUT_CHANGED_BEFORE_LAUNCH", "Input hashes changed after staging and before process creation.")]
-                receipt["input_hashes_after_recheck"] = rechecked_hashes
-                return _finish(job_directory, receipt)
-
-            stdout_path = job_directory / "runner.stdout.log"
-            stderr_path = job_directory / "runner.stderr.log"
-            pid_path = job_directory / "synthetic_tree_pids.txt"
-            command = [str(interpreter), str(helper), "--scenario", scenario, "--seed", seedname, "--pid-file", str(pid_path)]
-            receipt["process"]["stdout_path"] = str(stdout_path)
-            receipt["process"]["stderr_path"] = str(stderr_path)
-            started = _now()
-            process: subprocess.Popen[bytes] | None = None
-            termination_kind: str | None = None
-            try:
-                with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
-                    process = subprocess.Popen(
-                        command, cwd=job_directory, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
-                        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0,
-                        close_fds=True,
-                    )
-                    receipt["process"]["pid"] = process.pid
-                    receipt["process"]["started_utc"] = started
-                    deadline = time.monotonic() + timeout
-                    while process.poll() is None:
-                        if cancel_event is not None and cancel_event.is_set():
-                            termination_kind = "cancelled"
-                            break
-                        if time.monotonic() >= deadline:
-                            termination_kind = "timeout"
-                            break
-                        time.sleep(0.05)
-                    if termination_kind is not None:
-                        receipt["process"]["termination"] = _terminate_process_tree(process)
-                    try:
-                        process.wait(timeout=15)
-                    except subprocess.TimeoutExpired:
-                        receipt["status"] = "process_cleanup_failed"
-                        receipt["errors"] = [_issue("PROCESS_CLEANUP_FAILED", "Owned synthetic process did not exit after tree termination.")]
-                        receipt["process"]["ended_utc"] = _now()
-                        return _finish(job_directory, receipt)
-            except OSError as exc:
-                receipt["status"] = "start_failed"
-                receipt["errors"] = [_issue("PROCESS_START_FAILED", f"{type(exc).__name__}: {exc}")]
-                receipt["process"]["ended_utc"] = _now()
-                return _finish(job_directory, receipt)
-
-            assert process is not None
-            receipt["process"]["ended_utc"] = _now()
-            receipt["process"]["exit_code"] = process.returncode
-            receipt["logs"] = {"stdout_sha256": sha256_file(stdout_path), "stderr_sha256": sha256_file(stderr_path)}
-            output = job_directory / f"{seedname}.castep"
-            if output.is_file():
-                output_hash = sha256_file(output)
-                receipt["output"] = {"path": str(output), "sha256": output_hash, "present": True}
-                receipt["parser"] = parse_standalone_castep_result(
-                    castep_output=output, input_manifest=manifest, expected_output_sha256=output_hash,
-                    process_exit_code=process.returncode, termination=termination_kind,
-                )
-            if termination_kind is not None:
-                receipt["status"] = termination_kind
-            elif process.returncode != 0:
-                receipt["status"] = "nonzero_exit"
-            elif not output.is_file():
-                receipt["status"] = "output_missing"
-                receipt["errors"] = [_issue("OUTPUT_MISSING", "Synthetic helper exited without the required .castep output.")]
-            elif receipt["parser"]["status"] != "completed":
-                receipt["status"] = "output_parse_failed"
-                receipt["errors"] = [_issue("OUTPUT_PARSE_FAILED", "P1 parser did not qualify synthetic output completion.")]
-            else:
-                receipt["status"] = "qualified_process_control"
-                receipt["process_control_qualified"] = True
-            return _finish(job_directory, receipt)
+        slot.__enter__()
     except RuntimeError as exc:
         receipt["status"] = "blocked_lock"
         receipt["errors"] = [_issue("EXECUTION_SLOT_UNAVAILABLE", str(exc))]
         return _finish(job_directory, receipt)
+    except Exception as exc:
+        return _internal_failure(job_directory, receipt, process, exc)
+    try:
+        try:
+            helper, helper_hash, interpreter, interpreter_hash = _synthetic_adapter()
+        except Exception as exc:
+            receipt["status"] = "synthetic_adapter_unavailable"
+            receipt["errors"] = [_issue("SYNTHETIC_ADAPTER_UNAVAILABLE", f"{type(exc).__name__}: {exc}")]
+            return _finish(job_directory, receipt)
+        receipt["adapter"] = {
+            "helper_path": str(helper), "helper_sha256": helper_hash,
+            "interpreter_path": str(interpreter), "interpreter_sha256": interpreter_hash,
+        }
+        _, rechecked_hashes, recheck_errors = _validate_input_contract(manifest)
+        if _input_changed(input_hashes, rechecked_hashes, recheck_errors):
+            receipt["status"] = "input_changed_before_launch"
+            receipt["errors"] = recheck_errors or [_issue("INPUT_CHANGED_BEFORE_LAUNCH", "Input hashes changed after staging and before process creation.")]
+            receipt["input_hashes_after_recheck"] = rechecked_hashes
+            return _finish(job_directory, receipt)
+        staged_before, staged_before_errors = _verify_staged_inputs(job_directory, receipt["copied_input_hashes"])
+        receipt["staged_input_hashes_before_launch"] = staged_before
+        if staged_before_errors:
+            receipt["status"] = "staged_input_changed_before_launch"
+            receipt["errors"] = staged_before_errors
+            return _finish(job_directory, receipt)
+
+        stdout_path = job_directory / "runner.stdout.log"
+        stderr_path = job_directory / "runner.stderr.log"
+        pid_path = job_directory / "synthetic_tree_pids.txt"
+        command = [str(interpreter), str(helper), "--scenario", scenario, "--seed", seedname, "--pid-file", str(pid_path)]
+        receipt["process"]["stdout_path"] = str(stdout_path)
+        receipt["process"]["stderr_path"] = str(stderr_path)
+        started = _now()
+        termination_kind: str | None = None
+        try:
+            with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+                process = subprocess.Popen(
+                    command, cwd=job_directory, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
+                    creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0,
+                    close_fds=True,
+                )
+                receipt["process"]["pid"] = process.pid
+                receipt["process"]["started_utc"] = started
+                deadline = time.monotonic() + timeout
+                while process.poll() is None:
+                    if cancel_event is not None and cancel_event.is_set():
+                        termination_kind = "cancelled"
+                        break
+                    if time.monotonic() >= deadline:
+                        termination_kind = "timeout"
+                        break
+                    time.sleep(0.05)
+                if termination_kind is not None:
+                    try:
+                        receipt["process"]["termination"] = _terminate_process_tree(process)
+                    except Exception as exc:
+                        receipt["process"]["termination"] = _tree_termination_fallback(process, exc)
+                        receipt["status"] = "process_cleanup_failed"
+                        receipt["errors"] = [_issue("PROCESS_TREE_TERMINATION_FAILED", f"{type(exc).__name__}: {exc}")]
+                        receipt["process"]["ended_utc"] = _now()
+                        receipt["process"]["exit_code"] = process.returncode
+                        return _finish(job_directory, receipt)
+                try:
+                    process.wait(timeout=15)
+                except subprocess.TimeoutExpired:
+                    receipt["status"] = "process_cleanup_failed"
+                    receipt["errors"] = [_issue("PROCESS_CLEANUP_FAILED", "Owned synthetic process did not exit after tree termination.")]
+                    receipt["process"]["ended_utc"] = _now()
+                    return _finish(job_directory, receipt)
+        except OSError as exc:
+            receipt["status"] = "start_failed"
+            receipt["errors"] = [_issue("PROCESS_START_FAILED", f"{type(exc).__name__}: {exc}")]
+            receipt["process"]["ended_utc"] = _now()
+            return _finish(job_directory, receipt)
+
+        assert process is not None
+        receipt["process"]["ended_utc"] = _now()
+        receipt["process"]["exit_code"] = process.returncode
+        receipt["logs"] = {"stdout_sha256": sha256_file(stdout_path), "stderr_sha256": sha256_file(stderr_path)}
+        staged_after, staged_after_errors = _verify_staged_inputs(job_directory, receipt["copied_input_hashes"])
+        receipt["staged_input_hashes_after_run"] = staged_after
+        if staged_after_errors:
+            receipt["status"] = "staged_input_changed_during_run"
+            receipt["errors"] = staged_after_errors
+            return _finish(job_directory, receipt)
+        output = job_directory / f"{seedname}.castep"
+        if output.is_file():
+            output_hash = sha256_file(output)
+            receipt["output"] = {"path": str(output), "sha256": output_hash, "present": True}
+            receipt["parser"] = parse_standalone_castep_result(
+                castep_output=output, input_manifest=manifest, expected_output_sha256=output_hash,
+                process_exit_code=process.returncode, termination=termination_kind,
+            )
+        if termination_kind is not None:
+            receipt["status"] = termination_kind
+        elif process.returncode != 0:
+            receipt["status"] = "nonzero_exit"
+        elif not output.is_file():
+            receipt["status"] = "output_missing"
+            receipt["errors"] = [_issue("OUTPUT_MISSING", "Synthetic helper exited without the required .castep output.")]
+        elif receipt["parser"]["status"] != "completed":
+            receipt["status"] = "output_parse_failed"
+            receipt["errors"] = [_issue("OUTPUT_PARSE_FAILED", "P1 parser did not qualify synthetic output completion.")]
+        else:
+            receipt["status"] = "qualified_process_control"
+            receipt["process_control_qualified"] = True
+        return _finish(job_directory, receipt)
+    except Exception as exc:
+        return _internal_failure(job_directory, receipt, process, exc)
+    finally:
+        slot.__exit__(None, None, None)

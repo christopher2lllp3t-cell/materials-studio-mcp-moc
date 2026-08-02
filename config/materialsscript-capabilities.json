@@ -169,7 +169,7 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_standalone_runner.py",
-      "sha256": "1192E75F3738211540B15ECAA5A3ECB31AC8C056D62B4B85B7A2890846AD5A14"
+      "sha256": "1582413D719D5847B35DCFFA7A2D28E66CF98281FC5F7259D606866152A3E813"
     },
     {
       "id": "test_forcite_checked",

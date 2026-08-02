@@ -27,7 +27,7 @@ def _spawn(role: str, pid_file: Path) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--scenario", choices=("normal", "sleep", "tree", "nonzero", "missing_output", "truncated"))
+    parser.add_argument("--scenario", choices=("normal", "write_then_sleep", "sleep", "tree", "nonzero", "missing_output", "truncated"))
     parser.add_argument("--seed")
     parser.add_argument("--pid-file", required=True)
     parser.add_argument("--role", choices=("child", "grandchild"))
@@ -66,6 +66,8 @@ def main() -> int:
         encoding="utf-8",
         newline="\n",
     )
+    if args.scenario == "write_then_sleep":
+        time.sleep(2)
     return 0
 
 

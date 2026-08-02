@@ -1,7 +1,7 @@
 param(
     [string]$DeploymentRoot = "E:\ms_mcp\deployments\1.3.0",
     [string]$ReceiptPath = "",
-    [int]$ExpectedTestCount = 274
+    [int]$ExpectedTestCount = 279
 )
 
 Set-StrictMode -Version Latest
@@ -16,8 +16,8 @@ $deployment = (Resolve-Path -LiteralPath $DeploymentRoot).Path
 $deploymentPython = Join-Path $deployment ".venv\Scripts\python.exe"
 $sourceManifest = Join-Path $sourceRoot "release-manifest.json"
 
-if ($ExpectedTestCount -ne 274) {
-    throw "P2 candidate verification is fixed to 274 tests; received $ExpectedTestCount"
+if ($ExpectedTestCount -ne 279) {
+    throw "P2 candidate verification is fixed to 279 tests; received $ExpectedTestCount"
 }
 foreach ($required in @($sourcePython, $deploymentPython, $sourceManifest)) {
     if (-not (Test-Path -LiteralPath $required -PathType Leaf)) {
@@ -63,8 +63,8 @@ $savedRoot = $env:MATERIALS_STUDIO_MCP_ROOT
 Remove-Item Env:MATERIALS_STUDIO_MCP_ROOT -ErrorAction SilentlyContinue
 try {
     $unittestText = Invoke-CheckedText -Name "unittest" -Executable $sourcePython -Arguments @("-m", "unittest", "discover", "-s", "tests", "-q")
-    if ($unittestText -notmatch "Ran 274 tests") {
-        throw "Expected the P2 candidate suite to run exactly 274 tests; received: $unittestText"
+    if ($unittestText -notmatch "Ran 279 tests") {
+        throw "Expected the P2 candidate suite to run exactly 279 tests; received: $unittestText"
     }
     $sourcePipText = Invoke-CheckedText -Name "source pip check" -Executable $sourcePython -Arguments @("-m", "pip", "check")
     $sourceIntegrity = Invoke-CheckedJson -Name "source release manifest verification" -Executable $sourcePython -Arguments @("-m", "materials_studio_mcp.release", "verify", "--manifest", $sourceManifest)
@@ -102,7 +102,7 @@ $receipt = [ordered]@{
         synthetic_process_control_only = $true
     }
     checks = @(
-        [ordered]@{ name = "unittest"; status = "pass"; expected_test_count = 274 },
+        [ordered]@{ name = "unittest"; status = "pass"; expected_test_count = 279 },
         [ordered]@{ name = "source_pip_check"; status = "pass"; output = $sourcePipText },
         [ordered]@{ name = "source_release_manifest"; status = $sourceIntegrity.status; sha256 = $sourceIntegrity.manifest_sha256 },
         [ordered]@{ name = "deployment_pip_check"; status = "pass"; output = $deploymentPipText },
