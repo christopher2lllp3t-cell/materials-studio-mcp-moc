@@ -11,7 +11,7 @@
                     "result_parsing":  "not_exercised",
                     "production_science_released":  false,
                     "public_tool_count":  49,
-                    "attempt_receipt_sha256":  "B42D1C43E9ACE35AA9EECE4A0E28C1912997E0EA07AAF7A7D50F72BA1B13054C",
+                    "attempt_receipt_sha256":  "DFBC27FB62A490D9D8559A804C55B413A9803C11060E2976E72C51646AC0B187",
                     "original_job_receipt_sha256":  "DFBC27FB62A490D9D8559A804C55B413A9803C11060E2976E72C51646AC0B187"
                 },
     "checks":  [
@@ -49,7 +49,7 @@
                    {
                        "name":  "source_integrity",
                        "status":  "pass",
-                       "sha256":  "D31F95CF54457698678041F828969688EDE6653B6024B07567160CE2FC417B04"
+                       "sha256":  "A3DEB19428B32D2ED49C1D5F8BED5AE80E1F8310C861E5B9137C2A9A21906209"
                    },
                    {
                        "name":  "deployment_pip_check",

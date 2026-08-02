@@ -15,7 +15,7 @@ $deployment = (Resolve-Path -LiteralPath $DeploymentRoot).Path
 $deploymentPython = Join-Path $deployment ".venv\Scripts\python.exe"
 $manifest = Join-Path $sourceRoot "release-manifest.json"
 $attempt = Join-Path $sourceRoot "docs\validation\receipts\p3b-real-castep-attempt-1.json"
-$attemptSha = "B42D1C43E9ACE35AA9EECE4A0E28C1912997E0EA07AAF7A7D50F72BA1B13054C"
+$attemptSha = "DFBC27FB62A490D9D8559A804C55B413A9803C11060E2976E72C51646AC0B187"
 
 function Invoke-CheckedText {
     param([string]$Name, [string]$Executable, [string[]]$Arguments)
