@@ -16,7 +16,7 @@ $before=@{LC_ALL=$env:LC_ALL;LC_CTYPE=$env:LC_CTYPE;LANG=$env:LANG}
 $forbidden=@(Get-Process -ErrorAction SilentlyContinue|Where-Object{$_.ProcessName -match '^(castep|castepexe|mpiexec|smpd|msserver|matserver|MaterialsStudio|RunCASTEP)$'})
 if($forbidden.Count -ne 0){throw "Forbidden runtime process exists before P4-A"}
 $full=Invoke-Text "unittest" $python @("-m","unittest","discover","-s","tests","-q")
-if($full -notmatch "Ran 314 tests"){throw "Expected 314 tests: $full"}
+if($full -notmatch "Ran 319 tests"){throw "Expected 319 tests: $full"}
 $targeted=Invoke-Text "P4-A targeted" $python @("-m","unittest","tests.test_castep_p4a_preflight","-q")
 if($targeted -notmatch "Ran 8 tests"){throw "Expected 8 P4-A tests: $targeted"}
 $audit=Invoke-Json "MS Perl locale audit" $python @("-c","import json; from materials_studio_mcp.castep_p4a_preflight import audit_materials_studio_perl_locale; print(json.dumps(audit_materials_studio_perl_locale()))")
@@ -52,7 +52,7 @@ $receipt=[ordered]@{
   public_castep_parsing="unverified"
  }
  checks=@(
-  [ordered]@{name="unittest";status="pass";expected_test_count=314},
+  [ordered]@{name="unittest";status="pass";expected_test_count=319},
   [ordered]@{name="p4a_targeted";status="pass";expected_test_count=8},
   [ordered]@{name="ms_perl_locale";status=$audit.status;stderr_bytes=$audit.stderr_bytes;stderr_sha256=$audit.stderr_sha256},
   [ordered]@{name="publication_preflight";status="pass";execution_allowed=$false;public_tool_added=$false},

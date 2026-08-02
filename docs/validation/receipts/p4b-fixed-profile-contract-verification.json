@@ -1,30 +1,17 @@
 {
     "schema_version":  1,
-    "verification_entry":  "scripts/verify_candidate_p4a.ps1",
+    "verification_entry":  "scripts/verify_candidate_p4b.ps1",
     "outcome":  {
                     "qualification":  "pass",
-                    "scope":  "locale_safe_child_environment_and_nonexecuting_fixed_profile_publication_preflight",
-                    "ms_perl_sha256":  "31F0629C1A9A6489505376AA76AE5A742667615487F35338E8306DE1317EF95F",
-                    "locale_before":  {
-                                          "LC_ALL":  "C.UTF-8",
-                                          "LC_CTYPE":  "C.UTF-8",
-                                          "LANG":  "C.UTF-8"
-                                      },
-                    "locale_after":  {
-                                         "LC_ALL":  "C",
-                                         "LC_CTYPE":  "C",
-                                         "LANG":  "C"
-                                     },
-                    "locale_stderr_bytes":  0,
-                    "locale_warning_markers":  [
-
-                                               ],
-                    "parent_environment_unchanged":  true,
-                    "castep_or_license_started":  false,
+                    "scope":  "unregistered_fixed_profile_public_api_contract_only",
+                    "contract_sha256":  "92F969E076D36C3A7FD377BA5EDD7E4DBFA817409839D1D33657D4145C4F113E",
+                    "fixed_preflight_request_sha256":  "C85E2C2642487C6FE8859179A56B75E39AE4DDA430691030B1994E41496A7DD9",
+                    "execution_allowed":  false,
                     "public_tool_added":  false,
                     "public_tool_count":  49,
-                    "public_castep_calculation":  "unverified",
-                    "public_castep_parsing":  "unverified"
+                    "new_execution_authorization_required":  true,
+                    "public_confirmation_required_if_execution_is_implemented":  true,
+                    "rollback":  "candidate_only_no_deployment_or_current_pointer_change"
                 },
     "checks":  [
                    {
@@ -33,26 +20,24 @@
                        "expected_test_count":  319
                    },
                    {
-                       "name":  "p4a_targeted",
+                       "name":  "p4b_targeted",
                        "status":  "pass",
-                       "expected_test_count":  8
+                       "expected_test_count":  5
                    },
                    {
-                       "name":  "ms_perl_locale",
+                       "name":  "contract",
                        "status":  "pass",
-                       "stderr_bytes":  0,
-                       "stderr_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                       "sha256":  "92F969E076D36C3A7FD377BA5EDD7E4DBFA817409839D1D33657D4145C4F113E"
                    },
                    {
-                       "name":  "publication_preflight",
+                       "name":  "exact_input_preflight",
                        "status":  "pass",
-                       "execution_allowed":  false,
-                       "public_tool_added":  false
+                       "request_sha256":  "C85E2C2642487C6FE8859179A56B75E39AE4DDA430691030B1994E41496A7DD9"
                    },
                    {
-                       "name":  "capability_boundary",
+                       "name":  "public_boundary",
                        "status":  "pass",
-                       "output":  "p4a_internal_verified_public_unchanged"
+                       "output":  "p4b_internal_contract_verified_public_unchanged"
                    },
                    {
                        "name":  "source_pip_check",

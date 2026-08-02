@@ -29,7 +29,7 @@ $forbidden=@(Get-Process -ErrorAction SilentlyContinue|Where-Object{$_.ProcessNa
 if($forbidden.Count -ne 0){throw "P3-C owned/runtime process remains"}
 
 $full=Invoke-Text "unittest" $python @("-m","unittest","discover","-s","tests","-q")
-if($full -notmatch "Ran 314 tests"){throw "Expected 314 tests: $full"}
+if($full -notmatch "Ran 319 tests"){throw "Expected 319 tests: $full"}
 $targeted=Invoke-Text "P3-C targeted" $python @("-m","unittest","tests.test_castep_real_qualification_runner","-q")
 if($targeted -notmatch "Ran 16 tests"){throw "Expected 16 P3-C tests: $targeted"}
 $state=Invoke-Text "capability and retirement state" $python @("-c","from materials_studio_mcp.castep_real_qualification_runner import PLAN_RETIRED_AFTER_ATTEMPT_2; from materials_studio_mcp.capability_registry import load_capability_registry; c={x['id']:x for x in load_capability_registry()['capabilities']}; assert PLAN_RETIRED_AFTER_ATTEMPT_2; assert c['castep.real_qualification_execution_candidate']['verified']; assert not c['castep.calculation']['verified']; assert not c['results.castep_parsing']['verified']; print('fixed_profile_verified_public_general_unverified_plan_retired')")
@@ -69,7 +69,7 @@ $final=[ordered]@{
   [ordered]@{name="input_hashes_before_after";status="pass"},
   [ordered]@{name="owned_processes_remaining";status="pass";count=0},
   [ordered]@{name="capability_boundary";status="pass";output=$state},
-  [ordered]@{name="unittest";status="pass";expected_test_count=314},
+  [ordered]@{name="unittest";status="pass";expected_test_count=319},
   [ordered]@{name="p3c_targeted";status="pass";expected_test_count=16},
   [ordered]@{name="source_pip_check";status="pass";output=$sourcePip},
   [ordered]@{name="source_integrity";status=$source.status;sha256=$source.manifest_sha256},

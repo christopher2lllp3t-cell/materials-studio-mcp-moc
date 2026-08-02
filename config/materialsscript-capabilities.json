@@ -200,6 +200,13 @@
       "sha256": "C3D736F8D136F70C4A17F39545731ABD1DE5B2F8B00D6FAC47F0C1092EA6D0C4"
     },
     {
+      "id": "test_castep_p4b_contract",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_castep_p4b_contract.py",
+      "sha256": "9AA9AA3EE0C1C00CDB50D57DF50ABAF7EE0CEB855333CC81055A77C76C39AC05"
+    },
+    {
       "id": "test_forcite_checked",
       "kind": "regression_test",
       "root": "project",
@@ -424,6 +431,17 @@
       "parameters": [],
       "evidence_ids": ["test_castep_p4a_preflight", "receipt_p3c_real_castep_qualification"],
       "notes": "P4-A only: verified child-process locale isolation for the fixed Materials Studio 2023 Perl and a nonexecuting publication preflight for the exact P3-C profile. It does not mutate system/user environment variables, start CASTEP, add a public tool, or release general CASTEP execution."
+    },
+    {
+      "id": "castep.p4b_fixed_profile_public_contract",
+      "layer": "CASTEP",
+      "status": "verified",
+      "verified": true,
+      "exposure": "internal",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": ["test_castep_p4b_contract", "receipt_p3c_real_castep_qualification"],
+      "notes": "P4-B only: a deterministic, nonregistered contract reserves a fixed-profile public preflight and a blocked R3 execution endpoint. It binds the exact P3-C hashes, rejects arbitrary parameters, requires a new authorization and single-use confirmation for any future execution, and specifies candidate-only rollback. No public tool is registered in P4-B."
     },
     {
       "id": "results.standalone_castep_parser_qualification",
