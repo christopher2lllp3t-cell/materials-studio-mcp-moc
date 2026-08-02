@@ -5,7 +5,7 @@
     "version": "1.3.0",
     "api_version": "1.0",
     "channel": "v1-release-candidate",
-    "generated_at_utc": "2026-08-02T06:43:13.168544+00:00",
+    "generated_at_utc": "2026-08-02T07:05:30.476003+00:00",
     "production_science_released": false
   },
   "python": {
@@ -384,6 +384,12 @@
       "sha256": "B21B0F1D7D2A03893C9C00C55B59F453E02F07D873E6FD6BF2B6CD532694793A"
     },
     {
+      "label": "src/materials_studio_mcp/castep_real_qualification_plan.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\castep_real_qualification_plan.py",
+      "bytes": 8611,
+      "sha256": "56B123D5B47A00795031D883D8887B84A622CD71DA369D09FA7A633AE3F922CB"
+    },
+    {
       "label": "src/materials_studio_mcp/castep_result_parser.py",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\castep_result_parser.py",
       "bytes": 18485,
@@ -566,8 +572,8 @@
     {
       "label": "config/materialsscript-capabilities.json",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\materialsscript-capabilities.json",
-      "bytes": 18917,
-      "sha256": "8A2AA1BE3CA517398D567BA525A39C11858D3AF747AE10DAE2124967ACEE3497"
+      "bytes": 19742,
+      "sha256": "3985C9614DD760323376605D117985CCA361A661ADA05D64A35223DD6A08F52F"
     },
     {
       "label": "config/policy.json",
@@ -684,6 +690,12 @@
       "sha256": "3810725AE70228A66C3C27612C3AAA109E86A6270920CA37CA81F2B7D0748E6E"
     },
     {
+      "label": "scripts/verify_candidate_p3a.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_p3a.ps1",
+      "bytes": 5828,
+      "sha256": "3CD151F7CCB6393C4104BA6FF7E6A2528C7CF9107A3AD8041209E4982088C0F7"
+    },
+    {
       "label": "scripts/verify_candidate_v1.ps1",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_v1.ps1",
       "bytes": 5350,
@@ -778,6 +790,12 @@
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_castep_pl.py",
       "bytes": 18025,
       "sha256": "7CB773F839E8A5CBB73A426D5A474629D2BBB0D39F4E94C6C10B3FEC9473266A"
+    },
+    {
+      "label": "tests/test_castep_real_qualification_plan.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_castep_real_qualification_plan.py",
+      "bytes": 8610,
+      "sha256": "B87FFC0F870B101E3E973F18AF1F71DCEBF23E3D8649FEABE7033E3EC31B2023"
     },
     {
       "label": "tests/test_castep_result_parser.py",

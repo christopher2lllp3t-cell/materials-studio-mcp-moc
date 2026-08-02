@@ -172,6 +172,13 @@
       "sha256": "1582413D719D5847B35DCFFA7A2D28E66CF98281FC5F7259D606866152A3E813"
     },
     {
+      "id": "test_castep_real_qualification_plan",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_castep_real_qualification_plan.py",
+      "sha256": "B87FFC0F870B101E3E973F18AF1F71DCEBF23E3D8649FEABE7033E3EC31B2023"
+    },
+    {
       "id": "test_forcite_checked",
       "kind": "regression_test",
       "root": "project",
@@ -352,6 +359,17 @@
       "parameters": [],
       "evidence_ids": ["test_castep_standalone_runner"],
       "notes": "Private P2 synthetic process-control qualification only. The real RunCASTEP path is unconditionally blocked; successful fake-helper tests never verify CASTEP execution, licensing, Gateway use, or result parsing."
+    },
+    {
+      "id": "castep.real_qualification_plan_candidate",
+      "layer": "CASTEP",
+      "status": "todo",
+      "verified": false,
+      "exposure": "not_implemented",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": ["test_castep_real_qualification_plan"],
+      "notes": "Private P3-A plan only. It hash-binds one local 4-core alpha-quartz SinglePoint qualification candidate and official launcher evidence, but remains execution-blocked pending separate user authorization, license evidence, and a reviewed P3-B runner."
     },
     {
       "id": "results.castep_parsing",
