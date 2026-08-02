@@ -1,0 +1,67 @@
+{
+    "schema_version":  1,
+    "verification_entry":  "scripts/verify_candidate_p4c_final.ps1",
+    "outcome":  {
+                    "qualification":  "pass",
+                    "scope":  "public_R0_exact_fixed_profile_preflight_only",
+                    "fixed_preflight_request_sha256":  "C85E2C2642487C6FE8859179A56B75E39AE4DDA430691030B1994E41496A7DD9",
+                    "execution_allowed":  false,
+                    "files_written":  false,
+                    "public_tool_count":  50,
+                    "locale_stderr_bytes":  0,
+                    "general_castep_calculation":  "unverified",
+                    "general_castep_parsing":  "unverified"
+                },
+    "checks":  [
+                   {
+                       "name":  "unittest",
+                       "status":  "pass",
+                       "expected_test_count":  322
+                   },
+                   {
+                       "name":  "p4c_targeted",
+                       "status":  "pass",
+                       "expected_test_count":  3
+                   },
+                   {
+                       "name":  "public_preflight",
+                       "status":  "pass",
+                       "request_sha256":  "C85E2C2642487C6FE8859179A56B75E39AE4DDA430691030B1994E41496A7DD9"
+                   },
+                   {
+                       "name":  "locale_safeguard",
+                       "status":  "pass",
+                       "stderr_bytes":  0
+                   },
+                   {
+                       "name":  "capability_boundary",
+                       "status":  "pass",
+                       "output":  "p4c_r0_fixed_preflight_only_general_execution_unverified"
+                   },
+                   {
+                       "name":  "source_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "source_integrity",
+                       "status":  "pass",
+                       "sha256":  "107808C3F70C4E98FD9D84E2DDE1CD6B3C46214B41DD88DE312D7A5EFECFDA47"
+                   },
+                   {
+                       "name":  "deployment_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "deployment_integrity",
+                       "status":  "pass",
+                       "bundle_sha256":  "207AB795043A264038A179974D8E86A518F20CB85A7D457C2A90C58A7D5DE723"
+                   },
+                   {
+                       "name":  "forbidden_processes",
+                       "status":  "pass",
+                       "count":  0
+                   }
+               ]
+}

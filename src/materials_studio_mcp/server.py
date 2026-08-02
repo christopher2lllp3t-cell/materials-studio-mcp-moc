@@ -112,6 +112,7 @@ from .qualification_workflow import run_g01_qualification_vertical
 from .scientific_gate_audit import audit_target_model_science
 from .castep_pl import prepare_castep_pl_package
 from .castep_standalone import prepare_castep_standalone_inputs
+from .castep_p4b_contract import inspect_fixed_profile_preflight_request
 from .castep_preflight import (
     PREFLIGHT_ENVIRONMENT_VARIABLE,
     finalize_castep_preflight,
@@ -4682,6 +4683,27 @@ def ms_prepare_castep_standalone_inputs(
             dry_run=dry_run,
         )
         return success_result(operation, data)
+    except Exception as exc:
+        return error_result(operation, exc)
+
+
+@mcp.tool()
+def ms_castep_fixed_profile_preflight(
+    input_manifest: str,
+    input_manifest_sha256: str,
+) -> dict[str, Any]:
+    """Read-only preflight for the exact P3-C alpha-quartz CASTEP profile."""
+
+    operation = "ms_castep_fixed_profile_preflight"
+    try:
+        manifest = resolve_workspace_path(input_manifest, must_exist=True)
+        return success_result(
+            operation,
+            inspect_fixed_profile_preflight_request(
+                input_manifest=manifest,
+                input_manifest_sha256=input_manifest_sha256,
+            ),
+        )
     except Exception as exc:
         return error_result(operation, exc)
 

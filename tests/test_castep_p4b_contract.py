@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import json
 from pathlib import Path
 import unittest
@@ -75,7 +74,11 @@ class CastepP4BContractTests(unittest.TestCase):
                 )
 
     def test_p4b_preserves_current_public_and_general_capability_boundary(self) -> None:
-        self.assertEqual(len(PUBLIC_TOOLS), 49)
+        self.assertEqual(len(PUBLIC_TOOLS), 50)
+        self.assertIn(
+            "ms_castep_fixed_profile_preflight",
+            {item.name for item in PUBLIC_TOOLS},
+        )
         capabilities = {item["id"]: item for item in load_capability_registry()["capabilities"]}
         self.assertFalse(capabilities["castep.calculation"]["verified"])
         self.assertFalse(capabilities["results.castep_parsing"]["verified"])

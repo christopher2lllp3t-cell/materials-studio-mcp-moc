@@ -18,7 +18,7 @@
                     "public_castep_parsing":  "unverified",
                     "production_science_released":  false,
                     "convergence_evidence":  false,
-                    "public_tool_count":  49
+                    "public_tool_count":  50
                 },
     "checks":  [
                    {
@@ -58,7 +58,7 @@
                    {
                        "name":  "unittest",
                        "status":  "pass",
-                       "expected_test_count":  319
+                       "expected_test_count":  322
                    },
                    {
                        "name":  "p3c_targeted",
@@ -73,7 +73,7 @@
                    {
                        "name":  "source_integrity",
                        "status":  "pass",
-                       "sha256":  "D9E298D525FA7CFD449CA68453D10275976BE15B24F3C3D654B6D7EAADB65E7E"
+                       "sha256":  "107808C3F70C4E98FD9D84E2DDE1CD6B3C46214B41DD88DE312D7A5EFECFDA47"
                    },
                    {
                        "name":  "deployment_pip_check",

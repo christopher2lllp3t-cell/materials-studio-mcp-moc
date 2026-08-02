@@ -57,6 +57,7 @@ PUBLIC_TOOLS: tuple[PublicTool, ...] = (
     PublicTool("ms_inspect_document", "R0"),
     PublicTool("ms_prepare_castep_pl_package", "R1"),
     PublicTool("ms_prepare_castep_standalone_inputs", "R1"),
+    PublicTool("ms_castep_fixed_profile_preflight", "R0"),
     PublicTool("ms_castep_preflight_checked", "R2"),
     PublicTool("ms_castep_gateway_readiness", "R0"),
     PublicTool("ms_geology_import_crystal_parent", "R2"),

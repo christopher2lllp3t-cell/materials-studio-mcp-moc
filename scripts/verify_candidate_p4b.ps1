@@ -4,6 +4,7 @@ param(
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference="Stop"
+throw "P4-B verification is historical after public P4-C registration; use verify_candidate_p4c_final.ps1"
 $root=(Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).Path
 if([string]::IsNullOrWhiteSpace($ReceiptPath)){$ReceiptPath=Join-Path $root "docs\validation\receipts\p4b-fixed-profile-contract-verification.json"}
 $python=Join-Path $root ".venv\Scripts\python.exe"

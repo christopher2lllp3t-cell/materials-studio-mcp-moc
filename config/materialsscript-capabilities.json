@@ -197,14 +197,21 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_p4a_preflight.py",
-      "sha256": "C3D736F8D136F70C4A17F39545731ABD1DE5B2F8B00D6FAC47F0C1092EA6D0C4"
+      "sha256": "0546E3538EA3B5F49BD63A11151B0427BEEC610EA2B7EBDDC553F59CFD52E5DD"
     },
     {
       "id": "test_castep_p4b_contract",
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_p4b_contract.py",
-      "sha256": "9AA9AA3EE0C1C00CDB50D57DF50ABAF7EE0CEB855333CC81055A77C76C39AC05"
+      "sha256": "932C09C5A7A9F87C329ED39BAAC4DAC1C7F899BABAFEA41DA83036789DA0F3DD"
+    },
+    {
+      "id": "test_castep_p4c_public_preflight",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_castep_p4c_public_preflight.py",
+      "sha256": "6C48CBD24205E4A775412E7AEB05545B8BB252E1A4DB5B0C5B6F38785FD2FA25"
     },
     {
       "id": "test_forcite_checked",
@@ -430,7 +437,7 @@
       "api_symbols": [],
       "parameters": [],
       "evidence_ids": ["test_castep_p4a_preflight", "receipt_p3c_real_castep_qualification"],
-      "notes": "P4-A only: verified child-process locale isolation for the fixed Materials Studio 2023 Perl and a nonexecuting publication preflight for the exact P3-C profile. It does not mutate system/user environment variables, start CASTEP, add a public tool, or release general CASTEP execution."
+      "notes": "P4-A only: verified child-process locale isolation for the fixed Materials Studio 2023 Perl and a nonexecuting publication preflight for the exact P3-C profile. P4-A itself did not add a public tool; it does not mutate system/user environment variables, start CASTEP, or release general CASTEP execution."
     },
     {
       "id": "castep.p4b_fixed_profile_public_contract",
@@ -442,6 +449,20 @@
       "parameters": [],
       "evidence_ids": ["test_castep_p4b_contract", "receipt_p3c_real_castep_qualification"],
       "notes": "P4-B only: a deterministic, nonregistered contract reserves a fixed-profile public preflight and a blocked R3 execution endpoint. It binds the exact P3-C hashes, rejects arbitrary parameters, requires a new authorization and single-use confirmation for any future execution, and specifies candidate-only rollback. No public tool is registered in P4-B."
+    },
+    {
+      "id": "castep.fixed_profile_public_preflight",
+      "layer": "CASTEP",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": [],
+      "parameters": [
+        {"name": "input_manifest", "status": "verified", "verified": true, "evidence_ids": ["test_castep_p4c_public_preflight"]},
+        {"name": "input_manifest_sha256", "status": "verified", "verified": true, "evidence_ids": ["test_castep_p4c_public_preflight"]}
+      ],
+      "evidence_ids": ["test_castep_p4b_contract", "test_castep_p4c_public_preflight", "receipt_p3c_real_castep_qualification"],
+      "notes": "Public R0 preflight only for the exact P3-C alpha-quartz standalone manifest and all bound hashes. It returns a request hash for a future separately authorized execution, accepts no caller-selected CASTEP settings, creates no files, and never starts a runtime process or consumes a license."
     },
     {
       "id": "results.standalone_castep_parser_qualification",
