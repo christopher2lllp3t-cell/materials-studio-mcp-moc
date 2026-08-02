@@ -1,6 +1,7 @@
 param(
     [string]$DeploymentRoot = "E:\ms_mcp\deployments\1.3.0",
-    [string]$ReceiptPath = ""
+    [string]$ReceiptPath = "",
+    [int]$ExpectedTestCount = 262
 )
 
 Set-StrictMode -Version Latest
@@ -66,8 +67,8 @@ $savedRoot = $env:MATERIALS_STUDIO_MCP_ROOT
 Remove-Item Env:MATERIALS_STUDIO_MCP_ROOT -ErrorAction SilentlyContinue
 try {
     $unittestText = Invoke-CheckedText -Name "unittest" -Executable $sourcePython -Arguments @("-m", "unittest", "discover", "-s", "tests", "-q")
-    if ($unittestText -notmatch "Ran 252 tests") {
-        throw "Expected the 1.3.0 baseline suite to run exactly 252 tests; received: $unittestText"
+    if ($unittestText -notmatch ("Ran " + $ExpectedTestCount + " tests")) {
+        throw "Expected the requested candidate suite to run exactly $ExpectedTestCount tests; received: $unittestText"
     }
     $sourcePipText = Invoke-CheckedText -Name "source pip check" -Executable $sourcePython -Arguments @("-m", "pip", "check")
     $sourceIntegrity = Invoke-CheckedJson -Name "source release manifest verification" -Executable $sourcePython -Arguments @("-m", "materials_studio_mcp.release", "verify", "--manifest", $sourceManifest)
@@ -101,7 +102,7 @@ $receipt = [ordered]@{
         castep_result_parsing = "unverified"
     }
     checks = @(
-        [ordered]@{ name = "unittest"; status = "pass"; expected_test_count = 252 },
+        [ordered]@{ name = "unittest"; status = "pass"; expected_test_count = $ExpectedTestCount },
         [ordered]@{ name = "source_pip_check"; status = "pass"; output = $sourcePipText },
         [ordered]@{ name = "source_release_manifest"; status = $sourceIntegrity.status; sha256 = $sourceIntegrity.manifest_sha256 },
         [ordered]@{ name = "deployment_pip_check"; status = "pass"; output = $deploymentPipText },

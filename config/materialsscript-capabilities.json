@@ -158,6 +158,13 @@
       "sha256": "90BF56D7FEE7111B187489E267DC67D7A4AC818045C207BDC476A73902B1F634"
     },
     {
+      "id": "test_castep_result_parser",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_castep_result_parser.py",
+      "sha256": "E913F4F6A1CC9DE9C9BCE25D877C8C6C3BB0E4C9DA35B365E37274301A362EC9"
+    },
+    {
       "id": "test_forcite_checked",
       "kind": "regression_test",
       "root": "project",
@@ -338,6 +345,17 @@
       "parameters": [],
       "evidence_ids": [],
       "notes": "CASTEP result properties and table schemas are not yet registered."
+    },
+    {
+      "id": "results.standalone_castep_parser_qualification",
+      "layer": "Results",
+      "status": "todo",
+      "verified": false,
+      "exposure": "not_implemented",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": ["test_castep_result_parser"],
+      "notes": "Private offline qualification candidate only. It requires an externally supplied output SHA-256 before classifying completion, does not prove a freshly executed job, and does not release CASTEP result parsing."
     },
     {
       "id": "reports.materialsscript_report_generation",
