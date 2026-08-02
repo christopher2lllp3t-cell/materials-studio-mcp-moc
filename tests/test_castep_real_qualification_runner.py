@@ -4,7 +4,9 @@ from contextlib import ExitStack
 import copy
 import hashlib
 import json
+import os
 from pathlib import Path
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
@@ -14,6 +16,7 @@ from materials_studio_mcp.capability_registry import load_capability_registry
 
 
 FROZEN_PLAN = Path(__file__).parents[1] / "docs" / "validation" / "receipts" / "p3a-real-castep-qualification-plan.json"
+SAFE_BATCH_FIXTURE = Path(__file__).parent / "fixtures" / "p3b command" / "echo_args.cmd"
 COMPLETED_OUTPUT = (
     "CASTEP test output\n"
     "Final energy = -12.345678 eV\n"
@@ -113,6 +116,7 @@ class RealCastepQualificationRunnerTests(unittest.TestCase):
         }
         with ExitStack() as stack:
             stack.enter_context(patch.object(p3b, "_QUALIFICATION_ROOT", root))
+            stack.enter_context(patch.object(p3b, "PLAN_RETIRED_AFTER_ATTEMPT_1", False))
             stack.enter_context(patch.object(p3b, "_load_plan", return_value=plan))
             stack.enter_context(patch.object(
                 p3b, "_fixed_file", side_effect=[launcher, command_interpreter]
@@ -152,6 +156,40 @@ class RealCastepQualificationRunnerTests(unittest.TestCase):
         self.assertEqual(plan["runtime"]["cores"], 4)
         self.assertEqual(plan["runtime"]["hard_timeout_seconds"], 600)
         self.assertFalse(plan["execution_allowed"])
+
+    def test_consumed_r1_plan_is_permanently_retired(self) -> None:
+        with self.assertRaisesRegex(RuntimeError, "permanently retired"), patch.object(
+            p3b, "_load_plan"
+        ) as load_plan:
+            p3b.execute_real_castep_qualification_once(
+                plan_path=FROZEN_PLAN,
+                input_manifest=Path("not-read.json"),
+                authorization=self._authorization(),
+            )
+        load_plan.assert_not_called()
+
+    def test_raw_windows_command_line_handles_quoted_batch_path_without_backslash_quotes(self) -> None:
+        command_interpreter = Path(os.environ["SystemRoot"]) / "System32" / "cmd.exe"
+        raw_command_line = (
+            f'"{command_interpreter}" /d /s /c '
+            f'""{SAFE_BATCH_FIXTURE.resolve()}" -np 4 quartz_alpha_sp_4c"'
+        )
+        completed = subprocess.run(
+            raw_command_line,
+            executable=str(command_interpreter),
+            cwd=Path(__file__).parent,
+            shell=False,
+            stdin=subprocess.DEVNULL,
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertIn(
+            "P3B_SAFE_FIXTURE_OK:-np 4 quartz_alpha_sp_4c", completed.stdout
+        )
+        self.assertNotIn(r'\"', raw_command_line)
 
     def test_authorization_is_canonical_hash_bound_and_tamper_fails(self) -> None:
         authorization = self._authorization("ab" * 32)

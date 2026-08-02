@@ -47,6 +47,7 @@ RUNNER_REVISION = "ms-mcp.private-real-castep-qualification-runner.1.3.0-p3b-r1"
 APPROVED_PLAN_SHA256 = "E461D57676903DEA6A19886D1AE85EB28859DC4AE2DC933D9890AA1E8D59C35E"
 AUTHORIZATION_ACTION = "execute_one_local_p3b_castep_qualification"
 AUTHORIZATION_BASIS = "explicit_user_authorization_in_codex_thread_2026-08-02"
+PLAN_RETIRED_AFTER_ATTEMPT_1 = True
 _NONCE = re.compile(r"^[0-9A-F]{64}$")
 _SAFE_SEED = re.compile(r"^[A-Za-z0-9_]{1,48}$")
 _LICENSE_FAILURE = re.compile(
@@ -230,6 +231,10 @@ def execute_real_castep_qualification_once(
 ) -> dict[str, Any]:
     """Execute exactly one authorized P3-B local qualification attempt."""
 
+    if PLAN_RETIRED_AFTER_ATTEMPT_1:
+        raise RuntimeError(
+            "The P3-B r1 plan was consumed by attempt 1 and is permanently retired"
+        )
     plan = _load_plan(Path(plan_path))
     validate_single_use_authorization(authorization)
     root = _QUALIFICATION_ROOT.resolve()

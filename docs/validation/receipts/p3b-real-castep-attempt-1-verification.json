@@ -1,0 +1,65 @@
+{
+    "schema_version":  1,
+    "verification_entry":  "scripts/verify_candidate_p3b_postattempt.ps1",
+    "outcome":  {
+                    "qualification":  "failed_before_castep_start",
+                    "attempt_number":  1,
+                    "retry_authorized":  false,
+                    "old_plan_retired":  true,
+                    "castep_execution":  "unverified",
+                    "license_evidence":  "unverified",
+                    "result_parsing":  "not_exercised",
+                    "production_science_released":  false,
+                    "public_tool_count":  49,
+                    "attempt_receipt_sha256":  "B42D1C43E9ACE35AA9EECE4A0E28C1912997E0EA07AAF7A7D50F72BA1B13054C",
+                    "original_job_receipt_sha256":  "DFBC27FB62A490D9D8559A804C55B413A9803C11060E2976E72C51646AC0B187"
+                },
+    "checks":  [
+                   {
+                       "name":  "attempt_receipt",
+                       "status":  "pass",
+                       "exit_code":  1,
+                       "parser":  null
+                   },
+                   {
+                       "name":  "owned_processes_remaining",
+                       "status":  "pass",
+                       "count":  0
+                   },
+                   {
+                       "name":  "r1_plan_retired",
+                       "status":  "pass",
+                       "output":  "retired"
+                   },
+                   {
+                       "name":  "unittest",
+                       "status":  "pass",
+                       "expected_test_count":  305
+                   },
+                   {
+                       "name":  "p3b_targeted",
+                       "status":  "pass",
+                       "expected_test_count":  15
+                   },
+                   {
+                       "name":  "source_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "source_integrity",
+                       "status":  "pass",
+                       "sha256":  "D31F95CF54457698678041F828969688EDE6653B6024B07567160CE2FC417B04"
+                   },
+                   {
+                       "name":  "deployment_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "deployment_integrity",
+                       "status":  "pass",
+                       "bundle_sha256":  "207AB795043A264038A179974D8E86A518F20CB85A7D457C2A90C58A7D5DE723"
+                   }
+               ]
+}

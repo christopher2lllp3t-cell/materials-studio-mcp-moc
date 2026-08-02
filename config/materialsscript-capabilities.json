@@ -183,7 +183,7 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_real_qualification_runner.py",
-      "sha256": "9CBD31310B30DDE95795D6D315E6EEB96D453E4BD84F29E4BD1863E4E212B19E"
+      "sha256": "F1BADE7FBFDA6C0A0867BD829109761DFF4988661ECA7CC49C0C5E1FDA743700"
     },
     {
       "id": "test_forcite_checked",

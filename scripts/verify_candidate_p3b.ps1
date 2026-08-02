@@ -7,6 +7,8 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+throw "P3-B pre-run verification is retired after the consumed attempt 1; use verify_candidate_p3b_postattempt.ps1"
+
 $sourceRoot = (Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).Path
 if ([string]::IsNullOrWhiteSpace($ReceiptPath)) {
     $ReceiptPath = Join-Path $sourceRoot "docs\validation\receipts\p3b-real-castep-prerun-verification.json"
