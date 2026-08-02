@@ -1,0 +1,42 @@
+{
+    "schema_version":  1,
+    "verification_entry":  "scripts/verify_candidate_p2.ps1",
+    "candidate":  {
+                      "qualification":  "p2_private_synthetic_standalone_castep_runner",
+                      "release_version":  "1.3.0",
+                      "channel":  "candidate",
+                      "production_science_released":  false,
+                      "castep_execution":  "unverified",
+                      "castep_result_parsing":  "unverified",
+                      "public_mcp_tool_added":  false,
+                      "real_castep_execution_started":  false,
+                      "synthetic_process_control_only":  true
+                  },
+    "checks":  [
+                   {
+                       "name":  "unittest",
+                       "status":  "pass",
+                       "expected_test_count":  274
+                   },
+                   {
+                       "name":  "source_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "source_release_manifest",
+                       "status":  "pass",
+                       "sha256":  "E5C782922D70987A9F9E152323E23F21331CD0745489B3572DFC33015D79AC54"
+                   },
+                   {
+                       "name":  "deployment_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "deployment_verify",
+                       "status":  "pass",
+                       "bundle_sha256":  "207AB795043A264038A179974D8E86A518F20CB85A7D457C2A90C58A7D5DE723"
+                   }
+               ]
+}

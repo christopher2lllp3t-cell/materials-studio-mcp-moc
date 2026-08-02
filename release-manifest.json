@@ -5,7 +5,7 @@
     "version": "1.3.0",
     "api_version": "1.0",
     "channel": "v1-release-candidate",
-    "generated_at_utc": "2026-08-02T03:34:17.201648+00:00",
+    "generated_at_utc": "2026-08-02T06:15:25.051363+00:00",
     "production_science_released": false
   },
   "python": {
@@ -396,6 +396,12 @@
       "sha256": "1EFA8B82C7E2E45A09DCF6F312C5D7E522BA5696348D3EA248FDFD93646D4606"
     },
     {
+      "label": "src/materials_studio_mcp/castep_standalone_runner.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\castep_standalone_runner.py",
+      "bytes": 15589,
+      "sha256": "1280AFB55685639EBEAF6DDC1B2149D9182B915C0AFA1FDAE9B72F177E890EDB"
+    },
+    {
       "label": "src/materials_studio_mcp/clayff_lammps.py",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\clayff_lammps.py",
       "bytes": 20867,
@@ -560,8 +566,8 @@
     {
       "label": "config/materialsscript-capabilities.json",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\materialsscript-capabilities.json",
-      "bytes": 18133,
-      "sha256": "124E1BFFB1095DA8C213DA57E4D677AEF92A933702C20BB10F3E05F3B13AE85C"
+      "bytes": 18917,
+      "sha256": "5535891DBB83CEED658419C48D7B91A2527C701AC1F6441AC6E725322E11EB5A"
     },
     {
       "label": "config/policy.json",
@@ -672,6 +678,12 @@
       "sha256": "ACE4EE907D1A4C98DA726F4D9EAC46D51D1EF20AF1FF3F98E98FBA6569923762"
     },
     {
+      "label": "scripts/verify_candidate_p2.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_p2.ps1",
+      "bytes": 5267,
+      "sha256": "3DB906EEF8FF71AB690D49C5BFE8AD80A98E809AE5EC888FDC75DB790D32CE19"
+    },
+    {
       "label": "scripts/verify_candidate_v1.ps1",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_v1.ps1",
       "bytes": 5350,
@@ -732,6 +744,18 @@
       "sha256": "6C018791F99258AE7D1777E6C26A76DACB950EFF40A4DB125F82FBBC97E8B155"
     },
     {
+      "label": "tests/fixtures/castep_runner/README.md",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\fixtures\\castep_runner\\README.md",
+      "bytes": 330,
+      "sha256": "D3A733A35C9E62CEF247296E7D460EAFD80B18D17DDFE7EDA915A1A07EF813BB"
+    },
+    {
+      "label": "tests/fixtures/castep_runner/synthetic_castep_helper.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\fixtures\\castep_runner\\synthetic_castep_helper.py",
+      "bytes": 2180,
+      "sha256": "850247944B5F80EEA2DE6638C5F3E8855D7CCC32F72281126FEA720382AF172E"
+    },
+    {
       "label": "tests/test_adaptive_planning.py",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_adaptive_planning.py",
       "bytes": 10102,
@@ -766,6 +790,12 @@
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_castep_standalone.py",
       "bytes": 8892,
       "sha256": "90BF56D7FEE7111B187489E267DC67D7A4AC818045C207BDC476A73902B1F634"
+    },
+    {
+      "label": "tests/test_castep_standalone_runner.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_castep_standalone_runner.py",
+      "bytes": 10849,
+      "sha256": "1192E75F3738211540B15ECAA5A3ECB31AC8C056D62B4B85B7A2890846AD5A14"
     },
     {
       "label": "tests/test_checked_conversion_tools.py",

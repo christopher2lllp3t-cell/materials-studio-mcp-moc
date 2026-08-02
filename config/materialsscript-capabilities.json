@@ -165,6 +165,13 @@
       "sha256": "E913F4F6A1CC9DE9C9BCE25D877C8C6C3BB0E4C9DA35B365E37274301A362EC9"
     },
     {
+      "id": "test_castep_standalone_runner",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_castep_standalone_runner.py",
+      "sha256": "1192E75F3738211540B15ECAA5A3ECB31AC8C056D62B4B85B7A2890846AD5A14"
+    },
+    {
       "id": "test_forcite_checked",
       "kind": "regression_test",
       "root": "project",
@@ -334,6 +341,17 @@
       ],
       "evidence_ids": ["doc_castep_standalone_launcher_23_1", "doc_castep_lattice_cart_23_1", "doc_castep_positions_frac_23_1", "doc_castep_kpoints_mp_grid_23_1", "doc_castep_species_pot_23_1", "doc_castep_task_23_1", "doc_castep_cut_off_energy_23_1", "doc_castep_xc_functional_23_1", "doc_castep_spin_polarized_23_1", "doc_castep_fix_occupancy_23_1", "test_castep_standalone"],
       "notes": "Writes only deterministic standalone CASTEP input candidates. It never starts RunCASTEP.bat, acquires a license, selects a Gateway, or parses a CASTEP result; those remain separate unverified capabilities."
+    },
+    {
+      "id": "castep.standalone_runner_process_control_qualification",
+      "layer": "CASTEP",
+      "status": "todo",
+      "verified": false,
+      "exposure": "not_implemented",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": ["test_castep_standalone_runner"],
+      "notes": "Private P2 synthetic process-control qualification only. The real RunCASTEP path is unconditionally blocked; successful fake-helper tests never verify CASTEP execution, licensing, Gateway use, or result parsing."
     },
     {
       "id": "results.castep_parsing",
