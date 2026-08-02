@@ -1,0 +1,83 @@
+{
+    "schema_version":  1,
+    "verification_entry":  "scripts/verify_candidate_p4a.ps1",
+    "outcome":  {
+                    "qualification":  "pass",
+                    "scope":  "locale_safe_child_environment_and_nonexecuting_fixed_profile_publication_preflight",
+                    "ms_perl_sha256":  "31F0629C1A9A6489505376AA76AE5A742667615487F35338E8306DE1317EF95F",
+                    "locale_before":  {
+                                          "LC_ALL":  "C.UTF-8",
+                                          "LC_CTYPE":  "C.UTF-8",
+                                          "LANG":  "C.UTF-8"
+                                      },
+                    "locale_after":  {
+                                         "LC_ALL":  "C",
+                                         "LC_CTYPE":  "C",
+                                         "LANG":  "C"
+                                     },
+                    "locale_stderr_bytes":  0,
+                    "locale_warning_markers":  [
+
+                                               ],
+                    "parent_environment_unchanged":  true,
+                    "castep_or_license_started":  false,
+                    "public_tool_added":  false,
+                    "public_tool_count":  49,
+                    "public_castep_calculation":  "unverified",
+                    "public_castep_parsing":  "unverified"
+                },
+    "checks":  [
+                   {
+                       "name":  "unittest",
+                       "status":  "pass",
+                       "expected_test_count":  314
+                   },
+                   {
+                       "name":  "p4a_targeted",
+                       "status":  "pass",
+                       "expected_test_count":  8
+                   },
+                   {
+                       "name":  "ms_perl_locale",
+                       "status":  "pass",
+                       "stderr_bytes":  0,
+                       "stderr_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                   },
+                   {
+                       "name":  "publication_preflight",
+                       "status":  "pass",
+                       "execution_allowed":  false,
+                       "public_tool_added":  false
+                   },
+                   {
+                       "name":  "capability_boundary",
+                       "status":  "pass",
+                       "output":  "p4a_internal_verified_public_unchanged"
+                   },
+                   {
+                       "name":  "source_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "source_integrity",
+                       "status":  "pass",
+                       "sha256":  "9EBADFBF7D051AEB2422055D0B5A2B898052C083F95536FFDE08AC52928E3008"
+                   },
+                   {
+                       "name":  "deployment_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "deployment_integrity",
+                       "status":  "pass",
+                       "bundle_sha256":  "207AB795043A264038A179974D8E86A518F20CB85A7D457C2A90C58A7D5DE723"
+                   },
+                   {
+                       "name":  "forbidden_processes",
+                       "status":  "pass",
+                       "count":  0
+                   }
+               ]
+}

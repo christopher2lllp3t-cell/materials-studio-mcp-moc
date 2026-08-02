@@ -5,7 +5,7 @@
     "version": "1.3.0",
     "api_version": "1.0",
     "channel": "v1-release-candidate",
-    "generated_at_utc": "2026-08-02T08:59:34.027452+00:00",
+    "generated_at_utc": "2026-08-02T09:21:03.651616+00:00",
     "production_science_released": false
   },
   "python": {
@@ -372,6 +372,12 @@
       "sha256": "E16C76C0CDC3921643658FC47CF22DEDA3CCD34BEB44B10928F447D062C1BC0F"
     },
     {
+      "label": "src/materials_studio_mcp/castep_p4a_preflight.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\castep_p4a_preflight.py",
+      "bytes": 5684,
+      "sha256": "9E8737121361CC9557ABC8E5577E9D4DDBE1F78C9501FA257D32EB066A8CD002"
+    },
+    {
       "label": "src/materials_studio_mcp/castep_pl.py",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\src\\materials_studio_mcp\\castep_pl.py",
       "bytes": 21872,
@@ -578,8 +584,8 @@
     {
       "label": "config/materialsscript-capabilities.json",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\config\\materialsscript-capabilities.json",
-      "bytes": 21065,
-      "sha256": "86293D858BADE7ECF620649892EC928CEFEDE781B2DFCF42EAD64404C288D667"
+      "bytes": 21936,
+      "sha256": "328BB24F80E6FA6B67BE92DDD5063AC199B5E9B61CAEF6FC965DB94F35492F9E"
     },
     {
       "label": "config/policy.json",
@@ -723,7 +729,13 @@
       "label": "scripts/verify_candidate_p3c_final.ps1",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_p3c_final.ps1",
       "bytes": 6151,
-      "sha256": "4D9C4044DC09F279941F6416B956DD041D5D2C7E2642DA80DFBD63D303DD1595"
+      "sha256": "B6DDA1D4A5CC36104E8FC76F66CC1C5C70726ABC72D7D45AA483D46989D3A006"
+    },
+    {
+      "label": "scripts/verify_candidate_p4a.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_p4a.ps1",
+      "bytes": 5885,
+      "sha256": "8B4317FE7926EC99CE0AE2600B9C595797F1E51C3D725F88D3CA0441881C6E15"
     },
     {
       "label": "scripts/verify_candidate_v1.ps1",
@@ -820,6 +832,12 @@
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_capability_registry.py",
       "bytes": 2427,
       "sha256": "11CB2E148805682C6415AED22FFF5B7D03FAF4B4A25AEEBF4372315E3E5DC818"
+    },
+    {
+      "label": "tests/test_castep_p4a_preflight.py",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_castep_p4a_preflight.py",
+      "bytes": 4019,
+      "sha256": "C3D736F8D136F70C4A17F39545731ABD1DE5B2F8B00D6FAC47F0C1092EA6D0C4"
     },
     {
       "label": "tests/test_castep_pl.py",

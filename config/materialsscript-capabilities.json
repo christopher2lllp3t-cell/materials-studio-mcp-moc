@@ -193,6 +193,13 @@
       "sha256": "12FB79B370A783618C5F0580192D2B40E459A4E6DD4D9875210CED05415EB872"
     },
     {
+      "id": "test_castep_p4a_preflight",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_castep_p4a_preflight.py",
+      "sha256": "C3D736F8D136F70C4A17F39545731ABD1DE5B2F8B00D6FAC47F0C1092EA6D0C4"
+    },
+    {
       "id": "test_forcite_checked",
       "kind": "regression_test",
       "root": "project",
@@ -406,6 +413,17 @@
       "parameters": [],
       "evidence_ids": [],
       "notes": "CASTEP result properties and table schemas are not yet registered."
+    },
+    {
+      "id": "castep.p4a_locale_and_publication_preflight",
+      "layer": "CASTEP",
+      "status": "verified",
+      "verified": true,
+      "exposure": "internal",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": ["test_castep_p4a_preflight", "receipt_p3c_real_castep_qualification"],
+      "notes": "P4-A only: verified child-process locale isolation for the fixed Materials Studio 2023 Perl and a nonexecuting publication preflight for the exact P3-C profile. It does not mutate system/user environment variables, start CASTEP, add a public tool, or release general CASTEP execution."
     },
     {
       "id": "results.standalone_castep_parser_qualification",
