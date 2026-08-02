@@ -68,9 +68,26 @@ The committed P1 receipt is
 `docs/validation/receipts/p1-castep-result-parser-verification.json`. It records
 the 262-test full candidate suite, source manifest integrity, source/deployment
 `pip check`, and immutable deployment verification. It is a software
-qualification record only, not a CASTEP execution result.
+qualification record only, not a CASTEP execution result. It is written only by
+`scripts/verify_candidate_v1.ps1`; P1 never writes the frozen baseline receipt.
+
+`scripts/verify_baseline_v1.ps1` and
+`docs/validation/receipts/v1.3.0-baseline-verification.json` retain their
+historical d30f338 semantics: exactly 252 tests and the original baseline source
+manifest hash. They are not a current-candidate verification entry.
 
 - Overall result: pass
-- Source candidate manifest SHA-256: `86AC721BDBD423EE6941C440C747E5D461B640CA6BC51B2B4044B22163B166BD`
-- P1 receipt SHA-256: `63B8B6B4E9C66AE3A35D587E5A11269D82C092376E22275BAC6D71BAA7CE7ED0`
+- Source candidate manifest SHA-256: `26741C99045F75146DF00DE2496994D3C2E378E0406E361DFACEB260868946D8`
+- P1 receipt SHA-256: `6DB31D5A1FB86D154D0E18F3AC22BB57A19985828B45E4E07689ED901D75033E`
 - Immutable deployment bundle SHA-256: `207AB795043A264038A179974D8E86A518F20CB85A7D457C2A90C58A7D5DE723`
+
+## Candidate receipt idempotence
+
+The P1 candidate verification entry is run twice consecutively against the same
+source candidate. Both invocations must exit zero, write byte-identical P1
+receipts, and leave `git status --short` empty after the second run. The follow-up
+repair commit records the observed receipt hash and clean-tree result.
+
+Observed after the repair commit: two consecutive candidate-verification runs
+exited zero, both wrote the SHA-256 above, and the second run left the worktree
+clean.

@@ -1,13 +1,16 @@
 {
     "schema_version":  1,
-    "verification_entry":  "scripts/verify_baseline_v1.ps1",
-    "baseline":  {
-                     "release_version":  "1.3.0",
-                     "channel":  "candidate",
-                     "production_science_released":  false,
-                     "castep_execution":  "unverified",
-                     "castep_result_parsing":  "unverified"
-                 },
+    "verification_entry":  "scripts/verify_candidate_v1.ps1",
+    "candidate":  {
+                      "qualification":  "p1_private_offline_castep_result_parser",
+                      "release_version":  "1.3.0",
+                      "channel":  "candidate",
+                      "production_science_released":  false,
+                      "castep_execution":  "unverified",
+                      "castep_result_parsing":  "unverified",
+                      "public_mcp_tool_added":  false,
+                      "execution_started":  false
+                  },
     "checks":  [
                    {
                        "name":  "unittest",
@@ -22,7 +25,7 @@
                    {
                        "name":  "source_release_manifest",
                        "status":  "pass",
-                       "sha256":  "86AC721BDBD423EE6941C440C747E5D461B640CA6BC51B2B4044B22163B166BD"
+                       "sha256":  "26741C99045F75146DF00DE2496994D3C2E378E0406E361DFACEB260868946D8"
                    },
                    {
                        "name":  "deployment_pip_check",

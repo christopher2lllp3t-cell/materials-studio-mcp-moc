@@ -1,6 +1,7 @@
 param(
     [string]$DeploymentRoot = "E:\ms_mcp\deployments\1.3.0",
-    [string]$ReceiptPath = ""
+    [string]$ReceiptPath = "",
+    [int]$ExpectedTestCount = 262
 )
 
 Set-StrictMode -Version Latest
@@ -8,16 +9,19 @@ $ErrorActionPreference = "Stop"
 
 $sourceRoot = (Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).Path
 if ([string]::IsNullOrWhiteSpace($ReceiptPath)) {
-    $ReceiptPath = Join-Path $sourceRoot "docs\validation\receipts\v1.3.0-baseline-verification.json"
+    $ReceiptPath = Join-Path $sourceRoot "docs\validation\receipts\p1-castep-result-parser-verification.json"
 }
 $sourcePython = Join-Path $sourceRoot ".venv\Scripts\python.exe"
 $deployment = (Resolve-Path -LiteralPath $DeploymentRoot).Path
 $deploymentPython = Join-Path $deployment ".venv\Scripts\python.exe"
 $sourceManifest = Join-Path $sourceRoot "release-manifest.json"
 
+if ($ExpectedTestCount -ne 262) {
+    throw "P1 candidate verification is fixed to 262 tests; received $ExpectedTestCount"
+}
 foreach ($required in @($sourcePython, $deploymentPython, $sourceManifest)) {
     if (-not (Test-Path -LiteralPath $required -PathType Leaf)) {
-        throw "Required baseline verification file is missing: $required"
+        throw "Required P1 candidate verification file is missing: $required"
     }
 }
 
@@ -28,9 +32,7 @@ function Invoke-CheckedText {
         [Parameter(Mandatory = $true)][string[]]$Arguments
     )
 
-    # unittest writes its normal summary to stderr.  With strict PowerShell
-    # error handling enabled, capture that native stream as data first and
-    # decide success solely from the executable exit code.
+    # unittest writes normal summaries to stderr; native exit status decides.
     $savedPreference = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
     try {
@@ -60,14 +62,13 @@ function Invoke-CheckedJson {
     }
 }
 
-# This test makes project-root discovery independent of the caller's local
-# shell and prevents an ambient source override from masking deployment drift.
+# Do not permit an ambient source-root override to mask source/deployment drift.
 $savedRoot = $env:MATERIALS_STUDIO_MCP_ROOT
 Remove-Item Env:MATERIALS_STUDIO_MCP_ROOT -ErrorAction SilentlyContinue
 try {
     $unittestText = Invoke-CheckedText -Name "unittest" -Executable $sourcePython -Arguments @("-m", "unittest", "discover", "-s", "tests", "-q")
-    if ($unittestText -notmatch "Ran 252 tests") {
-        throw "Expected the 1.3.0 baseline suite to run exactly 252 tests; received: $unittestText"
+    if ($unittestText -notmatch "Ran 262 tests") {
+        throw "Expected the P1 candidate suite to run exactly 262 tests; received: $unittestText"
     }
     $sourcePipText = Invoke-CheckedText -Name "source pip check" -Executable $sourcePython -Arguments @("-m", "pip", "check")
     $sourceIntegrity = Invoke-CheckedJson -Name "source release manifest verification" -Executable $sourcePython -Arguments @("-m", "materials_studio_mcp.release", "verify", "--manifest", $sourceManifest)
@@ -92,16 +93,19 @@ $receiptDirectory = Split-Path -Parent $ReceiptPath
 New-Item -ItemType Directory -Path $receiptDirectory -Force | Out-Null
 $receipt = [ordered]@{
     schema_version = 1
-    verification_entry = "scripts/verify_baseline_v1.ps1"
-    baseline = [ordered]@{
+    verification_entry = "scripts/verify_candidate_v1.ps1"
+    candidate = [ordered]@{
+        qualification = "p1_private_offline_castep_result_parser"
         release_version = "1.3.0"
         channel = "candidate"
         production_science_released = $false
         castep_execution = "unverified"
         castep_result_parsing = "unverified"
+        public_mcp_tool_added = $false
+        execution_started = $false
     }
     checks = @(
-        [ordered]@{ name = "unittest"; status = "pass"; expected_test_count = 252 },
+        [ordered]@{ name = "unittest"; status = "pass"; expected_test_count = 262 },
         [ordered]@{ name = "source_pip_check"; status = "pass"; output = $sourcePipText },
         [ordered]@{ name = "source_release_manifest"; status = $sourceIntegrity.status; sha256 = $sourceIntegrity.manifest_sha256 },
         [ordered]@{ name = "deployment_pip_check"; status = "pass"; output = $deploymentPipText },
@@ -113,4 +117,4 @@ $receipt = [ordered]@{
     ($receipt | ConvertTo-Json -Depth 8) + [Environment]::NewLine,
     [System.Text.UTF8Encoding]::new($false)
 )
-Write-Output ("BASELINE_VERIFICATION_PASS receipt=" + (Resolve-Path -LiteralPath $ReceiptPath).Path)
+Write-Output ("CANDIDATE_VERIFICATION_PASS receipt=" + (Resolve-Path -LiteralPath $ReceiptPath).Path)
