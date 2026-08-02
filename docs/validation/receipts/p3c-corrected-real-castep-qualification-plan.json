@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "plan_revision": "ms-mcp.private-real-castep-qualification-plan.1.3.0-p3c-r1",
+  "plan_type": "single_local_castep_platform_qualification",
+  "status": "blocked_pending_new_user_authorization_after_p3b_attempt_1",
+  "execution_allowed": false,
+  "qualification_only": true,
+  "production_science_released": false,
+  "input": {
+    "seedname": "quartz_alpha_sp_4c",
+    "hashes": {
+      "manifest_path": "D:\\\u5206\u5b50\u52a8\u529b\u5b66\u6a21\u62df\\07_mcp_materials_studio\\qtz_alpha_standalone_candidate_1_3_0_r1\\standalone_input_manifest.json",
+      "manifest_sha256": "8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79",
+      "source_sha256": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE",
+      "input_source_copy_sha256": "12B9147B763EBD2BAB08F04F2D304E51DB422854B47F93890B52BFB2A1AEF8EE",
+      "cell_sha256": "010F86189B61DCCB7D1557BB1E9ECD3353C93A9575AC15AEEB473B49FF61C34E",
+      "param_sha256": "31E5F02C9204429786B7C31A07A45EE1409697235D57CCE689D2AD2D87F24576",
+      "contract_file_sha256": "9C461EB21B8E7D90040A9DCE13179D4F974E9B8F2B7F70E129D4F83B4AE4A03D",
+      "contract_canonical_sha256": "ABB51030B44A697D78ADCE91595AC51A445D97F4B0E885E4CA9DCD73E3805A42"
+    },
+    "runtime_atom_count": 9,
+    "elements": {
+      "O": 6,
+      "Si": 3
+    },
+    "settings": {
+      "task": "SinglePoint",
+      "xc_functional": "PBE",
+      "energy_cutoff_ev": 600.0,
+      "kpoint_mp_grid": [
+        3,
+        3,
+        3
+      ],
+      "spin_polarized": false,
+      "fix_occupancy": true,
+      "species_pot": "omitted_standard_elements_use_default_otfg",
+      "cores": 4
+    },
+    "scientific_interpretation": "syntax_and_platform_qualification_only_not_convergence_evidence"
+  },
+  "runtime": {
+    "mode": "local",
+    "queue": null,
+    "cores": 4,
+    "max_parallel_jobs": 1,
+    "hard_timeout_seconds": 600,
+    "qualification_root": "E:\\ms_mcp\\ms_mcp_jobs\\castep_real_qualification",
+    "launcher": {
+      "path": "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1\\etc\\CASTEP\\bin\\RunCASTEP.bat",
+      "sha256": "FE09BD22E729E03D1B75027CAC9ECF2A0CC250A170FE5EE309CC33CCD070C027",
+      "bytes": 917
+    },
+    "launcher_documentation": {
+      "path": "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1\\etc\\CASTEP\\bin\\RunCASTEP.Readme",
+      "sha256": "08F9E048CFC9D9C98054D77EEB7F0AF3A2AD61F79182B2E9D81CC75A57D1712B",
+      "bytes": 1492
+    },
+    "command_interpreter": {
+      "path": "C:\\Windows\\System32\\cmd.exe",
+      "sha256": "65EC268ADD3973B6DCA64222985DA47CAEAEE44A340B0EC1466782914FD743D9",
+      "bytes": 344064
+    },
+    "launcher_arguments": [
+      "-np",
+      "4",
+      "quartz_alpha_sp_4c"
+    ],
+    "windows_raw_command_line": "\"C:\\Windows\\System32\\cmd.exe\" /d /s /c \"\"D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1\\etc\\CASTEP\\bin\\RunCASTEP.bat\" -np 4 quartz_alpha_sp_4c\"",
+    "windows_raw_command_line_sha256": "0FD9D3D18643C052D83FE427C8710562EC12D50364A162F4DB1DDB218A9FF58B",
+    "popen_contract": {
+      "args": "exact_windows_raw_command_line",
+      "executable": "C:\\Windows\\System32\\cmd.exe",
+      "shell": false,
+      "stdin": "closed"
+    }
+  },
+  "control_policy": {
+    "new_non_overwriting_ascii_job_directory": true,
+    "single_cross_process_execution_slot": true,
+    "stdin": "closed",
+    "stdout_stderr_hash_receipts": true,
+    "staged_input_hash_check": [
+      "before_launch",
+      "after_exit"
+    ],
+    "timeout_or_cancel": "terminate_only_owned_root_process_tree",
+    "success_requires": [
+      "launcher_exit_observed",
+      "input_hashes_unchanged",
+      "output_sha256_bound",
+      "finite_final_energy",
+      "finite_total_time",
+      "no_failure_markers",
+      "no_owned_processes_remaining"
+    ]
+  },
+  "blockers": [
+    {
+      "code": "NEW_SINGLE_USE_AUTHORIZATION_REQUIRED",
+      "detail": "Attempt 1 authorization was consumed; corrected P3-C execution requires a new explicit authorization."
+    },
+    {
+      "code": "CASTEP_LICENSE_SEAT_UNVERIFIED",
+      "detail": "Attempt 1 never started CASTEP and did not establish license availability."
+    },
+    {
+      "code": "SCIENTIFIC_CONVERGENCE_NOT_ESTABLISHED",
+      "detail": "600 eV and 3x3x3 remain platform-qualification candidates, not research convergence evidence."
+    }
+  ],
+  "future_single_use_authorization_contract": {
+    "must_bind": [
+      "authorization_nonce",
+      "plan_sha256",
+      "input_manifest_sha256",
+      "launcher_sha256",
+      "command_interpreter_sha256",
+      "windows_raw_command_line_sha256",
+      "cores",
+      "timeout_seconds",
+      "one_new_job_directory"
+    ],
+    "single_use": true,
+    "authorization_basis": "explicit_user_authorization_after_p3b_attempt_1_in_codex_thread_2026-08-02",
+    "replay_protection": "authorization SHA-256 marker is exclusively created before process start"
+  },
+  "prior_attempt": {
+    "attempt_number": 1,
+    "authorization_sha256": "34E07A795C681FD0E8D71C18A0E6479AF02E9446576A90D6E9F867BDD6BC3C2F",
+    "receipt_sha256": "DFBC27FB62A490D9D8559A804C55B413A9803C11060E2976E72C51646AC0B187",
+    "outcome": "failed_before_castep_start_due_to_windows_command_serialization",
+    "plan_retired": true
+  },
+  "plan_sha256": "10F3C622A161EAB3F25B0A9E19031AA9C485C7946E758CFDE5C1CD625B5F726B"
+}

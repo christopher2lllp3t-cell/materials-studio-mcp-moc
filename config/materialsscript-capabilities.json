@@ -169,7 +169,7 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_standalone_runner.py",
-      "sha256": "1582413D719D5847B35DCFFA7A2D28E66CF98281FC5F7259D606866152A3E813"
+      "sha256": "5903E6858AA21D29AB717ED806ECA80D817E8B569AF8C998509CAA18B77F4497"
     },
     {
       "id": "test_castep_real_qualification_plan",
@@ -183,7 +183,7 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_real_qualification_runner.py",
-      "sha256": "F1BADE7FBFDA6C0A0867BD829109761DFF4988661ECA7CC49C0C5E1FDA743700"
+      "sha256": "1A95FC1191C32BF6B56B4840DFBBB3319DEB2353B247A2BE3632CC1FAC1EA1E9"
     },
     {
       "id": "test_forcite_checked",
@@ -387,7 +387,7 @@
       "api_symbols": [],
       "parameters": [],
       "evidence_ids": ["test_castep_real_qualification_runner"],
-      "notes": "Private P3-B single-use qualification candidate only. It is frozen to one authorized local 4-core alpha-quartz SinglePoint attempt with a 600-second timeout. Mock qualification does not verify licensing or real CASTEP execution; public CASTEP calculation remains unreleased."
+      "notes": "Private corrected P3-C single-use qualification candidate only. P3-B attempt 1 failed before CASTEP start and is retired. P3-C binds raw Windows command serialization for one authorized local 4-core alpha-quartz SinglePoint attempt with a 600-second timeout; public CASTEP calculation remains unreleased."
     },
     {
       "id": "results.castep_parsing",

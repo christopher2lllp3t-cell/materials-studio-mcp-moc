@@ -15,7 +15,8 @@ from materials_studio_mcp import castep_real_qualification_runner as p3b
 from materials_studio_mcp.capability_registry import load_capability_registry
 
 
-FROZEN_PLAN = Path(__file__).parents[1] / "docs" / "validation" / "receipts" / "p3a-real-castep-qualification-plan.json"
+FROZEN_PLAN = Path(__file__).parents[1] / "docs" / "validation" / "receipts" / "p3c-corrected-real-castep-qualification-plan.json"
+RETIRED_PLAN = Path(__file__).parents[1] / "docs" / "validation" / "receipts" / "p3a-real-castep-qualification-plan.json"
 SAFE_BATCH_FIXTURE = Path(__file__).parent / "fixtures" / "p3b command" / "echo_args.cmd"
 COMPLETED_OUTPUT = (
     "CASTEP test output\n"
@@ -29,9 +30,9 @@ class FakeProcess:
     next_pid = 424242
     output_text: str | None = COMPLETED_OUTPUT
     return_code = 0
-    calls: list[tuple[list[str], dict]] = []
+    calls: list[tuple[str, dict]] = []
 
-    def __init__(self, command: list[str], **kwargs: object) -> None:
+    def __init__(self, command: str, **kwargs: object) -> None:
         self.pid = self.next_pid
         self.returncode = self.return_code
         self.command = command
@@ -39,7 +40,7 @@ class FakeProcess:
         type(self).calls.append((command, kwargs))
         if self.output_text is not None:
             job = Path(str(kwargs["cwd"]))
-            seed = command[-1].rsplit(" ", 1)[-1]
+            seed = command.rsplit(" ", 1)[-1].rstrip('"')
             (job / f"{seed}.castep").write_text(self.output_text, encoding="utf-8")
 
     def poll(self) -> int:
@@ -74,10 +75,11 @@ class RealCastepQualificationRunnerTests(unittest.TestCase):
                 "qualification_root": str(root),
                 "launcher": {"sha256": "2" * 64},
                 "command_interpreter": {"sha256": "3" * 64},
-                "command_preview": [
-                    str(root / "cmd.exe"), "/d", "/s", "/c",
-                    f'call "{root / "RunCASTEP.bat"}" -np 4 {seed}',
-                ],
+                "launcher_arguments": ["-np", "4", seed],
+                "windows_raw_command_line": (
+                    f'"{root / "cmd.exe"}" /d /s /c '
+                    f'""{root / "RunCASTEP.bat"}" -np 4 {seed}"'
+                ),
             },
         }
 
@@ -116,7 +118,6 @@ class RealCastepQualificationRunnerTests(unittest.TestCase):
         }
         with ExitStack() as stack:
             stack.enter_context(patch.object(p3b, "_QUALIFICATION_ROOT", root))
-            stack.enter_context(patch.object(p3b, "PLAN_RETIRED_AFTER_ATTEMPT_1", False))
             stack.enter_context(patch.object(p3b, "_load_plan", return_value=plan))
             stack.enter_context(patch.object(
                 p3b, "_fixed_file", side_effect=[launcher, command_interpreter]
@@ -158,15 +159,8 @@ class RealCastepQualificationRunnerTests(unittest.TestCase):
         self.assertFalse(plan["execution_allowed"])
 
     def test_consumed_r1_plan_is_permanently_retired(self) -> None:
-        with self.assertRaisesRegex(RuntimeError, "permanently retired"), patch.object(
-            p3b, "_load_plan"
-        ) as load_plan:
-            p3b.execute_real_castep_qualification_once(
-                plan_path=FROZEN_PLAN,
-                input_manifest=Path("not-read.json"),
-                authorization=self._authorization(),
-            )
-        load_plan.assert_not_called()
+        with self.assertRaisesRegex(ValueError, "permanently retired"):
+            p3b._load_plan(RETIRED_PLAN)
 
     def test_raw_windows_command_line_handles_quoted_batch_path_without_backslash_quotes(self) -> None:
         command_interpreter = Path(os.environ["SystemRoot"]) / "System32" / "cmd.exe"
@@ -228,7 +222,9 @@ class RealCastepQualificationRunnerTests(unittest.TestCase):
         self.assertEqual(result["status"], "qualification_pass")
         self.assertEqual(len(FakeProcess.calls), 1)
         command, kwargs = FakeProcess.calls[0]
-        self.assertEqual(command, self._plan(Path(temporary))["runtime"]["command_preview"])
+        expected = self._plan(Path(temporary))["runtime"]["windows_raw_command_line"]
+        self.assertEqual(command, expected)
+        self.assertEqual(kwargs["executable"], str(Path(temporary) / "cmd.exe"))
         self.assertIs(kwargs["shell"], False)
         self.assertEqual(kwargs["stdin"], p3b.subprocess.DEVNULL)
         self.assertEqual(receipt["authorization_sha256"], result["authorization_sha256"])

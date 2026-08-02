@@ -28,7 +28,6 @@ from .castep_real_qualification_plan import (
     _RUNCASTEP_SHA256,
     _canonical_sha256,
     _fixed_file,
-    validate_real_castep_qualification_plan,
 )
 from .castep_result_parser import parse_standalone_castep_result
 from .castep_standalone_runner import (
@@ -43,11 +42,11 @@ from .pipeline_config import _pid_exists, acquire_execution_slot
 
 
 RUN_SCHEMA_VERSION = 1
-RUNNER_REVISION = "ms-mcp.private-real-castep-qualification-runner.1.3.0-p3b-r1"
-APPROVED_PLAN_SHA256 = "E461D57676903DEA6A19886D1AE85EB28859DC4AE2DC933D9890AA1E8D59C35E"
+RUNNER_REVISION = "ms-mcp.private-real-castep-qualification-runner.1.3.0-p3c-r1"
+APPROVED_PLAN_SHA256 = "10F3C622A161EAB3F25B0A9E19031AA9C485C7946E758CFDE5C1CD625B5F726B"
+RETIRED_PLAN_SHA256 = "E461D57676903DEA6A19886D1AE85EB28859DC4AE2DC933D9890AA1E8D59C35E"
 AUTHORIZATION_ACTION = "execute_one_local_p3b_castep_qualification"
-AUTHORIZATION_BASIS = "explicit_user_authorization_in_codex_thread_2026-08-02"
-PLAN_RETIRED_AFTER_ATTEMPT_1 = True
+AUTHORIZATION_BASIS = "explicit_user_authorization_after_p3b_attempt_1_in_codex_thread_2026-08-02"
 _NONCE = re.compile(r"^[0-9A-F]{64}$")
 _SAFE_SEED = re.compile(r"^[A-Za-z0-9_]{1,48}$")
 _LICENSE_FAILURE = re.compile(
@@ -107,11 +106,37 @@ def validate_single_use_authorization(authorization: dict[str, Any]) -> None:
 def _load_plan(path: Path) -> dict[str, Any]:
     plan_path = path.resolve(strict=True)
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
-    validate_real_castep_qualification_plan(plan)
+    if not isinstance(plan, dict) or not isinstance(plan.get("plan_sha256"), str):
+        raise ValueError("P3-C plan must contain a canonical plan SHA-256")
+    payload = {key: value for key, value in plan.items() if key != "plan_sha256"}
+    if _canonical_sha256(payload) != plan["plan_sha256"]:
+        raise ValueError("P3-C plan SHA-256 does not match its canonical payload")
+    if plan["plan_sha256"] == RETIRED_PLAN_SHA256:
+        raise ValueError("The consumed P3-B r1 plan is permanently retired")
     if plan["plan_sha256"] != APPROVED_PLAN_SHA256:
-        raise ValueError("P3-B accepts only the exact reviewed P3-A plan")
+        raise ValueError("P3-C accepts only the exact corrected reviewed plan")
+    if (
+        plan.get("execution_allowed") is not False
+        or plan.get("status") != "blocked_pending_new_user_authorization_after_p3b_attempt_1"
+        or plan.get("prior_attempt", {}).get("receipt_sha256")
+        != "DFBC27FB62A490D9D8559A804C55B413A9803C11060E2976E72C51646AC0B187"
+    ):
+        raise ValueError("P3-C plan does not preserve the corrected authorization boundary")
     if plan["runtime"]["cores"] != 4 or plan["runtime"]["hard_timeout_seconds"] != 600:
-        raise ValueError("P3-B plan resource policy has changed")
+        raise ValueError("P3-C plan resource policy has changed")
+    raw = plan["runtime"].get("windows_raw_command_line")
+    if (
+        not isinstance(raw, str)
+        or hashlib.sha256(raw.encode("utf-8")).hexdigest().upper()
+        != plan["runtime"].get("windows_raw_command_line_sha256")
+        or plan["runtime"].get("popen_contract") != {
+            "args": "exact_windows_raw_command_line",
+            "executable": str(_CMD),
+            "shell": False,
+            "stdin": "closed",
+        }
+    ):
+        raise ValueError("P3-C Windows command serialization contract changed")
     return plan
 
 
@@ -231,10 +256,6 @@ def execute_real_castep_qualification_once(
 ) -> dict[str, Any]:
     """Execute exactly one authorized P3-B local qualification attempt."""
 
-    if PLAN_RETIRED_AFTER_ATTEMPT_1:
-        raise RuntimeError(
-            "The P3-B r1 plan was consumed by attempt 1 and is permanently retired"
-        )
     plan = _load_plan(Path(plan_path))
     validate_single_use_authorization(authorization)
     root = _QUALIFICATION_ROOT.resolve()
@@ -307,11 +328,16 @@ def execute_real_castep_qualification_once(
             _write_json_exclusive(receipt_path, receipt)
             return {**receipt, "receipt_path": str(receipt_path)}
 
-        reviewed_command = f'call "{launcher["path"]}" -np 4 {seedname}'
-        command = [command_interpreter["path"], "/d", "/s", "/c", reviewed_command]
-        if command != plan["runtime"]["command_preview"]:
-            raise ValueError("P3-B rendered command differs from the frozen plan")
-        receipt["command_sha256"] = _canonical_sha256(command)
+        command = (
+            f'"{command_interpreter["path"]}" /d /s /c '
+            f'""{launcher["path"]}" -np 4 {seedname}"'
+        )
+        if (
+            command != plan["runtime"]["windows_raw_command_line"]
+            or plan["runtime"]["launcher_arguments"] != ["-np", "4", seedname]
+        ):
+            raise ValueError("P3-C rendered command differs from the frozen plan")
+        receipt["command_sha256"] = hashlib.sha256(command.encode("utf-8")).hexdigest().upper()
 
         with acquire_execution_slot():
             marker = _consume_authorization(root, authorization, job_directory)
@@ -321,6 +347,7 @@ def execute_real_castep_qualification_once(
             with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
                 process = subprocess.Popen(
                     command,
+                    executable=command_interpreter["path"],
                     cwd=job_directory,
                     shell=False,
                     stdin=subprocess.DEVNULL,

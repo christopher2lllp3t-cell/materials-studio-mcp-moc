@@ -265,6 +265,10 @@ class CastepStandaloneRunnerTests(unittest.TestCase):
         self.assertEqual(receipt["errors"][0]["code"], "PROCESS_TREE_TERMINATION_FAILED")
         self.assertEqual(receipt["process"]["termination"]["method"], "tree_termination_failed_root_fallback")
         self.assertNotEqual(result["status"], "blocked_lock")
+        for _ in range(20):
+            if not _pid_exists(pid):
+                break
+            time.sleep(0.1)
         self.assertFalse(_pid_exists(pid))
 
     def test_unicode_complete_job_path_is_blocked_before_creation_and_popen(self) -> None:

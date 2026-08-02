@@ -1,0 +1,64 @@
+{
+    "schema_version":  1,
+    "verification_entry":  "scripts/verify_candidate_p3c.ps1",
+    "candidate":  {
+                      "qualification":  "p3c_corrected_single_use_real_castep_prerun",
+                      "plan_sha256":  "10F3C622A161EAB3F25B0A9E19031AA9C485C7946E758CFDE5C1CD625B5F726B",
+                      "input_manifest_sha256":  "8CAF21ABEB448A6D2669AA10684362652B2E97A1677D8C1AC1682F11CECA1C79",
+                      "prior_attempt":  1,
+                      "prior_plan_retired":  true,
+                      "new_authorization_consumed":  false,
+                      "real_castep_execution_started":  false,
+                      "castep_execution":  "unverified",
+                      "license_evidence":  "unverified",
+                      "production_science_released":  false,
+                      "public_tool_count":  49
+                  },
+    "checks":  [
+                   {
+                       "name":  "unittest",
+                       "status":  "pass",
+                       "expected_test_count":  305
+                   },
+                   {
+                       "name":  "p3c_targeted",
+                       "status":  "pass",
+                       "expected_test_count":  15
+                   },
+                   {
+                       "name":  "corrected_plan_binding",
+                       "status":  "pass",
+                       "output":  "10F3C622A161EAB3F25B0A9E19031AA9C485C7946E758CFDE5C1CD625B5F726B"
+                   },
+                   {
+                       "name":  "harmless_quoted_batch_path",
+                       "status":  "pass",
+                       "covered_by":  "test_raw_windows_command_line_handles_quoted_batch_path_without_backslash_quotes"
+                   },
+                   {
+                       "name":  "source_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "source_integrity",
+                       "status":  "pass",
+                       "sha256":  "1261D67F63BFCCE48D9BAD18BFDB267A822F7B3B73E64CFAD4A77AF98CBA08E9"
+                   },
+                   {
+                       "name":  "deployment_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "deployment_integrity",
+                       "status":  "pass",
+                       "bundle_sha256":  "207AB795043A264038A179974D8E86A518F20CB85A7D457C2A90C58A7D5DE723"
+                   },
+                   {
+                       "name":  "forbidden_processes_before_after",
+                       "status":  "pass",
+                       "count":  0
+                   }
+               ]
+}
