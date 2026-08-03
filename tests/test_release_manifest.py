@@ -7,7 +7,12 @@ import unittest
 
 from materials_studio_mcp import __version__
 from materials_studio_mcp.public_registry import API_VERSION, public_tool_names
-from materials_studio_mcp.release import verify_deployment, verify_release_manifest, write_release_manifest
+from materials_studio_mcp.release import (
+    build_release_manifest,
+    verify_deployment,
+    verify_release_manifest,
+    write_release_manifest,
+)
 
 
 class ReleaseManifestTests(unittest.TestCase):
@@ -24,12 +29,14 @@ class ReleaseManifestTests(unittest.TestCase):
             '"scripts"',
             '"src"',
             '"tests"',
+            '"docs"',
             '"wheelhouse"',
             '"config\\policy.json"',
             '"config\\materialsscript-capabilities.json"',
             '"config\\qualification-profiles.json"',
             '"config\\research-environment.local.json"',
             '"config\\research-workflow-requirements.json"',
+            '"docs\\validation\\receipts\\p3c-real-castep-qualification-success.json"',
             '"moc\\ms_moc.py"',
             '"moc\\science-requirements.lock"',
         ):
@@ -55,6 +62,22 @@ class ReleaseManifestTests(unittest.TestCase):
         self.assertLess(staging_creation, final_move)
         self.assertIn('$env:MATERIALS_STUDIO_MCP_ROOT = $installFull', script)
         self.assertIn('$env:MS_MOC_MCP_ROOT = $installFull', script)
+        self.assertIn("Installed capability registry audit failed", script)
+
+    def test_release_includes_hash_bound_qualification_receipts(self) -> None:
+        manifest = build_release_manifest()
+        labels = {item["label"] for item in manifest["files"]}
+        self.assertIn(
+            "docs/validation/receipts/p3c-real-castep-qualification-success.json",
+            labels,
+        )
+
+    def test_p6_candidate_verifier_requires_effective_capability_evidence(self) -> None:
+        script = (Path(__file__).resolve().parents[1] / "scripts" / "verify_candidate_p6_model_readiness.ps1").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("candidate capability registry audit", script)
+        self.assertIn("Candidate capability registry evidence audit failed", script)
 
     def test_release_builder_excludes_generated_python_artifacts(self) -> None:
         script = (Path(__file__).resolve().parents[1] / "scripts" / "build_release_v1.ps1").read_text(

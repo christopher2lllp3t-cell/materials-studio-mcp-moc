@@ -1,6 +1,6 @@
 param(
-    [string]$DeploymentRoot = "E:\ms_mcp\deployments\1.3.6",
-    [string]$ExpectedCurrentTarget = "E:\ms_mcp\deployments\1.3.4",
+    [string]$DeploymentRoot = "E:\ms_mcp\deployments\1.3.7",
+    [string]$ExpectedCurrentTarget = "E:\ms_mcp\deployments\1.3.6",
     [string]$ReceiptPath = ""
 )
 
@@ -80,6 +80,10 @@ try {
     $candidatePip = Invoke-Text "candidate pip check" $deploymentPython @("-m", "pip", "check")
     $candidateIntegrity = Invoke-Json "candidate deployment integrity" $deploymentPython @("-m", "materials_studio_mcp.release", "verify-deployment", "--root", $deployment)
     if ($candidateIntegrity.status -ne "pass") { throw "Candidate deployment integrity failed" }
+    $capabilityAudit = Invoke-Json "candidate capability registry audit" $deploymentPython @("-c", "import json; from materials_studio_mcp.capability_registry import audit_capability_registry; print(json.dumps(audit_capability_registry()))")
+    if ($capabilityAudit.status -ne "pass" -or $capabilityAudit.summary.declared_verified -ne $capabilityAudit.summary.effective_verified) {
+        throw "Candidate capability registry evidence audit failed"
+    }
     $candidateTests = Invoke-Text "candidate P6 regression" $deploymentPython @("-m", "unittest", "discover", "-s", (Join-Path $deployment "tests"), "-p", "test_model_readiness_and_public_evidence.py", "-q")
     if ($candidateTests -notmatch "Ran\s+17\s+tests") { throw "Expected 17 P6 candidate tests: $candidateTests" }
     $boundary = Invoke-Json "candidate P6 boundary" $deploymentPython @(
@@ -111,7 +115,7 @@ $receipt = [ordered]@{
     verification_entry = "scripts/verify_candidate_p6_model_readiness.ps1"
     outcome = [ordered]@{
         qualification = "pass"
-        candidate_version = "1.3.6"
+        candidate_version = "1.3.7"
         activated = $false
         current_target = $currentTarget
         public_tool_count = $boundary.tool_count
@@ -129,6 +133,7 @@ $receipt = [ordered]@{
         [ordered]@{name="source_integrity"; status=$sourceIntegrity.status; sha256=$sourceIntegrity.manifest_sha256},
         [ordered]@{name="candidate_pip_check"; status="pass"; output=$candidatePip},
         [ordered]@{name="candidate_integrity"; status=$candidateIntegrity.status; bundle_sha256=$candidateIntegrity.bundle_sha256},
+        [ordered]@{name="candidate_capability_registry"; status=$capabilityAudit.status; declared_verified=$capabilityAudit.summary.declared_verified; effective_verified=$capabilityAudit.summary.effective_verified},
         [ordered]@{name="candidate_p6_regression"; status="pass"; expected_test_count=17},
         [ordered]@{name="p6_public_boundary"; status="pass"; public_tool_count=$boundary.tool_count; network_access=$boundary.network_access},
         [ordered]@{name="windows_perl_locale"; status="pass"; stderr_bytes=$locale.stderr_bytes},

@@ -78,6 +78,21 @@ foreach ($directory in @("src", "scripts", "tests")) {
         }
 }
 
+# Runtime receipts referenced by the capability registry are release evidence,
+# not transient logs.  Preserve the complete immutable receipt set so the
+# deployed registry can re-check its declared evidence hashes.
+$receiptDirectory = Join-Path $projectRoot "docs\validation\receipts"
+if (-not (Test-Path -LiteralPath $receiptDirectory -PathType Container)) {
+    throw "Qualification receipt directory is missing: $receiptDirectory"
+}
+Get-ChildItem -LiteralPath $receiptDirectory -File -Recurse |
+    ForEach-Object {
+        $relative = $_.FullName.Substring($projectRoot.Length).TrimStart('\')
+        $destination = Join-Path $releaseDir $relative
+        New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
+        Copy-Item -LiteralPath $_.FullName -Destination $destination
+    }
+
 $generatedPythonArtifacts = @(
     Get-ChildItem -LiteralPath $releaseDir -File -Recurse |
         Where-Object {

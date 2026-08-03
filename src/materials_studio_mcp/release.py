@@ -52,7 +52,11 @@ def _release_files() -> Iterable[tuple[str, Path]]:
     )
     for relative in root_files:
         yield relative, PROJECT_ROOT / relative
-    for directory in ("src", "config", "scripts", "tests"):
+    # Qualification receipts are part of the auditable release evidence.  In
+    # particular, the capability registry can hash-bind a verified capability
+    # to a receipt under this tree; excluding it would make a byte-identical
+    # installation report a false degraded state.
+    for directory in ("src", "config", "scripts", "tests", "docs/validation/receipts"):
         root = PROJECT_ROOT / directory
         if not root.is_dir():
             continue
@@ -229,6 +233,15 @@ def verify_deployment(root: Path) -> dict[str, Any]:
         "moc/SCIENCE_ENVIRONMENT.md",
         "moc/science-requirements.lock",
     ]
+    receipt_entries = sorted(
+        path
+        for path in entries
+        if path.startswith("docs/validation/receipts/") and path.endswith(".json")
+    )
+    required_receipt = "docs/validation/receipts/p3c-real-castep-qualification-success.json"
+    if required_receipt not in receipt_entries:
+        errors.append("Deployment bundle does not contain the P3-C qualification receipt")
+    critical.extend(receipt_entries)
     wheel_entries = [path for path in entries if path.startswith("wheelhouse/materials_studio_mcp-") and path.endswith(".whl")]
     if len(wheel_entries) != 1:
         errors.append("Deployment bundle does not contain exactly one project wheel")

@@ -20,7 +20,7 @@ foreach ($entry in $bundle.files) {
     $actual = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash
     if ($actual -ne $entry.sha256) { throw "Bundle file hash mismatch: $path" }
 }
-$requiredBundleDirectories = @("config", "moc", "scripts", "src", "tests", "wheelhouse")
+$requiredBundleDirectories = @("config", "docs", "moc", "scripts", "src", "tests", "wheelhouse")
 foreach ($relative in $requiredBundleDirectories) {
     $path = Join-Path $bundleRoot $relative
     if (-not (Test-Path -LiteralPath $path -PathType Container)) {
@@ -45,6 +45,7 @@ $requiredBundleFiles = @(
     "config\scientific-gate-intake.schema.v1.json",
     "config\science-contract.schema.json",
     "config\software.local.json",
+    "docs\validation\receipts\p3c-real-castep-qualification-success.json",
     "moc\ms_moc.py",
     "moc\ms_mcp_bridge.py",
     "moc\MS_MOC_INTERFACE.md",
@@ -99,6 +100,7 @@ Copy-Item -LiteralPath (Join-Path $bundleRoot "pyproject.toml") -Destination $in
 Copy-Item -LiteralPath (Join-Path $bundleRoot "install.ps1") -Destination $installFull
 Copy-Item -LiteralPath (Join-Path $bundleRoot "README.md") -Destination $installFull
 Copy-Item -LiteralPath (Join-Path $bundleRoot "config") -Destination $installFull -Recurse
+Copy-Item -LiteralPath (Join-Path $bundleRoot "docs") -Destination $installFull -Recurse
 Copy-Item -LiteralPath (Join-Path $bundleRoot "moc") -Destination $installFull -Recurse
 Copy-Item -LiteralPath (Join-Path $bundleRoot "scripts") -Destination $installFull -Recurse
 Copy-Item -LiteralPath (Join-Path $bundleRoot "src") -Destination $installFull -Recurse
@@ -116,6 +118,8 @@ try {
 
     & $python -m materials_studio_mcp.release verify-deployment --root $installFull
     if ($LASTEXITCODE -ne 0) { throw "Independent deployment verification failed" }
+    & $python -c "from materials_studio_mcp.capability_registry import audit_capability_registry; assert audit_capability_registry()['status'] == 'pass'"
+    if ($LASTEXITCODE -ne 0) { throw "Installed capability registry audit failed" }
 }
 finally {
     if ($null -eq $previousMcpRoot) { Remove-Item Env:MATERIALS_STUDIO_MCP_ROOT -ErrorAction SilentlyContinue } else { $env:MATERIALS_STUDIO_MCP_ROOT = $previousMcpRoot }
