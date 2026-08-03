@@ -64,7 +64,29 @@ foreach ($relative in $bundleFiles) {
 }
 
 foreach ($directory in @("src", "scripts", "tests")) {
-    Copy-Item -LiteralPath (Join-Path $projectRoot $directory) -Destination (Join-Path $releaseDir $directory) -Recurse
+    $sourceDirectory = Join-Path $projectRoot $directory
+    Get-ChildItem -LiteralPath $sourceDirectory -File -Recurse |
+        Where-Object {
+            $_.FullName -notmatch '(?i)(\\|/)(__pycache__|[^\\/]+\.egg-info)(\\|/)' -and
+            $_.Extension -notin @('.pyc', '.pyo')
+        } |
+        ForEach-Object {
+            $relative = $_.FullName.Substring($projectRoot.Length).TrimStart('\')
+            $destination = Join-Path $releaseDir $relative
+            New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
+            Copy-Item -LiteralPath $_.FullName -Destination $destination
+        }
+}
+
+$generatedPythonArtifacts = @(
+    Get-ChildItem -LiteralPath $releaseDir -File -Recurse |
+        Where-Object {
+            $_.FullName -match '(?i)(\\|/)(__pycache__|[^\\/]+\.egg-info)(\\|/)' -or
+            $_.Extension -in @('.pyc', '.pyo')
+        }
+)
+if ($generatedPythonArtifacts.Count -ne 0) {
+    throw "Generated Python artifacts must not be bundled: $($generatedPythonArtifacts.FullName -join ', ')"
 }
 
 $mocDir = New-Item -ItemType Directory -Path (Join-Path $releaseDir "moc")

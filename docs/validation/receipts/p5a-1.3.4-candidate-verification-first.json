@@ -1,0 +1,69 @@
+{
+    "schema_version":  1,
+    "verification_entry":  "scripts/verify_candidate_p5a.ps1",
+    "outcome":  {
+                    "qualification":  "pass",
+                    "candidate_version":  "1.3.4",
+                    "activated":  false,
+                    "current_target":  "E:\\ms_mcp\\deployments\\1.3.0",
+                    "public_tool_count":  50,
+                    "fixed_preflight_request_sha256":  "C85E2C2642487C6FE8859179A56B75E39AE4DDA430691030B1994E41496A7DD9",
+                    "execution_allowed":  false,
+                    "generated_python_artifact_count":  0,
+                    "locale_stderr_bytes":  0,
+                    "general_castep_calculation":  "unverified",
+                    "general_castep_parsing":  "unverified"
+                },
+    "checks":  [
+                   {
+                       "name":  "current_unchanged",
+                       "status":  "pass",
+                       "target":  "E:\\ms_mcp\\deployments\\1.3.0"
+                   },
+                   {
+                       "name":  "bundle_integrity",
+                       "status":  "pass",
+                       "file_count":  174
+                   },
+                   {
+                       "name":  "install_receipt",
+                       "status":  "pass",
+                       "activated":  false
+                   },
+                   {
+                       "name":  "deployment_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "deployment_integrity",
+                       "status":  "pass",
+                       "bundle_sha256":  "EEB035A4897C4DF5E5FDAEB7438ABB224528B09BC750D9AC3AA598F57EE8E06F"
+                   },
+                   {
+                       "name":  "public_boundary",
+                       "status":  "pass",
+                       "version":  "1.3.4",
+                       "public_tool_count":  50
+                   },
+                   {
+                       "name":  "public_fixed_preflight",
+                       "status":  "pass",
+                       "request_sha256":  "C85E2C2642487C6FE8859179A56B75E39AE4DDA430691030B1994E41496A7DD9"
+                   },
+                   {
+                       "name":  "locale_safeguard",
+                       "status":  "pass",
+                       "stderr_bytes":  0
+                   },
+                   {
+                       "name":  "deployment_read_only",
+                       "status":  "pass"
+                   },
+                   {
+                       "name":  "forbidden_processes",
+                       "status":  "pass",
+                       "count":  0
+                   }
+               ]
+}

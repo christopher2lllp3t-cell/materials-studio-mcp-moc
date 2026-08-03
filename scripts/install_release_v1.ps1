@@ -1,7 +1,8 @@
 param(
     [Parameter(Mandatory = $true)][string]$BundleDirectory,
     [string]$InstallRoot = "E:\ms_mcp\deployments",
-    [string]$BootstrapPython = "E:\ms_mcp\ms_mcp_runtime\materials_studio_2023\.venv\Scripts\python.exe"
+    [string]$BootstrapPython = "E:\ms_mcp\ms_mcp_runtime\materials_studio_2023\.venv\Scripts\python.exe",
+    [switch]$Activate
 )
 
 Set-StrictMode -Version Latest
@@ -71,9 +72,16 @@ if (-not $targetFull.StartsWith($rootFull + '\', [System.StringComparison]::Ordi
     throw "Install target escaped the install root"
 }
 if (Test-Path -LiteralPath $targetFull) { throw "Immutable version is already installed: $targetFull" }
-New-Item -ItemType Directory -Path $targetFull -Force | Out-Null
+$staging = Join-Path $rootFull ".$($bundle.version).installing-$PID"
+$stagingFull = [System.IO.Path]::GetFullPath($staging)
+if (-not $stagingFull.StartsWith($rootFull + '\', [System.StringComparison]::OrdinalIgnoreCase)) {
+    throw "Install staging target escaped the install root"
+}
+if (Test-Path -LiteralPath $stagingFull) { throw "Install staging directory already exists: $stagingFull" }
+New-Item -ItemType Directory -Path $stagingFull -Force | Out-Null
+$installFull = $stagingFull
 
-$venv = Join-Path $targetFull ".venv"
+$venv = Join-Path $installFull ".venv"
 & $BootstrapPython -m venv $venv
 if ($LASTEXITCODE -ne 0) { throw "Virtual environment creation failed" }
 $python = Join-Path $venv "Scripts\python.exe"
@@ -83,36 +91,52 @@ if ($LASTEXITCODE -ne 0) { throw "Locked offline dependency installation failed"
 if ($LASTEXITCODE -ne 0) { throw "Project wheel installation failed" }
 & $python -m pip check
 if ($LASTEXITCODE -ne 0) { throw "Installed dependency check failed" }
-Copy-Item -LiteralPath (Join-Path $bundleRoot "release-manifest.json") -Destination $targetFull
-Copy-Item -LiteralPath $bundlePath -Destination $targetFull
-Copy-Item -LiteralPath (Join-Path $bundleRoot "requirements.lock") -Destination $targetFull
-Copy-Item -LiteralPath (Join-Path $bundleRoot "mcp-config.example.json") -Destination $targetFull
-Copy-Item -LiteralPath (Join-Path $bundleRoot "pyproject.toml") -Destination $targetFull
-Copy-Item -LiteralPath (Join-Path $bundleRoot "install.ps1") -Destination $targetFull
-Copy-Item -LiteralPath (Join-Path $bundleRoot "README.md") -Destination $targetFull
-Copy-Item -LiteralPath (Join-Path $bundleRoot "config") -Destination $targetFull -Recurse
-Copy-Item -LiteralPath (Join-Path $bundleRoot "moc") -Destination $targetFull -Recurse
-Copy-Item -LiteralPath (Join-Path $bundleRoot "scripts") -Destination $targetFull -Recurse
-Copy-Item -LiteralPath (Join-Path $bundleRoot "src") -Destination $targetFull -Recurse
-Copy-Item -LiteralPath (Join-Path $bundleRoot "tests") -Destination $targetFull -Recurse
-$installedWheelhouse = New-Item -ItemType Directory -Path (Join-Path $targetFull "wheelhouse")
+Copy-Item -LiteralPath (Join-Path $bundleRoot "release-manifest.json") -Destination $installFull
+Copy-Item -LiteralPath $bundlePath -Destination $installFull
+Copy-Item -LiteralPath (Join-Path $bundleRoot "requirements.lock") -Destination $installFull
+Copy-Item -LiteralPath (Join-Path $bundleRoot "mcp-config.example.json") -Destination $installFull
+Copy-Item -LiteralPath (Join-Path $bundleRoot "pyproject.toml") -Destination $installFull
+Copy-Item -LiteralPath (Join-Path $bundleRoot "install.ps1") -Destination $installFull
+Copy-Item -LiteralPath (Join-Path $bundleRoot "README.md") -Destination $installFull
+Copy-Item -LiteralPath (Join-Path $bundleRoot "config") -Destination $installFull -Recurse
+Copy-Item -LiteralPath (Join-Path $bundleRoot "moc") -Destination $installFull -Recurse
+Copy-Item -LiteralPath (Join-Path $bundleRoot "scripts") -Destination $installFull -Recurse
+Copy-Item -LiteralPath (Join-Path $bundleRoot "src") -Destination $installFull -Recurse
+Copy-Item -LiteralPath (Join-Path $bundleRoot "tests") -Destination $installFull -Recurse
+$installedWheelhouse = New-Item -ItemType Directory -Path (Join-Path $installFull "wheelhouse")
 Copy-Item -LiteralPath $projectWheel[0].FullName -Destination $installedWheelhouse.FullName
 
-& $python -c "import materials_studio_mcp; assert materials_studio_mcp.__version__ == '$($bundle.version)'"
-if ($LASTEXITCODE -ne 0) { throw "Installed package version check failed" }
+$previousMcpRoot = $env:MATERIALS_STUDIO_MCP_ROOT
+$previousManifestRoot = $env:MS_MOC_MCP_ROOT
+try {
+    $env:MATERIALS_STUDIO_MCP_ROOT = $installFull
+    $env:MS_MOC_MCP_ROOT = $installFull
+    & $python -c "import materials_studio_mcp; assert materials_studio_mcp.__version__ == '$($bundle.version)'"
+    if ($LASTEXITCODE -ne 0) { throw "Installed package version check failed" }
 
-& $python -m materials_studio_mcp.release verify-deployment --root $targetFull
-if ($LASTEXITCODE -ne 0) { throw "Independent deployment verification failed" }
+    & $python -m materials_studio_mcp.release verify-deployment --root $installFull
+    if ($LASTEXITCODE -ne 0) { throw "Independent deployment verification failed" }
+}
+finally {
+    if ($null -eq $previousMcpRoot) { Remove-Item Env:MATERIALS_STUDIO_MCP_ROOT -ErrorAction SilentlyContinue } else { $env:MATERIALS_STUDIO_MCP_ROOT = $previousMcpRoot }
+    if ($null -eq $previousManifestRoot) { Remove-Item Env:MS_MOC_MCP_ROOT -ErrorAction SilentlyContinue } else { $env:MS_MOC_MCP_ROOT = $previousManifestRoot }
+}
+
+Move-Item -LiteralPath $installFull -Destination $targetFull
 
 $current = Join-Path $rootFull "current"
 $previousTarget = $null
-if (Test-Path -LiteralPath $current) {
-    $item = Get-Item -LiteralPath $current -Force
-    if ($item.LinkType -ne "Junction") { throw "Current deployment pointer is not a junction: $current" }
-    $previousTarget = [string]$item.Target
-    [System.IO.Directory]::Delete($current)
+$activated = $false
+if ($Activate) {
+    if (Test-Path -LiteralPath $current) {
+        $item = Get-Item -LiteralPath $current -Force
+        if ($item.LinkType -ne "Junction") { throw "Current deployment pointer is not a junction: $current" }
+        $previousTarget = [string]$item.Target
+        [System.IO.Directory]::Delete($current)
+    }
+    New-Item -ItemType Junction -Path $current -Target $targetFull | Out-Null
+    $activated = $true
 }
-New-Item -ItemType Junction -Path $current -Target $targetFull | Out-Null
 $receipt = @{
     schema_version = 1
     version = [string]$bundle.version
@@ -120,6 +144,7 @@ $receipt = @{
     target = $targetFull
     current_pointer = $current
     previous_target = $previousTarget
+    activated = $activated
     production_science_released = $false
 }
 [System.IO.File]::WriteAllText(

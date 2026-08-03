@@ -16,7 +16,7 @@
                    {
                        "name":  "unittest",
                        "status":  "pass",
-                       "expected_test_count":  322
+                       "expected_test_count":  327
                    },
                    {
                        "name":  "p4c_targeted",
@@ -46,7 +46,7 @@
                    {
                        "name":  "source_integrity",
                        "status":  "pass",
-                       "sha256":  "107808C3F70C4E98FD9D84E2DDE1CD6B3C46214B41DD88DE312D7A5EFECFDA47"
+                       "sha256":  "7C27ECF8E6AF2D0C384B9F62188A9C941E10D749F39FE0F5E85A96093C6A3CFF"
                    },
                    {
                        "name":  "deployment_pip_check",

@@ -18,7 +18,7 @@ if((Get-FileHash -Algorithm SHA256 -LiteralPath $input).Hash -ne $inputSha){thro
 $forbidden=@(Get-Process -ErrorAction SilentlyContinue|Where-Object{$_.ProcessName -match '^(castep|castepexe|mpiexec|smpd|msserver|matserver|MaterialsStudio|RunCASTEP)$'})
 if($forbidden.Count -ne 0){throw "Forbidden runtime process exists before P4-C"}
 $full=Invoke-Text "unittest" $python @("-m","unittest","discover","-s","tests","-q")
-if($full -notmatch "Ran 322 tests"){throw "Expected 322 tests: $full"}
+if($full -notmatch "Ran 328 tests"){throw "Expected 328 tests: $full"}
 $targeted=Invoke-Text "P4-C targeted" $python @("-m","unittest","tests.test_castep_p4c_public_preflight","-q")
 if($targeted -notmatch "Ran 3 tests"){throw "Expected 3 P4-C tests: $targeted"}
 $public=Invoke-Json "public fixed-profile preflight" $python @("-c","import json; from materials_studio_mcp.server import ms_castep_fixed_profile_preflight; print(json.dumps(ms_castep_fixed_profile_preflight(r'$input',r'$inputSha')))")
@@ -48,7 +48,7 @@ $receipt=[ordered]@{
   general_castep_parsing="unverified"
  }
  checks=@(
-  [ordered]@{name="unittest";status="pass";expected_test_count=322},
+  [ordered]@{name="unittest";status="pass";expected_test_count=328},
   [ordered]@{name="p4c_targeted";status="pass";expected_test_count=3},
   [ordered]@{name="public_preflight";status="pass";request_sha256=$public.data.request_sha256},
   [ordered]@{name="locale_safeguard";status="pass";stderr_bytes=0},

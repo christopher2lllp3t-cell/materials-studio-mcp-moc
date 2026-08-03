@@ -9,6 +9,7 @@
       "cwd": "E:\\ms_mcp\\deployments\\current",
       "env": {
         "MATERIALS_STUDIO_ROOT": "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1",
+        "MATERIALS_STUDIO_MCP_ROOT": "E:\\ms_mcp\\deployments\\current",
         "MS_MOC_SCRIPT": "E:\\ms_mcp\\deployments\\current\\moc\\ms_moc.py",
         "MS_MOC_MCP_ROOT": "E:\\ms_mcp\\deployments\\current"
       }

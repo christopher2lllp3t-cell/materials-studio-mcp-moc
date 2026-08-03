@@ -2,10 +2,10 @@
   "schema_version": 1,
   "release": {
     "name": "materials-studio-mcp-moc",
-    "version": "1.3.0",
+    "version": "1.3.4",
     "api_version": "1.0",
     "channel": "v1-release-candidate",
-    "generated_at_utc": "2026-08-02T11:06:23.369926+00:00",
+    "generated_at_utc": "2026-08-03T02:15:52.252029+00:00",
     "production_science_released": false
   },
   "python": {
@@ -338,8 +338,8 @@
     {
       "label": "mcp-config.example.json",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\mcp-config.example.json",
-      "bytes": 523,
-      "sha256": "9DE2C9F9871C2CB5B687BFADBDA8B2ABDEFA395F6E8F3858DAFD2FACCB6F6F35"
+      "bytes": 596,
+      "sha256": "05C98A1B3C800448F08791B7983E0E3F79A8D48F33B120FCB47FA8ACCFA562EA"
     },
     {
       "label": "README.md",
@@ -656,14 +656,14 @@
     {
       "label": "scripts/build_release_v1.ps1",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\build_release_v1.ps1",
-      "bytes": 4557,
-      "sha256": "B50377255971BC14D171C1FD822D419F11BD5F37C67BC07688B612F24C647980"
+      "bytes": 5496,
+      "sha256": "4B4A37FE1FDDF59756F65AD1001AC7DAE41CEB518CEAA30569F4EA3C66D0B011"
     },
     {
       "label": "scripts/install_release_v1.ps1",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\install_release_v1.ps1",
-      "bytes": 6279,
-      "sha256": "C3649030E09471A193E96EA9E9C5FA1899F599109B7C972E67EAD4B6A845A64E"
+      "bytes": 7471,
+      "sha256": "E0E08014B4915A83306CD85D270190EFF8AB87F117CAB3923DED5A25DB25B29E"
     },
     {
       "label": "scripts/reproduce_g01_v1.py",
@@ -674,8 +674,8 @@
     {
       "label": "scripts/rollback_release_v1.ps1",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\rollback_release_v1.ps1",
-      "bytes": 1570,
-      "sha256": "43C96F3C58D7636EC43A53F1DF7F5D8551580ED317DDF7980177EBF3DAA7A7DE"
+      "bytes": 846,
+      "sha256": "E1E9169A6E688A5BA85C9D7278303D3210FC5133E13DFBD1743A8A22AEBC18F5"
     },
     {
       "label": "scripts/smoke_geology_hydroxylation_mcp.py",
@@ -700,6 +700,12 @@
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\smoke_geology_surface_mcp.py",
       "bytes": 3840,
       "sha256": "1E188912D38D9ACDEC4A18346B9353E1BCDFF91D0880054272D346388B0C8308"
+    },
+    {
+      "label": "scripts/switch_current_release_v1.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\switch_current_release_v1.ps1",
+      "bytes": 5683,
+      "sha256": "3937B6ED9459FD9C78AC67DE66F0EC7F796E35C4FD3B606D1319C303289EFBDF"
     },
     {
       "label": "scripts/verify_baseline_v1.ps1",
@@ -741,7 +747,7 @@
       "label": "scripts/verify_candidate_p3c_final.ps1",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_p3c_final.ps1",
       "bytes": 6151,
-      "sha256": "629F053CFEE2052DADE8546A581FF51CCAF4F3BD6851431D406D3A1F6E7E621A"
+      "sha256": "AE392C6EE852E4CB3555E64B53C03CA089CF0AAC962CCA725AB71F1F7734773D"
     },
     {
       "label": "scripts/verify_candidate_p4a.ps1",
@@ -759,7 +765,13 @@
       "label": "scripts/verify_candidate_p4c_final.ps1",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_p4c_final.ps1",
       "bytes": 5879,
-      "sha256": "412628BCCA3D55CBAFF353BF6161AA708AB1FE88DBBF2A471438FA560F7ADF2D"
+      "sha256": "B026A7D77FF20A65DFE078D15D1BE306A46F305B619E1B468C2FDB3792C03FC3"
+    },
+    {
+      "label": "scripts/verify_candidate_p5a.ps1",
+      "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_p5a.ps1",
+      "bytes": 9818,
+      "sha256": "DEF006261BD2F3BFF761C6B8B16A3BFD4D1F1E429DA2CE3173DA30E2506F8209"
     },
     {
       "label": "scripts/verify_candidate_v1.ps1",
@@ -1046,8 +1058,8 @@
     {
       "label": "tests/test_release_manifest.py",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\tests\\test_release_manifest.py",
-      "bytes": 3420,
-      "sha256": "12BB34F204B626E52A3F4846660252C00A06CCBD4877AA742447D4C474F67974"
+      "bytes": 6986,
+      "sha256": "A33D5C66C080B2027159FC2A8379825613219CC2575C7005359AE778E0BA8ED5"
     },
     {
       "label": "tests/test_science_contract.py",
