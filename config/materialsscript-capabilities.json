@@ -197,14 +197,14 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_p4a_preflight.py",
-      "sha256": "0546E3538EA3B5F49BD63A11151B0427BEEC610EA2B7EBDDC553F59CFD52E5DD"
+      "sha256": "5D82D70876328B5E1799F1A3A402920402E166E4DD7E9E67BB921924FFC7A52F"
     },
     {
       "id": "test_castep_p4b_contract",
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_p4b_contract.py",
-      "sha256": "932C09C5A7A9F87C329ED39BAAC4DAC1C7F899BABAFEA41DA83036789DA0F3DD"
+      "sha256": "9EE9922B5F52465AE99FF69B28E120D96B1EF732576A180C7503CEC01982135C"
     },
     {
       "id": "test_castep_p4c_public_preflight",
@@ -221,6 +221,13 @@
       "sha256": "0E4EC005469C2FB4293C307C3174F4AEDAEE88B9F0696B860E048755A8936E8F"
     },
     {
+      "id": "test_model_readiness_and_public_evidence",
+      "kind": "regression_test",
+      "root": "project",
+      "path": "tests/test_model_readiness_and_public_evidence.py",
+      "sha256": "F57847C6FE360457B54DE7E8EB9BF0D83667DD95508C8D01F2F1F10156EA2886"
+    },
+    {
       "id": "receipt_type_iic_compassiii",
       "kind": "runtime_receipt",
       "root": "workspace",
@@ -229,6 +236,17 @@
     }
   ],
   "capabilities": [
+    {
+      "id": "core.model_intake_readiness",
+      "layer": "Core",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": [],
+      "parameters": [],
+      "evidence_ids": ["test_model_readiness_and_public_evidence"],
+      "notes": "Read-only model intake and fixed-provider metadata planning. It does not generate structures, force-field parameters, cross terms, partial charges, or scientific validity claims."
+    },
     {
       "id": "core.controlled_materialsscript_execution",
       "layer": "Core",

@@ -1,0 +1,74 @@
+{
+    "schema_version":  1,
+    "verification_entry":  "scripts/verify_candidate_p6_model_readiness.ps1",
+    "outcome":  {
+                    "qualification":  "pass",
+                    "candidate_version":  "1.3.6",
+                    "activated":  false,
+                    "current_target":  "E:\\ms_mcp\\deployments\\1.3.4",
+                    "public_tool_count":  53,
+                    "model_readiness":  "blocked",
+                    "public_network_access":  "not_requested",
+                    "general_castep_calculation":  "unverified",
+                    "general_castep_parsing":  "unverified",
+                    "locale_stderr_bytes":  0,
+                    "production_science_released":  false
+                },
+    "checks":  [
+                   {
+                       "name":  "current_unchanged",
+                       "status":  "pass",
+                       "target":  "E:\\ms_mcp\\deployments\\1.3.4"
+                   },
+                   {
+                       "name":  "source_regression",
+                       "status":  "pass",
+                       "observed_test_count":  345
+                   },
+                   {
+                       "name":  "source_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "source_integrity",
+                       "status":  "pass",
+                       "sha256":  "55FF25B4186058B1ED208A0A5B9CB655DFAEA9B0C9EA599E4CD982A8AF588DE8"
+                   },
+                   {
+                       "name":  "candidate_pip_check",
+                       "status":  "pass",
+                       "output":  "No broken requirements found."
+                   },
+                   {
+                       "name":  "candidate_integrity",
+                       "status":  "pass",
+                       "bundle_sha256":  "84A2F8CFA2A963F1D58CC92D5620D782D7FB50B2CDF1D6FA7E4CF36559B47006"
+                   },
+                   {
+                       "name":  "candidate_p6_regression",
+                       "status":  "pass",
+                       "expected_test_count":  17
+                   },
+                   {
+                       "name":  "p6_public_boundary",
+                       "status":  "pass",
+                       "public_tool_count":  53,
+                       "network_access":  "not_requested"
+                   },
+                   {
+                       "name":  "windows_perl_locale",
+                       "status":  "pass",
+                       "stderr_bytes":  0
+                   },
+                   {
+                       "name":  "deployment_read_only",
+                       "status":  "pass"
+                   },
+                   {
+                       "name":  "forbidden_processes",
+                       "status":  "pass",
+                       "count":  0
+                   }
+               ]
+}

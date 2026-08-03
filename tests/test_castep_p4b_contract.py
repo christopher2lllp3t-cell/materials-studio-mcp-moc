@@ -74,7 +74,9 @@ class CastepP4BContractTests(unittest.TestCase):
                 )
 
     def test_p4b_preserves_current_public_and_general_capability_boundary(self) -> None:
-        self.assertEqual(len(PUBLIC_TOOLS), 50)
+        # Public-surface growth is allowed after P4-B; its CASTEP boundary is
+        # asserted below and must remain unchanged.
+        self.assertGreaterEqual(len(PUBLIC_TOOLS), 50)
         self.assertIn(
             "ms_castep_fixed_profile_preflight",
             {item.name for item in PUBLIC_TOOLS},

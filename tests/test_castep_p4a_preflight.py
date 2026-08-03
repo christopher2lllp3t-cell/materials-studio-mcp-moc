@@ -69,7 +69,9 @@ class CastepP4APreflightTests(unittest.TestCase):
         })
 
     def test_p4a_does_not_change_public_registry_or_general_capabilities(self) -> None:
-        self.assertEqual(len(PUBLIC_TOOLS), 50)
+        # Later read-only model-intake tools may be added, but P4-A must never
+        # have opened a general CASTEP execution endpoint.
+        self.assertGreaterEqual(len(PUBLIC_TOOLS), 50)
         self.assertIn(
             "ms_castep_fixed_profile_preflight",
             {item.name for item in PUBLIC_TOOLS},

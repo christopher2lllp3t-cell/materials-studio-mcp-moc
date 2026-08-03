@@ -120,6 +120,8 @@ from .castep_preflight import (
 )
 from .castep_gateway import inspect_castep_gateway_readiness
 from .adaptive_planning import build_adaptive_calculation_plan
+from .model_readiness import assess_model_readiness, build_model_gap_resolution_plan
+from .public_evidence import build_public_evidence_request, search_public_model_evidence
 
 
 SERVER_NAME = "materials-studio-2023"
@@ -493,6 +495,30 @@ mcp._mcp_server.version = __version__
 
 def _clean_workflow_catalog() -> list[dict[str, Any]]:
     return [
+        {
+            "id": "model_readiness_assess",
+            "tool": "md_model_readiness_assess",
+            "title": "Assess model intake readiness",
+            "description": "Read local structure and force-field candidate metadata, identify missing model conditions, and distinguish mechanically resolvable gaps from scientific decisions. It does not create a model or select scientific parameters.",
+            "keywords": ["model readiness", "model intake", "force field gap", "建模条件", "力场缺口"],
+            "when_to_use": "Use before choosing a construction or calculation workflow, especially when structure, cell, charge, or force-field inputs are incomplete.",
+        },
+        {
+            "id": "model_gap_resolution_plan",
+            "tool": "md_model_gap_resolution_plan",
+            "title": "Plan safe resolution of model gaps",
+            "description": "Turn a model intake assessment into ordered local checks, optional public metadata searches, and explicit human scientific gates without performing writes or calculations.",
+            "keywords": ["gap resolution", "model plan", "parameter gap", "缺口补救", "建模计划"],
+            "when_to_use": "Use after readiness assessment to decide which existing controlled MCP tool or manual scientific review is needed next.",
+        },
+        {
+            "id": "public_model_evidence",
+            "tool": "md_search_public_model_evidence",
+            "title": "Search fixed public model-evidence metadata sources",
+            "description": "With explicit opt-in and a single-use confirmation, query PubChem or Crossref metadata only. It never downloads structures or force fields and never treats a search result as parameter validation.",
+            "keywords": ["PubChem", "Crossref", "model evidence", "公开资料", "文献元数据"],
+            "when_to_use": "Use only after a dry-run when local sources are insufficient and the query may be sent to an approved public provider.",
+        },
         {
             "id": "prepare_castep_pl_package",
             "tool": "ms_prepare_castep_pl_package",
@@ -4087,6 +4113,75 @@ def md_pipeline_health_check(run_version_probes: bool = True) -> dict[str, Any]:
     return pipeline_health_check(run_version_probes=run_version_probes)
 
 
+@mcp.tool()
+def md_model_readiness_assess(
+    model_spec: dict[str, Any],
+    search_roots: list[str] | None = None,
+) -> dict[str, Any]:
+    """Read-only intake assessment for an incomplete Materials Studio model specification."""
+
+    operation = "md_model_readiness_assess"
+    try:
+        return success_result(operation, assess_model_readiness(model_spec, search_roots=search_roots))
+    except Exception as exc:
+        return error_result(operation, exc)
+
+
+@mcp.tool()
+def md_model_gap_resolution_plan(
+    model_spec: dict[str, Any],
+    search_roots: list[str] | None = None,
+) -> dict[str, Any]:
+    """Plan local and human-reviewed remedies for model inputs that are not yet ready."""
+
+    operation = "md_model_gap_resolution_plan"
+    try:
+        return success_result(operation, build_model_gap_resolution_plan(model_spec, search_roots=search_roots))
+    except Exception as exc:
+        return error_result(operation, exc)
+
+
+@mcp.tool()
+def md_search_public_model_evidence(
+    query: str,
+    provider: str,
+    max_results: int = 3,
+    allow_network: bool = False,
+    dry_run: bool = True,
+    confirmation_token: str | None = None,
+) -> dict[str, Any]:
+    """Read fixed-provider PubChem/Crossref metadata only after explicit network opt-in."""
+
+    operation = "md_search_public_model_evidence"
+    parameters = {
+        "query": query,
+        "provider": provider,
+        "max_results": max_results,
+        "allow_network": allow_network,
+    }
+    try:
+        if not isinstance(dry_run, bool) or not isinstance(allow_network, bool):
+            raise ValueError("dry_run and allow_network must be booleans")
+        request_plan = build_public_evidence_request(query, provider, max_results)
+        if dry_run:
+            return success_result(
+                operation,
+                {
+                    **_dry_run_payload(operation, parameters, validations={"network_request": request_plan}),
+                    "network_access": "not_requested",
+                    "network_opt_in_required": True,
+                    "confirmation_required_for_live_lookup": True,
+                },
+                warnings=["No network request was sent. A live lookup requires allow_network=true and an exact single-use confirmation token."],
+            )
+        if not allow_network:
+            raise PermissionError("Live public evidence lookup requires allow_network=true")
+        confirmation_manager.consume(confirmation_token, operation, parameters)
+        return success_result(operation, search_public_model_evidence(query, provider, max_results))
+    except Exception as exc:
+        return error_result(operation, exc)
+
+
 @mcp.resource(
     "ms://runtime/health",
     name="materials_studio_runtime_health",
@@ -4156,9 +4251,11 @@ def md_architecture_compliance_audit() -> dict[str, Any]:
         row["name"] for row in rows
         if row["risk"] != "R0" and row["name"] not in dry_run_exemptions and not row["has_dry_run"]
     ]
+    confirmation_required_tools = {"md_search_public_model_evidence"}
     missing_confirmation = [
         row["name"] for row in rows
-        if row["risk"] in {"R2", "R3"} and not row["has_confirmation_token"]
+        if (row["risk"] in {"R2", "R3"} or row["name"] in confirmation_required_tools)
+        and not row["has_confirmation_token"]
     ]
     deprecated_public = [row["name"] for row in rows if row["lifecycle"] == "deprecated"]
     principles = {
@@ -4185,6 +4282,10 @@ def md_architecture_compliance_audit() -> dict[str, Any]:
         "confirmation_for_destructive_or_high_resource": {
             "status": "pass" if not missing_confirmation else "fail",
             "missing_tools": missing_confirmation,
+        },
+        "explicit_opt_in_for_public_network_metadata": {
+            "status": "pass" if not missing_confirmation else "fail",
+            "evidence": "Public evidence lookup is fixed-provider, dry-run by default, and consumes a confirmation bound to allow_network=true before sending a query.",
         },
         "complete_reproducibility_record": {
             "status": "pass",
@@ -4283,6 +4384,7 @@ def md_prepare_production_confirmation(
         "md_scientific_gate_audit",
         "ms_castep_preflight_checked",
         "ms_list_analysis_targets",
+        "md_search_public_model_evidence",
     }
     if tool_name not in allowed_tools:
         raise ValueError(f"Production confirmation is not enabled for tool: {tool_name}")

@@ -20,6 +20,7 @@ It is designed for governed local execution with structured JSON requests and im
 - Run hash-bound Forcite energy, geometry-optimization, and bounded NVT profiles through `ms_forcite_calculation_checked`
 - Submit, query, cancel, and retry governed operations through persisted owner-authenticated tasks
 - Build geology models, periodic slab cells, exact SPC/E NaCl packs, and ClayFF/LAMMPS candidates through typed tools
+- Assess incomplete model specifications and produce bounded local/public-evidence resolution plans without inventing scientific inputs
 - Stage inputs safely into ASCII-only scratch directories
 - Export generated outputs back to user-specified target paths
 - Work correctly when your project workspace itself uses Chinese or other non-ASCII paths
@@ -199,9 +200,42 @@ Typical config:
 }
 ```
 
+## Model-readiness and evidence resolution
+
+Before constructing or calculating a new system, use the read-only
+`md_model_readiness_assess` tool with the model class, components, intended
+engine, available structure source, forcefield state, charge method and
+conditions that are already known. It returns exactly one of:
+
+- `ready`: all machine-discoverable intake fields are present for the proposed
+  controlled preflight; it is not a scientific approval or execution permit.
+- `resolvable`: a bounded path exists to resolve the missing input, such as a
+  selected local source, a supported construction tool, or an optional public
+  metadata lookup. A human still chooses and reviews the scientific input.
+- `blocked`: an essential scientific decision or evidence item is absent, or
+  an input hash/provenance check failed.
+
+`md_model_gap_resolution_plan` turns that result into ordered next actions. It
+may discover configured local `.frc` resources and user-directed local
+structure files, but reports every such result as a *candidate*. It never
+generates forcefield parameters, cross terms, partial charges, crystal cells,
+or a scientific conclusion.
+
+`md_search_public_model_evidence` is deliberately narrow: it can query
+PubChem compound identity metadata or Crossref literature metadata only. It
+does not download SDF/CIF files, forcefields, scripts, or executables. It is
+dry-run by default; a live lookup requires `allow_network=true` and a
+single-use confirmation issued for the exact query. Treat its output as a
+source lead to review and register, never as direct forcefield validation.
+
+General CASTEP execution remains unavailable. No model-readiness or evidence
+tool changes this boundary.
+
 ## Available Tools
 
-The production registry currently exposes exactly **46 public MCP tools**. `ms_task_catalog` is the authoritative runtime list. Arbitrary MaterialsScript execution and the legacy chapter-3 reproduction helpers are internal profiles and are not MCP-registered.
+`ms_task_catalog` and `ms://catalog/public-tools` are the authoritative runtime
+lists. Arbitrary MaterialsScript execution and the legacy chapter-3
+reproduction helpers are internal profiles and are not MCP-registered.
 
 ### `ms_detect_installation`
 
