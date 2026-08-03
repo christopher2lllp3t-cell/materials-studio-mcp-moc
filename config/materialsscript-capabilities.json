@@ -148,7 +148,7 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_geology_modeling_tools.py",
-      "sha256": "40FC55E8B811BA08752B617DCA43809B360AB784D808DFB03FAD3578EEF40CEA"
+      "sha256": "57AE2451F3E7301B739A84D9BE1CFA3D4CFCB2810B25B614A0E945E7FFA82A7A"
     },
     {
       "id": "test_castep_standalone",

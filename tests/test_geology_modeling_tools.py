@@ -599,6 +599,62 @@ class GeologyModelingTests(unittest.TestCase):
             consume.assert_called_once()
             execute.assert_called_once()
 
+    def test_supercell_mcp_adapter_dry_run_validates_and_renders_template(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "model").mkdir()
+            (root / "reports").mkdir()
+            source = root / "source.xsd"
+            write_xsd(
+                source,
+                atoms=[("1", "Na", (0.1, 0.1, 0.1), "1"), ("2", "Cl", (0.6, 0.6, 0.6), "-1")],
+                vectors=((10, 0, 0), (0, 10, 0), (0, 0, 10)),
+            )
+            source_hash = geology.sha256_file(source)
+
+            with patch.object(server, "get_project", return_value={"project_directory": str(root)}), patch.object(
+                server, "resolve_workspace_path", return_value=source
+            ):
+                result = server.ms_geology_build_supercell(
+                    str(root), str(source), source_hash, 2, 1, 1, "salt_2x_dry_run", 10,
+                    "supercell-dry-run-key", timeout_seconds=30, dry_run=True,
+                )
+
+            self.assertTrue(result["ok"])
+            self.assertEqual(result["data"]["status"], "dry_run")
+            self.assertFalse(result["data"]["writes_performed"])
+            self.assertFalse(result["data"]["execution_started"])
+            expected_template_sha256 = hashlib.sha256(
+                geology.build_supercell_script((2, 1, 1), periodic_dimension=3).encode("utf-8")
+            ).hexdigest().upper()
+            self.assertEqual(result["data"]["template_sha256"], expected_template_sha256)
+
+    def test_supercell_mcp_adapter_dry_run_rejects_invalid_surface_repeat(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "model").mkdir()
+            (root / "reports").mkdir()
+            source = root / "surface.xsd"
+            write_xsd(
+                source,
+                atoms=[("1", "O", (0.1, 0.1, 0.1), "0")],
+                vectors=((10, 0, 0), (0, 10, 0), (0, 0, 10)),
+                periodic_dimension=2,
+            )
+            source_hash = geology.sha256_file(source)
+
+            with patch.object(server, "get_project", return_value={"project_directory": str(root)}), patch.object(
+                server, "resolve_workspace_path", return_value=source
+            ):
+                result = server.ms_geology_build_supercell(
+                    str(root), str(source), source_hash, 2, 1, 2, "surface_2x_invalid", 10,
+                    "surface-dry-run-key", timeout_seconds=30, dry_run=True,
+                )
+
+            self.assertFalse(result["ok"])
+            self.assertEqual(result["error"]["code"], "invalid_request")
+            self.assertIn("repeat_c=1", result["error"]["message"])
+
     def test_invalid_adapter_request_returns_versioned_error_without_execution(self) -> None:
         with patch.object(server, "_run_materialsscript_job") as execute:
             result = server.ms_geology_enumerate_surface_terminations(

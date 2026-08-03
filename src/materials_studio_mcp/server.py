@@ -6377,6 +6377,11 @@ def ms_geology_build_supercell(
             source = resolve_workspace_path(input_structure, must_exist=True)
             source_sha256 = validate_input_hash(source, input_sha256)
             input_model = inspect_xsd_geometry(source)
+            periodic_dimension = input_model.get("periodic_dimension")
+            if periodic_dimension not in {2, 3}:
+                raise ValueError("Supercell input must be a 2D PlaneGroup or 3D SpaceGroup XSD")
+            if periodic_dimension == 2 and repeats[2] != 1:
+                raise ValueError("A 2D surface supercell requires repeat_c=1")
             expected_atoms = input_model["atom_count"] * repeats[0] * repeats[1] * repeats[2]
             if expected_atoms > max_atoms:
                 raise ValueError("Requested supercell exceeds max_atoms")
@@ -6386,7 +6391,7 @@ def ms_geology_build_supercell(
                     tool_name, parameters,
                     planned_outputs=[str(destination), str(receipt_path)],
                     validations={"input_sha256": source_sha256, "input_atoms": input_model["atom_count"], "expected_atoms": expected_atoms},
-                    template_text=build_supercell_script(*repeats),
+                    template_text=build_supercell_script(repeats, periodic_dimension),
                     resource_estimate={"parallel_jobs": 1, "max_atoms": max_atoms, "timeout_seconds": timeout_seconds},
                 ),
             )
