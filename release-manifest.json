@@ -2,10 +2,10 @@
   "schema_version": 1,
   "release": {
     "name": "materials-studio-mcp-moc",
-    "version": "1.3.7",
+    "version": "1.3.8",
     "api_version": "1.0",
     "channel": "v1-release-candidate",
-    "generated_at_utc": "2026-08-03T03:40:32.374556+00:00",
+    "generated_at_utc": "2026-08-03T06:37:01.308774+00:00",
     "production_science_released": false
   },
   "python": {
@@ -362,8 +362,8 @@
     {
       "label": "README.md",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\README.md",
-      "bytes": 41243,
-      "sha256": "E1364649AC3B0F207AB57B567E224813EC6313F386ACDEEB286AE93260F0FC3C"
+      "bytes": 8179,
+      "sha256": "A8661C51AC3A3AC37891CE8A173C3C207F2856EC6FCE1828EA85EF9C4987E076"
     },
     {
       "label": "src/materials_studio_mcp/__init__.py",
@@ -807,7 +807,7 @@
       "label": "scripts/verify_candidate_p6_model_readiness.ps1",
       "path": "E:\\ms_mcp\\workspaces\\materials-studio-mcp-moc-1.3.0\\scripts\\verify_candidate_p6_model_readiness.ps1",
       "bytes": 9726,
-      "sha256": "921C2EC029D6F6014CAC7CD96C1AE6F6B464FF1D830F97A8FE4B9784A2F8826A"
+      "sha256": "3F1B453C1FFEC97DD3AEE6A36F92346BFCF303B30EE77162B14A7A6326259488"
     },
     {
       "label": "scripts/verify_candidate_v1.ps1",

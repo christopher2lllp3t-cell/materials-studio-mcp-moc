@@ -1,5 +1,5 @@
 param(
-    [string]$DeploymentRoot = "E:\ms_mcp\deployments\1.3.7",
+    [string]$DeploymentRoot = "E:\ms_mcp\deployments\1.3.8",
     [string]$ExpectedCurrentTarget = "E:\ms_mcp\deployments\1.3.6",
     [string]$ReceiptPath = ""
 )
@@ -115,7 +115,7 @@ $receipt = [ordered]@{
     verification_entry = "scripts/verify_candidate_p6_model_readiness.ps1"
     outcome = [ordered]@{
         qualification = "pass"
-        candidate_version = "1.3.7"
+        candidate_version = "1.3.8"
         activated = $false
         current_target = $currentTarget
         public_tool_count = $boundary.tool_count

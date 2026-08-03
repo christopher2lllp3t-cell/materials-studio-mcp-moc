@@ -1,870 +1,176 @@
 # Materials Studio 2023 MCP
 
-This project provides a local MCP server for `BIOVIA Materials Studio 2023` on Windows.
+这是一个面向 Windows 和 BIOVIA Materials Studio 2023/23.1 的 MCP 服务。它把 Materials Studio、Forcite、CASTEP 输入准备、地质模型构建和 LAMMPS/VMD 前处理封装成可审计的工具，同时保留严格的科学输入边界。
 
-It is designed for governed local execution with structured JSON requests and immutable evidence.
+本项目的重点不是“自动猜参数”，而是让每一步都能回答三个问题：输入来自哪里、执行了什么、结果能否复现。
 
-## What It Can Do
+## 项目能做什么
 
-- Detect the local `Materials Studio 2023` installation
-- Search the installed local scripting help
-- Read specific local help pages and extract code examples
-- Find relevant `MaterialsScript` examples from the installed documentation
-- List built-in example `.xsd`, `.xtd`, and related files
-- Scan your workspace for Materials Studio project and structure files
-- Parse `.xsd`, `.xtd`, and `.stp` files for structured metadata
-- List selectable analysis targets such as elements, existing sets, atom names, and forcefield types
-- Recommend a registered workflow from natural language without executing it
-- Expose a task catalog so an MCP client can discover supported workflows
-- Prepare hash-bound structures through closed COMPASSIII, PCFF, Dreiding/QEq, and Universal/QEq profiles with atom-type, partial-charge, topology, and non-overwrite audits
-- Run hash-bound Forcite energy, geometry-optimization, and bounded NVT profiles through `ms_forcite_calculation_checked`
-- Submit, query, cancel, and retry governed operations through persisted owner-authenticated tasks
-- Build geology models, periodic slab cells, exact SPC/E NaCl packs, and ClayFF/LAMMPS candidates through typed tools
-- Assess incomplete model specifications and produce bounded local/public-evidence resolution plans without inventing scientific inputs
-- Stage inputs safely into ASCII-only scratch directories
-- Export generated outputs back to user-specified target paths
-- Work correctly when your project workspace itself uses Chinese or other non-ASCII paths
+- 检测本机 Materials Studio 2023 安装并读取已安装的本地帮助文档。
+- 扫描和解析 `.xsd`、`.xtd`、`.stp` 等结构文件，检查原子、键、晶胞和拓扑信息。
+- 生成受控的超胞、表面、替换、羟基化、反离子和周期性水/盐模型候选。
+- 在固定的 COMPASSIII、PCFF、Dreiding/QEq、Universal/QEq 配置下准备 Forcite 力场输入，并记录类型、键级、电荷和自动项检查结果。
+- 生成受哈希约束的 CASTEP 独立输入候选；通用 CASTEP 计算执行和通用结果解析仍然关闭。
+- 对模型规格做只读就绪度评估，并给出缺口补齐计划。
+- 对 PubChem 化合物身份元数据和 Crossref 文献元数据提供受限、默认 dry-run 的公开证据查询。
+- 将 CAR/MDF、LAMMPS data、VMD 检查和科学质量门组织为可追溯的项目流程。
+- 通过异步任务提交、查询、取消和重试管理受控操作。
 
-## Execution Model
+## 重要安全边界
 
-The server uses two layers:
+- 不接受任意 Perl、任意 MaterialsScript 或自然语言拼接脚本。
+- 不自动编造晶体结构、晶胞、力场参数、交叉项、部分电荷或科学结论。
+- 公开证据查询默认不联网；实时查询必须由用户明确授权并使用一次性确认。
+- 不下载结构文件、力场文件、脚本或可执行文件作为“自动补齐”。
+- 所有写入和计算工具都有 `dry_run`；真实的 R2/R3 操作需要精确、一次性的确认令牌。
+- 通用 `castep.calculation` 和 `results.castep_parsing` 能力保持 `unverified`，不会因为计划或离线测试而开放。
+- 资格计算只用于内部验证，不代表目标材料已经收敛，也不会自动获得生产许可。
 
-- Python MCP server: tool definitions, staging, template rendering, result handling
-- PowerShell helper: local installation detection and documentation extraction
+## 可运行链路
 
-`MaterialsScript` execution is handled directly by Python through:
+典型的受控链路如下：
 
-- `D:\Program Files (x86)\BIOVIA\Materials Studio 23.1\etc\Scripting\bin\RunMatScript.bat`
+1. `md_model_readiness_assess` 读取模型规格，判断 `ready`、`resolvable` 或 `blocked`。
+2. `md_model_gap_resolution_plan` 列出缺失结构、力场、晶胞、电荷和条件证据；缺失项由用户选择和审核。
+3. `md_project_initialize`、`md_project_update_specification` 和 `md_project_register_artifact` 建立可复现项目记录。
+4. `md_structure_preflight`、力场准备、CAR/MDF 导出和 LAMMPS 转换逐级检查哈希、计数、单位和质量门。
+5. 只有在目标模型证据充分、人工授权和对应工具边界都满足时，才进入受控执行；候选和资格结果不会自动变成生产结果。
 
-The executor deliberately stages files into ASCII-safe scratch directories under `%TEMP%`.
-This avoids path and encoding problems that frequently break older Materials Studio scripting flows.
+## 模型就绪度与公开证据
 
-The PowerShell helper input path handling is also configured to work correctly with Unicode workspace paths.
+在构建或计算新体系前，先提供已经确认的模型信息：组分和数量、相态、目标引擎、结构来源、力场状态、电荷方法、晶胞和边界条件。
 
-Free-form Perl and the legacy direct Forcite/conversion functions remain internal and are not MCP tools. Every public write or calculation tool supports `dry_run`; every public R2/R3 tool requires an exact single-use confirmation for real execution.
+可使用以下工具：
 
-## Safety Architecture
+- `md_model_readiness_assess`：只读检查已知字段和证据完整性。
+- `md_model_gap_resolution_plan`：生成有顺序、有边界的补齐计划，不代替科学决策。
+- `md_search_public_model_evidence`：只查固定的 PubChem/Crossref 元数据；默认 `network_access=not_requested`。
 
-- MCP interface: 46 reviewed tools, 2 JSON resources, and 1 safety prompt
-- Validation: typed values, ranges, units, path boundaries, hashes, and dependency checks
-- Workflows: governed Forcite profiles, geology construction, conversion, packing, and LAMMPS gates
-- Tasks: asynchronous submit/query/cancel/retry with one-time owner capabilities and fixed Task Scheduler dispatch
-- MaterialsScript: reviewed templates only; no natural-language or user text is concatenated into Perl
-- Results: structured JSON envelopes and parsed reports
-- Records: parameters, rendered scripts, logs, environment, outputs, receipts, and SHA-256 hashes
+公开检索只产生“待人工复核的来源线索”，不会直接变成力场参数或结构输入。
 
-Forcefield preparation is fail-closed. The only input-preflight exception is a valid XSD whose sole error is missing `ForcefieldType`; the output must retain atom count, bond count, element inventory, and bond-order distribution, provide a readable partial charge for every atom, and pass the configured neutral net-charge tolerance. COMPASSIII is the primary organic condensed-phase candidate. PCFF, Dreiding/QEq, and Universal/QEq are separate diagnostic fallbacks and are never treated as scientifically interchangeable or automatically promoted to production.
+## 安装
 
-## Project Layout
-
-```text
-07_mcp_materials_studio/
-  .venv/                      optional local virtual environment
-  config/
-    software.local.json       local MS/LAMMPS/MPI/VMD/Packmol paths
-    policy.json               execution limits and quality gates
-    project-manifest.template.json
-  install.ps1
-  requirements.lock           exact tested Python runtime dependencies
-  mcp-config.example.json
-  mcp-config.local.json       generated by install.ps1
-  pyproject.toml
-  README.md
-  src/materials_studio_mcp/
-    __init__.py
-    pipeline_config.py
-    server.py
-    ms_helper.ps1
-```
-
-## Unified MD Pipeline Configuration
-
-The first-stage configuration for the Materials Studio -> LAMMPS -> VMD pipeline lives under `config/`:
-
-- `software.local.json`: local executable paths for Materials Studio, LAMMPS, msi2lmp, MPI, VMD, and Packmol
-- `policy.json`: workspace boundaries, concurrency limits, overwrite rules, and mandatory production preflight gates
-- `project-manifest.template.json`: reproducible per-project model, forcefield, artifact, provenance, and quality-gate record
-
-The strict v2 data contract is defined separately in `config/project-manifest.schema.v2.json` and implemented by `materials_studio_mcp.project_manifest_v2`. It is additive: existing v1 manifests remain readable by the v1 project manager and are not silently migrated. A v2 artifact must declare one of `source_structure`, `derived_structure`, `forcefield_bundle`, `conversion_artifact`, `simulation_run`, `analysis_result`, or `evidence_receipt`, with a SHA-256 hash, parent IDs, creator, tool version, timestamp, and explicit artifact status. The v2 lifecycle is `DRAFT -> STRUCTURE_VERIFIED -> FORCEFIELD_VERIFIED -> CONVERSION_VERIFIED -> LAMMPS_PREFLIGHT_VERIFIED -> QUALIFICATION_ONLY`; `PRODUCTION_READY` requires separate target-model production evidence and explicit manual authorization. Software tests, conversion results, candidate evidence, and qualification evidence cannot promote a project to production.
-
-Two MCP tools expose this layer:
-
-- `md_pipeline_get_config`: read the effective software and safety configuration
-- `md_pipeline_health_check`: verify the configured toolchain without starting a simulation or consuming a Materials Studio job license
-
-Project lifecycle tools keep every model and downstream run reproducible:
-
-- `md_project_initialize`: create the standard request/model/forcefield/conversion/LAMMPS/analysis/VMD/report tree without overwriting existing work
-- `md_project_get`: read the current project manifest
-- `md_project_update_specification`: record model composition, state conditions, boundaries, and forcefield decisions
-- `md_project_register_artifact`: register an input or output with its role, source, size, and SHA-256 hash
-- `md_project_validate`: enforce required specification fields, forcefield declarations, directory completeness, and artifact integrity
-- `md_project_set_quality_gate`: record pass/fail/blocked decisions with evidence instead of silently advancing a workflow
-
-Conversion preflight tools stop malformed or underspecified models before LAMMPS execution:
-
-- `md_structure_preflight`: inspect XSD atoms, bonds, forcefield typing, formal charge, coordinates, and periodic cell; or cross-check LAMMPS data header/section counts, masses, and inferred charge
-- `md_msi2lmp_preflight`: require a CAR/MDF pair, valid forcefield class, and explicit `.frc` selection before conversion
-- `md_export_xsd_to_car_mdf_checked`: confirmed, idempotent project export bound to the XSD SHA-256 and registered CAR/MDF outputs
-- `md_convert_to_lammps_checked`: confirmed, idempotent conversion bound to CAR, MDF, and forcefield hashes, explicit forcefield class, source/target atom-count equality, and LAMMPS data preflight
-- `md_g01_qualification_vertical`: one structured, qualification-only G01 path in the fixed order XSD audit -> reviewed PCFF preparation -> postflight -> PCFF Energy -> CAR/MDF -> checked conversion -> LAMMPS run 0 -> bounded minimization -> bounded NVT smoke -> VMD/text checks -> unified report. It is hash-bound to the reviewed three-atom water fixture, supports dry-run, and requires one exact confirmation for real execution. The NVT smoke output is never labeled as a production trajectory.
-- `md_scientific_gate_audit`: freeze and audit the 14 target-model intake groups against existing structure/evidence receipts. It returns per-gate `PASS`, `BLOCKED`, `UNVERIFIED`, or `NOT_APPLICABLE`, writes `scientific_gate_report.json`, `scientific_gate_report.md`, `blocker_register.json`, and `next_action_plan.md` only after confirmation, and never emits production release states.
-
-Task management tools:
-
-- `md_task_submit`: run the target tool dry-run first, then submit an exact confirmed operation to a fixed background worker
-- `md_task_query`: return one task only after validating its owner capability
-- `md_task_cancel`: dry-run or confirmed process-tree cancellation
-- `md_task_retry`: dry-run or confirmed creation of a new task linked to a failed/cancelled predecessor
-
-Local paths can be overridden without editing JSON through `MATERIALS_STUDIO_ROOT`, `LAMMPS_EXECUTABLE`, `MPIEXEC_EXECUTABLE`, `VMD_EXECUTABLE`, and `PACKMOL_EXECUTABLE`. The complete configuration files can be replaced with `MD_PIPELINE_SOFTWARE_CONFIG` and `MD_PIPELINE_POLICY_CONFIG`.
-
-The pipeline deliberately treats Packmol as optional for basic MS/LAMMPS/VMD operation. Packing workflows remain disabled until a working executable is configured.
-
-## Installation
-
-Run:
+在 Windows PowerShell 中运行：
 
 ```powershell
 .\install.ps1
 ```
 
-This script will:
+安装脚本会：
 
-- create `.venv` if needed
-- repair `.venv` launcher metadata if the original base Python moved
-- install the package in editable mode
-- install the exact dependency versions recorded in `requirements.lock` and run `pip check`
-- create an ASCII-safe runtime junction at `E:\ms_mcp\ms_mcp_runtime\materials_studio_2023`
-- write `mcp-config.local.json`
+- 创建或修复 `.venv`；
+- 安装锁定版本的 Python 依赖并执行 `pip check`；
+- 创建 ASCII 路径运行别名；
+- 生成本机 MCP 客户端配置 `mcp-config.local.json`。
 
-You can also install manually:
+也可以手动安装：
 
 ```powershell
 python -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -e .
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -e .
 ```
 
-## Start The Server
+`config/software.local.json`、`config/research-environment.local.json` 和生成的 `mcp-config.local.json` 都是本机配置。里面的 Windows 路径只是示例，使用前必须根据本机安装位置修改；不要把个人凭据写入这些文件。
 
-Preferred:
+## 启动服务
+
+推荐使用部署目录的 ASCII 路径：
 
 ```powershell
-E:\ms_mcp\ms_mcp_runtime\materials_studio_2023\.venv\Scripts\python.exe -m materials_studio_mcp.server
+E:\ms_mcp\deployments\current\.venv\Scripts\python.exe -m materials_studio_mcp.server
 ```
 
-Also works after a healthy local reinstall:
+本地开发环境也可以使用：
 
 ```powershell
-.venv\Scripts\python.exe -m materials_studio_mcp.server
+.\.venv\Scripts\python.exe -m materials_studio_mcp.server
 ```
 
-or:
+命令行入口为：
 
 ```powershell
-.venv\Scripts\materials-studio-mcp.exe
+.\.venv\Scripts\materials-studio-mcp.exe
 ```
 
-If a local `.venv` launcher points to an old base Python and fails to start, rerun `.\install.ps1` and prefer the ASCII runtime alias command above for MCP client integration.
+如果虚拟环境仍指向已经移动的 Python，请重新运行 `.\install.ps1`，并优先使用 ASCII 运行别名。
 
-For MCP clients, prefer the generated ASCII runtime alias path below instead of the original workspace path.
+## MCP 客户端配置
 
-## MCP Client Config
-
-Generated file:
-
-- `mcp-config.local.json`
-
-Example file:
-
-- `mcp-config.example.json`
-
-Typical config:
+仓库中的 `mcp-config.example.json` 是模板。典型配置如下，请将路径替换为本机实际路径：
 
 ```json
 {
   "mcpServers": {
     "materials-studio-2023": {
-      "command": "E:\\ms_mcp\\ms_mcp_runtime\\materials_studio_2023\\.venv\\Scripts\\python.exe",
-      "args": [
-        "-m",
-        "materials_studio_mcp.server"
-      ],
+      "command": "E:\\ms_mcp\\deployments\\current\\.venv\\Scripts\\python.exe",
+      "args": ["-m", "materials_studio_mcp.server"],
+      "cwd": "E:\\ms_mcp\\deployments\\current",
       "env": {
-        "MATERIALS_STUDIO_ROOT": "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1"
+        "MATERIALS_STUDIO_ROOT": "D:\\Program Files (x86)\\BIOVIA\\Materials Studio 23.1",
+        "MATERIALS_STUDIO_MCP_ROOT": "E:\\ms_mcp\\deployments\\current",
+        "MS_MOC_MCP_ROOT": "E:\\ms_mcp\\deployments\\current"
       }
     }
   }
 }
 ```
 
-## Model-readiness and evidence resolution
-
-Before constructing or calculating a new system, use the read-only
-`md_model_readiness_assess` tool with the model class, components, intended
-engine, available structure source, forcefield state, charge method and
-conditions that are already known. It returns exactly one of:
-
-- `ready`: all machine-discoverable intake fields are present for the proposed
-  controlled preflight; it is not a scientific approval or execution permit.
-- `resolvable`: a bounded path exists to resolve the missing input, such as a
-  selected local source, a supported construction tool, or an optional public
-  metadata lookup. A human still chooses and reviews the scientific input.
-- `blocked`: an essential scientific decision or evidence item is absent, or
-  an input hash/provenance check failed.
-
-`md_model_gap_resolution_plan` turns that result into ordered next actions. It
-may discover configured local `.frc` resources and user-directed local
-structure files, but reports every such result as a *candidate*. It never
-generates forcefield parameters, cross terms, partial charges, crystal cells,
-or a scientific conclusion.
-
-`md_search_public_model_evidence` is deliberately narrow: it can query
-PubChem compound identity metadata or Crossref literature metadata only. It
-does not download SDF/CIF files, forcefields, scripts, or executables. It is
-dry-run by default; a live lookup requires `allow_network=true` and a
-single-use confirmation issued for the exact query. Treat its output as a
-source lead to review and register, never as direct forcefield validation.
-
-General CASTEP execution remains unavailable. No model-readiness or evidence
-tool changes this boundary.
-
-## Available Tools
-
-`ms_task_catalog` and `ms://catalog/public-tools` are the authoritative runtime
-lists. Arbitrary MaterialsScript execution and the legacy chapter-3
-reproduction helpers are internal profiles and are not MCP-registered.
-
-### `ms_detect_installation`
-
-Returns:
-
-- install root
-- `RunMatScript.bat`
-- `perl.exe`
-- local help root
-- scripting PDF path
-- examples root
-
-### `ms_search_local_help`
-
-Searches the installed Materials Studio 2023 scripting help and returns ranked matches.
-
-### `ms_read_local_help_page`
-
-Reads a specific local Materials Studio help page and returns:
-
-- title
-- cleaned text excerpt
-- extracted code examples
-
-### `ms_find_code_examples`
-
-Searches installed scripting documentation for relevant example code blocks.
-
-### `ms_list_example_documents`
-
-Lists built-in example files such as `.xsd` and `.xtd`.
-
-### `ms_scan_workspace`
-
-Scans a workspace directory for:
-
-- `.xsd`
-- `.xtd`
-- `.stp`
-- `.std`
-- `.xod`
-- `.car`
-- `.mdf`
-
-### `ms_inspect_document`
-
-Parses `.xsd`, `.xtd`, and `.stp` files directly and returns best-effort metadata.
-
-Examples of returned data:
-
-- atom count
-- bond count
-- molecule count
-- periodic or non-periodic
-- trajectory frame information
-- space group information
-- project document list from `.stp`
-
-### `ms_prepare_castep_pl_package`
-
-Prepares a hash-bound set of self-contained XSD/MaterialsScript PL folders for CASTEP geometry optimization and spin screening. It validates the exact input SHA-256 and derives the MaterialsScript runtime atom count with the reviewed SpaceGroup/PlaneGroup unit-cell expansion instead of counting persisted `ImageOf` display nodes. It uses short ASCII task names, refuses to overwrite outputs, supports a write-free dry run, and records hashes for every generated XSD and PL.
-
-This R1 tool never starts Materials Studio, selects a Gateway, or submits a CASTEP job. Each generated PL defaults to fixed spin and blocks local Windows execution; the user must inspect the package, press `Ctrl+F5`, and manually select a reviewed remote Gateway and queue. Direct CASTEP execution and result parsing remain disabled in the MCP.
-
-For a no-CASTEP runtime preflight of the exact generated PL/XSD pair, set
-`MS_CASTEP_PL_PREFLIGHT_ONLY=1` and run the PL with `RunMatScript.bat -flat`
-from its task directory. The PL imports its sibling XSD with
-`Documents->Import`, checks `UnitCell->Atoms->Count`, prints
-`RESULT status=preflight_only`, and exits before the local-execution guard and
-before `GeometryOptimization->Run`. Acceptance requires all of the following:
-
-- `.pl.out` contains `RESULT status=preflight_only` and the expected atom count;
-- the MatStudio log contains `Completion status: (OK)`;
-- no CASTEP inputs, outputs, `opt.xsd`, or `report.txt` were created.
-
-Do not treat the `RunMatScript.bat` process exit code alone as proof of success:
-Materials Studio 23.1 can return exit code 0 even when the MatServer log reports
-a script parse failure.
-
-`ms_castep_preflight_checked` makes this acceptance path public and governed.
-It accepts only one MCP-generated task whose package manifest, copied XSD, and
-PL hashes all match; defaults to a write-free dry run; requires an exact
-single-use confirmation for execution; sets `MS_CASTEP_PL_PREFLIGHT_ONLY=1`;
-and preserves a hashed receipt. It never selects a Gateway and rejects any task
-directory that already contains CASTEP or result artifacts.
-
-The confirmation is issued through the public
-`md_prepare_production_confirmation` tool using the exact package directory,
-manifest hash, task name, and timeout that will be consumed by the preflight.
-The MCP boundary exposes a confirmation token only from that dedicated issuer;
-all other token-like response fields remain redacted. The capability expires,
-is single-use, and cannot authorize parameters whose operation hash differs.
-
-`ms_castep_gateway_readiness` is a read-only check of allowlisted public fields
-from the local Materials Studio Gateway. It reports Gateway/license-service
-state, local core capacity, queuing-system readiness, and explicit blockers. A
-running license service is not treated as proof that a CASTEP license seat is
-available. Real local or remote CASTEP submission remains unavailable until a
-reviewed execution profile and result-query evidence are separately validated.
-
-Local and remote readiness are evaluated independently. A healthy local
-Gateway whose requested core count fits the machine is reported ready for the
-local mode even when no remote queue exists; the absent queue remains visible
-under `remote_blockers`. Package preparation defaults to 4 cores; Gateway
-readiness checks the 12-logical-processor ceiling. The separate LAMMPS/MS-MPI
-policy remains capped at 8 processes. These are explicit per-engine policies,
-not interchangeable meanings of "cores".
-
-All public R1/R2/R3 operations default to `dry_run=true`. Real mutation or
-process launch therefore requires an explicit `dry_run=false`; R2/R3 tools also
-require their existing exact, single-use confirmation token.
-
-Runtime-only preflight accepts both default guarded packages and explicitly
-local packages. For a local package, `allow_local` must be a JSON boolean in the
-hash-bound manifest; default packages still require the local-execution guard.
-Both modes must place the preflight result marker before
-`GeometryOptimization->Run`.
-
-### `ms_prepare_castep_standalone_inputs`
-
-Prepares a self-contained, hash-bound standalone CASTEP input candidate for
-the official `RunCASTEP.bat` launcher. R1 accepts only a 3D periodic XSD and a
-closed initial scientific scope: `SinglePoint`, nonmagnetic insulator, PBE,
-dispersion off, standard-element default OTFG pseudopotentials, explicit
-cutoff energy, and explicit Monkhorst-Pack grid. It expands the XSD asymmetric
-unit with its explicit `SpaceGroup Operators`, writes a full `.cell`, a minimal
-documented `.param`, an exact source-XSD snapshot, and hash-bound contract and
-manifest files. The candidate has a four-core local ceiling and one parallel
-job.
-
-Every setting must include a source in `standalone_context`; the tool does not
-select a cutoff, k-point grid, magnetic treatment, functional, or dispersion
-model. It defaults to `dry_run=true`, refuses an existing output directory,
-never invokes `RunCASTEP.bat`, never selects a Gateway, never acquires a CASTEP
-license, and always returns `execution_allowed=false`. A separately qualified
-runner and result parser are required before these inputs can be calculated.
-
-### Controlled geology model tools
-
-`ms_geology_build_supercell` builds one periodic XSD supercell with the local Materials Studio 2023 API. Required mutation controls are:
-
-- an initialized `project_directory`
-- exact `input_sha256`
-- integer `repeat_a`, `repeat_b`, and `repeat_c` in `1..64`, with product at most `4096`
-- a basename-only `output_slot` without a path or extension
-- an explicit `max_atoms`
-- a new `idempotency_key`
-- a single-use confirmation token bound to every parameter, including the idempotency key and timeout
-
-The server expands the input asymmetric unit from the persisted `SpaceGroup Operators`, audits display `ImageMapping` records against those orbits, and verifies exact atom count, element composition, formal charge, cell-vector scaling, and supported topology before registering the result. The result is `candidate_model_pass` with `production_released=false`.
-
-`ms_geology_enumerate_surface_terminations` cleaves an explicit Miller plane at caller-supplied top positions. It requires the same project/hash/idempotency/confirmation controls plus:
-
-- integer `miller_h`, `miller_k`, and `miller_l`, not all zero
-- `thickness_angstrom` in `1..500`
-- unique `top_positions` in `[0,1)`
-- `max_candidates` in `1..64`
-
-Every returned slab is `candidate_only`. The tool does not select a best termination, repair bonds, hydroxylate a surface, assign a force field, or release production.
-
-`ms_geology_apply_substitutions` applies an explicit substitution ledger to a 3D P1 XSD. Every target binds a zero-based asymmetric-unit atom index to its expected name, fractional coordinate, source element, destination element, and before/after formal charge. The tool verifies composition, coordinates, topology, cell invariance, and a MaterialsScript runtime charge ledger before publishing a `substitution_geometry_pass` candidate.
-
-`ms_geology_place_counterions` adds explicitly named ions at reviewed fractional coordinates in a 3D P1 XSD. It performs an exact triclinic minimum-image clearance audit against the framework and all other inserted ions, enforces atom and charge deltas with a MaterialsScript runtime ledger, and returns only a `counterion_geometry_pass` candidate. It does not choose ion parameters or assign forcefield partial charges.
-
-`ms_geology_apply_hydroxylation_ledger` protonates only explicit, indexed oxygen sites in a 2D `PlaneGroup p1` surface. Every accepted oxygen must be singly coordinated to exactly one Si atom. The caller supplies the surface side, before/after oxygen formal charge, H name and fractional coordinate, O-H bond limits, and nonbonded clearance limit. The result includes exact bond-ledger validation, runtime charge totals, lateral area, and candidate silanol density, but never selects a termination or releases production.
-
-`ms_geology_assess_nanopore_contract` is a read-only fail-closed gate. It verifies the hashed literature and bulk source, cleavage, top/bottom termination, hydroxylation, double-surface transform, geometric and accessible widths, electrostatics mode, immutable fixed-region IDs, fluid specification, and forcefield provenance. Double-surface construction and packing must remain blocked unless this tool returns `construction_released=true`.
-
-The required mutation sequence is:
-
-1. call `md_project_initialize`;
-2. call `md_prepare_production_confirmation` with the exact final tool parameters;
-3. call the geology tool once with that token and the same parameter object;
-4. inspect the receipt, registered artifact hashes, and `production_released` flag.
-
-MaterialsScript subprocesses receive closed stdin so they cannot consume the MCP stdio transport. Inputs and outputs remain in ASCII staging, timeouts terminate only the owned process tree, and files are published only after an OK MatStudio log and complete output set.
-
-### Controlled MOC desktop tools
-
-`ms_moc_get_status` returns the readiness of the separate local MOC desktop-control layer in the versioned MCP result envelope.
-
-`ms_moc_open_document` opens one Materials Studio document only after validating an initialized project, project ownership of the document, the configured workspace boundary, and an exact SHA-256. A dry run is desktop-side-effect free and requires no confirmation token. A live launch requires a single-use confirmation bound to the complete request and is protected by the project idempotency ledger. The MOC child process and MatStudio desktop are detached from MCP protocol standard streams, and the result distinguishes the request dispatcher from stable desktop PIDs.
-
-### `ms_task_catalog`
-
-Lists the current high-level workflows and helper tools exposed by this server.
-
-This is useful for MCP clients that want to discover capabilities before choosing a tool.
-
-### `ms_list_analysis_targets`
-
-Inspects a structure or trajectory and returns the most useful targeting metadata for downstream analysis.
-
-Returns structured tables for:
-
-- element symbols and counts
-- forcefield types and counts
-- atom names and counts
-- existing set names and item counts
-
-This is especially useful before targeted RDF, MSD, or VACF analysis.
-
-### `ms_recommend_workflow`
-
-Takes a natural-language task request and returns:
-
-- ranked workflow recommendations
-- suggested next tool call arguments
-- notes about when to optimize before dynamics
-
-The recommender understands both English and Chinese keywords for common Materials Studio tasks.
-
-It can also recommend trajectory analysis workflows such as:
-
-- RDF
-- MSD
-- VACF
-- thermodynamic stability and equilibration profiles
-- hydrogen-bond statistics
-
-It also understands chained requests such as:
-
-- run dynamics and then do RDF
-- run dynamics and then do MSD
-- run dynamics and then do hydrogen-bond analysis
-
-### `ms_execute_task_request`
-
-Executes the best supported built-in workflow directly from a natural-language request.
-
-Current direct execution coverage includes:
-
-- document inspection
-- local help search
-- Forcite Energy
-- Forcite Geometry Optimization
-- Forcite Dynamics
-- Forcite RDF
-- Forcite MSD
-- Forcite VACF
-- thermodynamic profile analysis
-- hydrogen-bond statistics
-- Forcite dynamics plus automatic RDF/MSD/thermodynamic analysis
-- composite optimize-then-dynamics workflows
-
-It also extracts common Forcite settings from the request when present, including:
-
-- `NVT`, `NPT`, `NVE`
-- temperature
-- step count
-- timestep
-- trajectory frequency
-- common forcefield names
-
-### `ms_forcite_energy`
-
-Runs a high-level Forcite Energy task with default settings based on `COMPASSIII`.
-
-Returns:
-
-- raw execution metadata
-- parsed report values such as `PotentialEnergy`
-- optional exported structure
-
-### `ms_forcite_geometry_optimization`
-
-Runs a high-level Forcite Geometry Optimization task and exports the optimized structure.
-
-Returns:
-
-- raw execution metadata
-- parsed report values
-- optimized `.xsd`
-
-### `ms_forcite_dynamics`
-
-Runs a high-level Forcite Dynamics task and exports the resulting trajectory.
-
-Default settings include:
-
-- `NVT`
-- `Andersen`
-- `300 K`
-- `100` steps
-- `1 fs` timestep
-
-Returns:
-
-- raw execution metadata
-- parsed report values
-- trajectory frame count when available
-- exported `.xtd`
-
-When exporting trajectories, the server also copies the paired `.trj` sidecar automatically.
-
-### `ms_forcite_rdf`
-
-Runs Forcite radial distribution function analysis on an atomistic trajectory.
-
-Returns:
-
-- parsed table columns such as `r` and `g(r)`
-- structured data rows
-- analysis preview
-- optional saved `.std` study table
-
-The server automatically stages both `.xtd` and its paired `.trj` sidecar when needed.
-
-You can optionally restrict RDF to selected atoms through:
-
-- `selection_a`
-- `selection_b`
-- `frame_range`
-- `include_structure_factor`
-- `output_structure_factor_study_table_path`
-
-Supported selection forms include:
-
-- element symbols such as `O`, `H`, `Na`, `Cl`
-- existing Materials Studio set names already present in the document
-- `forcefield:<type>`
-- `name:<atom_name>`
-
-When `include_structure_factor = true`, the tool also returns structured `S(k)` data in `extra_analysis_tables["structure_factor"]`.
-
-`frame_range` uses the form `start-end`, for example:
-
-- `1-100`
-- `2-4`
-
-### `ms_forcite_msd`
-
-Runs Forcite mean square displacement analysis on an atomistic trajectory.
-
-Returns:
-
-- parsed table columns such as `Time` and `MSD`
-- structured data rows
-- analysis preview
-- optional saved `.std` study table
-
-You can optionally restrict MSD to a subset through:
-
-- `selection`
-- `frame_range`
-
-Supported selection forms are the same as for RDF selection.
-
-Depending on the settings, this may return either:
-
-- MSD-versus-time data
-- diffusion-coefficient fit results
-
-### `ms_forcite_vacf`
-
-Runs Forcite velocity autocorrelation analysis on an atomistic trajectory.
-
-Returns:
-
-- parsed VACF table columns
-- structured data rows
-- analysis preview
-- optional saved `.std` study table
-- optional structured power-spectrum data in `extra_analysis_tables["power_spectrum"]`
-
-Optional control parameters include:
-
-- `selection`
-- `frame_range`
-- `include_power_spectrum`
-- `output_power_spectrum_study_table_path`
-
-Supported selection forms are the same as for RDF selection.
-
-### `ms_forcite_thermo_profiles`
-
-Runs one or more Forcite time-series analyses on an atomistic trajectory to help judge equilibration and stability.
-
-Supported `properties` values include:
-
-- `temperature`
-- `pressure`
-- `density`
-- `potential_energy_components`
-- `cell_parameters`
-
-Returns:
-
-- one saved `.std` study table per requested property
-- parsed structured rows for each requested property
-- numeric summaries for every returned series column
-- convenience metrics such as mean, last value, and drift for the preferred physical series
-- an automatic stability assessment with a recommended production frame range when enough samples are available
-- exported `thermo_assessment.json` and `thermo_assessment.md` reports
-- exported `thermo_interpretation.json` and `thermo_interpretation.md` reports with plain-language findings and next-step suggestions
-
-Useful controls include:
-
-- `frame_range`
-- `common_analysis_settings`
-- `analysis_settings_by_property`
-- `assess_stability`
-
-Examples of per-property settings include:
-
-- `PressureComputeAnisotropicComponents`
-- `PotentialEnergyComponentsShowAll`
-- `ComputeRunningAverages`
-- `ComputeBlockAverages`
-
-When stability assessment is enabled, the workflow estimates:
-
-- whether each requested property looks `stable`, `possibly_stable`, or `not_stable`
-- a recommended equilibration discard count
-- a recommended production frame range
-
-It also generates a plain-language interpretation layer that summarizes:
-
-- which properties look usable
-- which properties still drift
-- what to extend or review next
-
-### `ms_hbond_statistics`
-
-Runs hydrogen-bond analysis on either:
-
-- a single structure
-- a trajectory with per-frame statistics
-
-Returns:
-
-- hydrogen-bond counts per frame
-- mean, minimum, and maximum hydrogen-bond length per frame
-- structured summary metrics across all analyzed frames
-- optional saved `.std` study table
-
-Optional control parameters include:
-
-- `frame_range`
-- `max_frames`
-
-When `mode = auto`, the tool treats `.xtd` inputs as trajectories and other supported atomistic documents as single-frame structures.
-
-### `ms_forcite_dynamics_with_analysis`
-
-Runs a one-shot workflow:
-
-1. Forcite Dynamics
-2. RDF analysis on the generated trajectory
-3. MSD analysis on the generated trajectory
-4. thermodynamic profile analysis on the generated trajectory when requested
-5. optional hydrogen-bond analysis on the generated trajectory
-
-Returns:
-
-- exported trajectory and final structure
-- structured RDF data
-- structured MSD data
-- structured thermodynamic profile data when requested
-- structured hydrogen-bond statistics when requested
-- diffusion coefficient when the MSD fit is available
-- recommended production frame range from the thermodynamic branch when available
-- combined workflow metrics
-- `workflow_interpretation.md` with a concise summary of the run and suggested follow-up actions
-- `unified_analysis_report.md` and `unified_analysis_report.json` that merge RDF, MSD, hydrogen-bond, and thermodynamic conclusions into one report
-
-Supported `analyses` values include:
-
-- `rdf`
-- `msd`
-- `thermo`
-- `hbond`
-
-Useful optional controls include:
-
-- `rdf_selection_a`
-- `rdf_selection_b`
-- `rdf_include_structure_factor`
-- `msd_selection`
-- `thermo_properties`
-- `thermo_common_analysis_settings`
-- `thermo_analysis_settings_by_property`
-- `analysis_frame_range`
-
-The unified report layer now tries to extract:
-
-- a strongest RDF peak location
-- the final MSD value and diffusion-fit availability
-- average hydrogen-bond count and mean bond length
-- thermodynamic production-window guidance when available
-
-The bundled MSD step uses `MSDMaxFrameLength = 100` by default so diffusion-coefficient fitting is more likely to be available.
-
-When the natural-language request includes element-specific targets such as `O-H RDF`, `oxygen MSD`, `oxygen VACF`, or `氧-氢 RDF`, the server now maps those into the corresponding analysis selections automatically.
-
-It also understands higher-level equilibration and stability requests such as:
-
-- `analyze whether this trajectory is equilibrated`
-- `return temperature, pressure, and density profiles`
-- `recommend which frames to keep for production statistics`
-- `分析这个轨迹的温度和密度是否稳定`
-- `返回势能组分曲线`
-- `建议我从哪一帧开始统计`
-
-It also understands frame-range requests such as:
-
-- `first 3 frames`
-- `frames 2-10`
-- `前3帧`
-- `第2到4帧`
-
-### `ms_forcite_relax_and_dynamics`
-
-Runs a composite workflow:
-
-1. geometry optimization
-2. dynamics using the optimized structure
-
-Returns:
-
-- step-by-step results
-- key metrics across both stages
-- exported optimized structure
-- exported final structure
-- exported trajectory
-- parsed artifact summaries
-
-### `ms_generate_client_config`
-
-Returns a ready-to-paste MCP client config for this project.
-
-The generated config prefers the ASCII runtime alias path so MCP clients do not need to resolve the original Unicode workspace path.
-
-## Example: Script Template
-
-```perl
-use strict;
-use warnings;
-use MaterialsScript qw(:all);
-
-my $doc = Documents->Import("{{input.structure}}");
-my $atoms = $doc->DisplayRange->Atoms;
-
-open(my $fh, '>', "{{output.report}}") or die $!;
-print $fh scalar(@$atoms), "\n";
-close($fh);
-
-$doc->Export("{{output.copy}}");
+## 工具分层
+
+公开工具数量和精确签名以 `ms://catalog/public-tools` 与 `ms_task_catalog` 为准。主要分层如下：
+
+- **R0 只读检查**：安装检测、本地帮助、工作区扫描、结构预检、项目读取、能力登记和模型就绪度。
+- **R1 规划与证据**：工作流建议、CASTEP 输入规划、公开证据 dry-run 和生产确认准备。
+- **R2 受控写入**：项目初始化、受哈希约束的结构构建、CAR/MDF 导出和 LAMMPS 转换。
+- **R3 受控计算**：仅开放经过固定 profile、人工授权和证据审计的 Forcite/资格流程；不提供通用 CASTEP MCP 执行接口。
+
+## 项目目录
+
+```text
+config/                      本机软件、策略和科学合同配置
+docs/validation/             验收说明与哈希绑定回执
+moc/                         Materials Studio MOC 接口和桥接文件
+scripts/                     安装、发布、候选验收和回滚脚本
+src/materials_studio_mcp/    MCP 服务实现
+tests/                       单元测试、合同测试和安全测试
+install.ps1                  本机安装入口
+release-manifest.json        发布文件与哈希清单
+requirements.lock            锁定依赖
 ```
 
-With matching tool arguments:
+## 验证状态
 
-- `input_files.structure` -> source `.xsd`
-- `output_files.report.relative_path` -> `count.txt`
-- `output_files.copy.relative_path` -> `exported/H2O_copy.xsd`
+最近一次候选验收包含：
 
-## Verified On This Machine
+- 347 项源回归测试通过；
+- P6 模型就绪度与公开证据专项测试通过；
+- 53 个公开工具登记一致；
+- 能力登记的声明证据和有效证据哈希一致；
+- Windows Materials Studio Perl locale 子进程回退通过，stderr 为 0；
+- 未启动 CASTEP、MPI 或 Materials Studio 受限计算进程。
 
-The following have been validated locally:
+版本以 `release-manifest.json` 为准。候选发布、切换和回滚脚本都会验证发布清单、依赖、哈希、locale 和 `current` 指针；候选验收不会自动切换生产部署。
 
-- Materials Studio 2023 installation detection
-- local scripting help search
-- local help page extraction
-- local code example extraction
-- `.xsd`, `.xtd`, and `.stp` parsing
-- real `MaterialsScript` execution through `RunMatScript.bat`
-- real stdio MCP handshake with 46 public tools
-- real bidirectional MOC integration: MOC-to-MCP health/tool discovery plus MCP-to-MOC status, hash-bound dry run, and confirmed Materials Studio document launch
-- real MOC import of the audited hydroxylation XSD with 31 asymmetric-unit atoms and an explicit `Completion status: (OK)` MatStudio log
-- real checked project export of that XSD with separately hashed CAR/MDF outputs and artifact registration
-- real checked Class II PCFF conversion of the G01 calibration fixture with 3/3 atom-count equality, LAMMPS data preflight, artifact registration, and idempotent replay; `production_released=false`
-- real NaCl `2x1x1` supercell build through `ms_geology_build_supercell`, including SpaceGroup-orbit and cell-scaling post-validation
-- real `(101)` surface-candidate enumeration with 2D PlaneGroup validation and candidate-only receipts
-- real P1 site substitution through `ms_geology_apply_substitutions`, including index/coordinate/element/formal-charge preconditions and a runtime charge ledger
-- real explicit counterion placement through `ms_geology_place_counterions`, including a 3D minimum-image clearance audit and a runtime charge ledger
-- real explicit surface-O protonation through `ms_geology_apply_hydroxylation_ledger`, including O-Si coordination, O-H bond, 2D clearance, silanol-density, and runtime charge audits
-- real read-only G06 contract assessment through `ms_geology_assess_nanopore_contract`, preserving all unresolved construction blockers and `construction_released=false`
-- importing an external staged `.xsd`
-- exporting a new `.xsd`
-- copying generated outputs back into the project directory
-- high-level Forcite Energy execution
-- high-level Forcite Geometry Optimization execution
-- high-level Forcite Dynamics execution with trajectory export
-- high-level Forcite RDF execution with structured tabular output
-- high-level Forcite MSD execution with structured tabular output
-- one-shot dynamics-plus-analysis workflow execution with diffusion-coefficient extraction
-- composite optimize-then-dynamics workflow execution
-- workflow recommendation logic for Chinese and English requests
-- natural-language trajectory analysis execution
-- natural-language dynamics-plus-analysis execution
+## 开发与验证
 
-## Important Notes
-
-- `Documents->Import(...)` must import a file outside the active project directory
-- for reliability, this server stages inputs outside the execution project directory
-- Materials Studio scripting is sensitive to path encoding and BOM-marked script files
-- this server writes generated Perl scripts as UTF-8 without BOM
-- many MCP clients also behave better with ASCII server paths, so the installer creates an ASCII runtime alias
-- trajectory documents often require both `.xtd` and `.trj`; this server now handles that pair automatically during staging and export
-
-## V1 Release Candidate
-
-The MCP/MOC release identity, including version and API version, is read only from `release-manifest.json`; no source or status document hard-codes the current version. This patch adds fail-closed COMPASSIII, PCFF, Dreiding/QEq, and Universal/QEq forcefield-preparation profiles to the existing governed Forcite tool, audits current MS 23.1 `Bond` nodes and bond orders, verifies per-atom type/charge coverage and neutral net partial charge, preserves structured evidence for failed calculations, records successful structure and forcefield gates only through trusted in-process validators, packages the hash-verified source, scripts, and regression suite, and fixes release-root discovery during installed MOC acceptance. Real Type II-C kerogen validation passed COMPASSIII, Dreiding/QEq, and Universal/QEq preparation; PCFF correctly remained blocked after five particles could not be typed. All candidates remain `production_released=false` until project-specific scientific validation. Licensed REFPROP and NAMD readiness remain independent from the core MS/LAMMPS pipeline.
-
-The versioned `config/materialsscript-capabilities.json` registry is the authority for local MaterialsScript claims. It defaults all unregistered fields to unverified, prohibits natural-language-to-Perl conversion, requires a closed parameter allowlist, and binds every verified capability and parameter to hashed local documentation, regression tests, or runtime receipts. The full effective registry is available as the read-only MCP resource `materials-studio://capabilities/v1`. Hash-bound CASTEP PL/XSD package preparation is available, but CASTEP execution, CASTEP result parsing, and generic MaterialsScript report generation remain explicitly unavailable until their own local evidence chains pass.
-
-Build and verify the hashed offline bundle:
+运行完整回归：
 
 ```powershell
-.\scripts\build_release_v1.ps1
-python -m materials_studio_mcp.release verify --manifest .\release-manifest.json
+.\.venv\Scripts\python.exe -m unittest discover -s tests -q
+.\.venv\Scripts\python.exe -m pip check
 ```
 
-Run the fresh G01 calibration reproduction and MOC acceptance:
+验证发布清单：
 
 ```powershell
-.\.venv\Scripts\python.exe .\scripts\reproduce_g01_v1.py --project-id <new-project-id>
-python D:\分子动力学模拟\tools\ms_moc.py doctor --json
-python D:\分子动力学模拟\tools\ms_moc.py acceptance --g01-report <G01_V1_REPRODUCTION_REPORT.json> --json
-python D:\分子动力学模拟\tools\ms_moc.py science-status --json
+.\.venv\Scripts\python.exe -m materials_studio_mcp.release verify --manifest .\release-manifest.json
 ```
 
-`science-status` is separate from platform acceptance. It hash-checks the current G02/G04/G06 evidence, reports checkpoint progress, and emits machine-readable blocker codes with next actions. It also audits the chapter 3 graphene-MMT target for surrogate clay, required PDB/PSF/parameter inputs, the paper's box-versus-coordinate-extent ambiguity, the partial local Heinz/INTERFACE PCFF 9-6 candidate, NAMD availability, the licensed and hash-bound REFPROP 10 pressure-mapping evidence, and the final production evidence schema. Directory presence alone cannot satisfy the REFPROP gate. `production_science_released` remains `false` until the qualification suite and the actual target reproduction have valid evidence.
+如需构建候选发布，请使用 `scripts/build_release_v1.ps1`；如需安装候选，请使用 `scripts/install_release_v1.ps1`，不要直接修改不可变部署目录或 `current` Junction。
 
-The terminal G02-CS-02 evidence passes all six arms and selects a `9.0 Å` cutoff. Its `G02-CS-02B` recovery adjudication preserves the six original raw failed states, derives six complete states, and records three externally interrupted segments only through the next segment's existing checkpoint path and SHA-256. G04-TH-01 also passes as a qualification fixture. Neither qualification result is mislabeled as a target production trajectory.
+## 公开说明
 
-The verified local G01 run reached project status `validated`, matched the Materials Studio and LAMMPS potential energies within `1e-3 kcal/mol`, passed VMD text validation, and re-verified all 22 registered artifact hashes. Its scope is only the nonperiodic three-atom PCFF calibration fixture; `production_science_released` remains `false`.
+本仓库公开的是 MCP 服务源代码、测试、模板和审计回执。回执中的本机软件路径用于说明证据绑定，不是可供他人访问的文件共享路径；使用者应替换为自己的环境配置。
 
-## References
-
-- Model Context Protocol docs: <https://modelcontextprotocol.io/>
-- MCP Python SDK: <https://github.com/modelcontextprotocol/python-sdk>
+本项目不承诺自动完成任意材料体系的科学建模。它提供可复现的工具链、输入检查和证据管理，最终的结构、力场、晶胞、电荷和计算设置仍需材料研究者确认。
