@@ -39,6 +39,17 @@ class CapabilityRegistryTests(unittest.TestCase):
         self.assertIn("never starts RunCASTEP", candidate["notes"])
         self.assertFalse(capabilities["castep.calculation"]["verified"])
 
+    def test_npt_profile_is_registered_with_fixed_pressure_evidence(self) -> None:
+        data = load_capability_registry()
+        capabilities = {item["id"]: item for item in data["capabilities"]}
+        candidate = capabilities["forcite.dynamics_npt"]
+        self.assertTrue(candidate["verified"])
+        self.assertEqual(candidate["exposure"], "public")
+        parameter_names = {item["name"] for item in candidate["parameters"]}
+        self.assertIn("Pressure", parameter_names)
+        self.assertIn("Barostat", parameter_names)
+        self.assertIn("1.01325e-4 GPa", candidate["notes"])
+
     def test_unknown_registry_fields_fail_closed(self) -> None:
         data = load_capability_registry()
         data["automatic_parameter_completion"] = True

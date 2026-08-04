@@ -224,6 +224,15 @@ class GovernedForciteTests(unittest.TestCase):
         self.assertEqual(settings["Ensemble3D"], "NVT")
         with self.assertRaisesRegex(ValueError, "Unsupported dynamics parameters"):
             server._governed_forcite_profile("dynamics_nvt_compassiii_v1", {"Pressure": 1})
+
+    def test_npt_profile_is_fixed_to_atmospheric_pressure_and_closed(self) -> None:
+        task, settings = server._governed_forcite_profile("dynamics_npt_compassiii_v1", None)
+        self.assertEqual(task, "Dynamics")
+        self.assertEqual(settings["Ensemble3D"], "NPT")
+        self.assertEqual(settings["Barostat"], "Berendsen")
+        self.assertAlmostEqual(settings["Pressure"], 1.01325e-4)
+        with self.assertRaisesRegex(ValueError, "Unsupported NPT dynamics parameters"):
+            server._governed_forcite_profile("dynamics_npt_compassiii_v1", {"pressure_gpa": 1.0})
         with self.assertRaisesRegex(ValueError, "number_of_steps"):
             server._governed_forcite_profile("dynamics_nvt_compassiii_v1", {"number_of_steps": 0})
 

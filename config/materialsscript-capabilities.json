@@ -141,7 +141,7 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_materialsscript_ascii_staging.py",
-      "sha256": "DCACDC71BEDF860DEA342C8DA055E1590EB08AB19DE6CCE9935CB31CA60350FA"
+      "sha256": "059A54480CDE3331220A19875A827380719BCB04811FA905CB9422F933217A1D"
     },
     {
       "id": "test_geology_modeling_tools",
@@ -218,7 +218,7 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_task_management_and_forcite_checked.py",
-      "sha256": "0E4EC005469C2FB4293C307C3174F4AEDAEE88B9F0696B860E048755A8936E8F"
+      "sha256": "AF66866A458AFE498263BE217260018437A1620FA6983B31CC57F3FD2787A8C9"
     },
     {
       "id": "test_model_readiness_and_public_evidence",
@@ -346,7 +346,27 @@
         {"name": "TrajectoryFrequency", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]}
       ],
       "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"],
-      "notes": "NVT/Andersen only; NPT, NVE and other controls are not exposed by the governed profile."
+      "notes": "NVT/Andersen is exposed through a closed governed profile; NVE and caller-selected module settings remain unavailable."
+    },
+    {
+      "id": "forcite.dynamics_npt",
+      "layer": "Forcite",
+      "status": "verified",
+      "verified": true,
+      "exposure": "public",
+      "api_symbols": ["Modules->Forcite->Dynamics->Run"],
+      "parameters": [
+        {"name": "Ensemble3D", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "Thermostat", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "Barostat", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "Pressure", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "Temperature", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "NumberOfSteps", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "TimeStep", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]},
+        {"name": "TrajectoryFrequency", "status": "verified", "verified": true, "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"]}
+      ],
+      "evidence_ids": ["doc_forcite_dynamics_23_1", "test_forcite_checked"],
+      "notes": "Closed COMPASSIII NPT profile with Nose thermostat, Berendsen barostat, and fixed atmospheric pressure of 1.01325e-4 GPa; arbitrary pressure and module settings are rejected."
     },
     {
       "id": "castep.adaptive_package_planning",

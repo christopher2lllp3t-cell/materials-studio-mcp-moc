@@ -113,6 +113,7 @@ from .scientific_gate_audit import audit_target_model_science
 from .castep_pl import prepare_castep_pl_package
 from .castep_standalone import prepare_castep_standalone_inputs
 from .castep_p4b_contract import inspect_fixed_profile_preflight_request
+from .castep_p4a_preflight import build_materials_studio_perl_environment
 from .castep_preflight import (
     PREFLIGHT_ENVIRONMENT_VARIABLE,
     finalize_castep_preflight,
@@ -3781,9 +3782,16 @@ def _run_materialsscript_job(
     script_path.write_text(rendered_script, encoding="utf-8", newline="\n")
 
     command = [str(run_mat_script), "-project" if run_mode == "project" else "-flat", job_name]
+    # Materials Studio 2023 bundles a Windows Perl that rejects inherited
+    # C.UTF-8 locale values on code page 936.  Build a child-only environment
+    # for every RunMatScript invocation; the parent/system/user environment is
+    # never mutated.  The fixed helper also records the policy boundary used
+    # by the P4-A locale audit.
+    materialsscript_environment, _locale_policy = build_materials_studio_perl_environment()
     with acquire_execution_slot(config=config):
         completed, timed_out, termination, process_pid = _run_guarded_materialsscript_process(
-            command, cwd=job_dir, timeout_seconds=timeout_seconds
+            command, cwd=job_dir, timeout_seconds=timeout_seconds,
+            env=materialsscript_environment,
         )
 
     stdout_path = Path(f"{script_path}.out")
@@ -3980,7 +3988,10 @@ my $missing_forcefield_type_count = 0;
 my $partial_charge_count = 0;
 my $partial_charge_read_error_count = 0;
 my $net_partial_charge = 0.0;
-foreach my $atom (@{{$doc->Atoms}}) {{
+my $audit_atoms = eval {{ $doc->UnitCell->Atoms }};
+$audit_atoms = eval {{ $doc->AsymmetricUnit->Atoms }} if !defined($audit_atoms);
+die "Unable to obtain a finite atom collection for audit" if !defined($audit_atoms);
+foreach my $atom (@{{$audit_atoms}}) {{
   ++$atom_audit_count;
   my $forcefield_type = eval {{ $atom->ForcefieldType }};
   ++$missing_forcefield_type_count if !defined($forcefield_type) || $forcefield_type eq "";
@@ -5357,6 +5368,7 @@ def ms_task_catalog() -> dict[str, Any]:
             "calculation": [
                 "energy_compassiii_v1",
                 "geometry_optimization_compassiii_v1",
+                "dynamics_npt_compassiii_v1",
                 "dynamics_nvt_compassiii_v1",
             ],
         },
@@ -7370,11 +7382,53 @@ def _governed_forcite_profile(
     if profile_id == "geometry_optimization_compassiii_v1":
         if values:
             raise ValueError("geometry_optimization_compassiii_v1 does not accept calculation_parameters")
-        return "GeometryOptimization", base
+        # Materials Studio's documented default is 500 iterations.  The
+        # 3848-atom low-density kerogen cell reached the force trend but hit
+        # that cap without satisfying the max-force criterion, so the reviewed
+        # fixed profile extends the cap while keeping Smart minimization and
+        # the native COMPASSIII charge policy unchanged.
+        return "GeometryOptimization", {
+            **base,
+            "OptimizationAlgorithm": "Smart",
+            "MaxIterations": 2000,
+        }
     if profile_id == "energy_pcff_v1":
         if values:
             raise ValueError("energy_pcff_v1 does not accept calculation_parameters")
         return "Energy", {"CurrentForcefield": "pcff", "ChargeAssignment": "Use current"}
+    if profile_id == "dynamics_npt_compassiii_v1":
+        allowed = {"temperature_kelvin", "number_of_steps", "time_step_fs", "trajectory_frequency"}
+        unknown = set(values) - allowed
+        if unknown:
+            raise ValueError(f"Unsupported NPT dynamics parameters: {sorted(unknown)}")
+        temperature = values.get("temperature_kelvin", 298.15)
+        steps = values.get("number_of_steps", 20000)
+        timestep = values.get("time_step_fs", 1.0)
+        frequency = values.get("trajectory_frequency", 100)
+        if isinstance(temperature, bool) or not isinstance(temperature, (int, float)) or not 1 <= float(temperature) <= 2000:
+            raise ValueError("temperature_kelvin must be from 1 to 2000")
+        if isinstance(steps, bool) or not isinstance(steps, int) or not 1 <= steps <= 100000:
+            raise ValueError("number_of_steps must be an integer from 1 to 100000")
+        if isinstance(timestep, bool) or not isinstance(timestep, (int, float)) or not 0.1 <= float(timestep) <= 5:
+            raise ValueError("time_step_fs must be from 0.1 to 5")
+        if isinstance(frequency, bool) or not isinstance(frequency, int) or not 1 <= frequency <= steps:
+            raise ValueError("trajectory_frequency must be an integer from 1 to number_of_steps")
+        return "Dynamics", {
+            **base,
+            "Ensemble3D": "NPT",
+            "Thermostat": "Nose",
+            "Barostat": "Berendsen",
+            # 1 atm = 1.01325e-4 GPa; keep this baseline fixed rather than
+            # exposing an arbitrary pressure field through the governed API.
+            "Pressure": 1.01325e-4,
+            "Temperature": float(temperature),
+            "NumberOfSteps": steps,
+            "TimeStep": float(timestep),
+            "TrajectoryFrequency": frequency,
+            "InitialVelocities": "Random",
+            "WriteVelocities": "Yes",
+            "UseMultipleTimeSteps": "No",
+        }
     if profile_id != "dynamics_nvt_compassiii_v1":
         raise ValueError("Unsupported Forcite profile_id")
     allowed = {"temperature_kelvin", "number_of_steps", "time_step_fs", "trajectory_frequency"}

@@ -57,8 +57,11 @@ class MaterialsScriptAsciiStagingTests(unittest.TestCase):
             observed: dict[str, object] = {}
 
             def fake_run(
-                command: list[str], *, cwd: Path, timeout_seconds: int
+                command: list[str], *, cwd: Path, timeout_seconds: int,
+                env: dict[str, str] | None = None,
             ) -> tuple[subprocess.CompletedProcess[str], bool, None, int]:
+                self.assertIsNotNone(env)
+                self.assertEqual({env.get(key) for key in ("LC_ALL", "LC_CTYPE", "LANG")}, {"C"})
                 observed["cwd"] = cwd
                 self.assertTrue(str(cwd).isascii())
                 job_name = command[-1]
@@ -206,8 +209,11 @@ class MaterialsScriptAsciiStagingTests(unittest.TestCase):
             output_mdf = base / "accepted.mdf"
 
             def fake_run(
-                command: list[str], *, cwd: Path, timeout_seconds: int
+                command: list[str], *, cwd: Path, timeout_seconds: int,
+                env: dict[str, str] | None = None,
             ) -> tuple[subprocess.CompletedProcess[str], bool, None, int]:
+                self.assertIsNotNone(env)
+                self.assertEqual({env.get(key) for key in ("LC_ALL", "LC_CTYPE", "LANG")}, {"C"})
                 job_name = command[-1]
                 (cwd / "outputs" / "model.car").write_text("!BIOSYM archive 3\n", encoding="ascii")
                 (cwd / "outputs" / "model.mdf").write_text("!BIOSYM molecular_data 4\n", encoding="ascii")
@@ -242,8 +248,11 @@ class MaterialsScriptAsciiStagingTests(unittest.TestCase):
             destination = base / "must_not_exist.xsd"
 
             def fake_run(
-                command: list[str], *, cwd: Path, timeout_seconds: int
+                command: list[str], *, cwd: Path, timeout_seconds: int,
+                env: dict[str, str] | None = None,
             ) -> tuple[subprocess.CompletedProcess[str], bool, None, int]:
+                self.assertIsNotNone(env)
+                self.assertEqual({env.get(key) for key in ("LC_ALL", "LC_CTYPE", "LANG")}, {"C"})
                 job_name = command[-1]
                 (cwd / "outputs" / "result.xsd").write_text("untrusted", encoding="ascii")
                 (cwd / f"{job_name}MatStudioLog.htm").write_text(
