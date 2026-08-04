@@ -127,7 +127,7 @@
       "kind": "regression_test",
       "root": "project",
       "path": "tests/test_castep_pl.py",
-      "sha256": "7CB773F839E8A5CBB73A426D5A474629D2BBB0D39F4E94C6C10B3FEC9473266A"
+      "sha256": "4BA70371C6960625FEA2A8DE16571A24AAF4CDF2D7429AF6104B0F5EF1BE09C1"
     },
     {
       "id": "test_adaptive_planning",

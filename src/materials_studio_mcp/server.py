@@ -4873,7 +4873,10 @@ def ms_castep_preflight_checked(
 
         confirmation_manager.consume(confirmation_token, operation, parameters)
         command = [str(run_mat_script), "-flat", Path(plan["pl_path"]).stem]
-        process_environment = dict(os.environ)
+        # RunMatScript is a child-only process.  Keep the parent/system/user
+        # environment untouched while forcing the Perl locale used by the
+        # Materials Studio runtime to the deterministic C locale.
+        process_environment, _locale_policy = build_materials_studio_perl_environment()
         process_environment[PREFLIGHT_ENVIRONMENT_VARIABLE] = "1"
         with acquire_execution_slot():
             completed, timed_out, termination, process_pid = _run_guarded_materialsscript_process(

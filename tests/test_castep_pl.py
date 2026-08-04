@@ -290,6 +290,10 @@ class CastepPlPackageTests(unittest.TestCase):
 
             def fake_process(command, *, cwd, timeout_seconds, stdin_path=None, env=None):
                 self.assertEqual(env.get("MS_CASTEP_PL_PREFLIGHT_ONLY"), "1")
+                self.assertEqual(
+                    {env.get(key) for key in ("LC_ALL", "LC_CTYPE", "LANG")},
+                    {"C"},
+                )
                 self.assertEqual(command[1], "-flat")
                 stem = command[-1]
                 (cwd / f"{stem}.pl.out").write_text(
